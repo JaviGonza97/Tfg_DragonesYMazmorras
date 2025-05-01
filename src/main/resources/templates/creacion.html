@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creación de Personaje</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="dungeon-bg">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-75">
+  <div class="container">
+    <a class="navbar-brand fantasy-title" href="#">D&D Dice Roller</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="index.html">INICIO</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="creacion.html">CREACIÓN</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="explorar.html">EXPLORAR</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="prueba.html">PRUEBA</a>
+        </li>
+      </ul>
+      <div class="d-flex">
+        <a href="index.html" class="btn btn-outline-light btn-sm">Volver</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-4">
+  <div class="card bg-white bg-opacity-90 shadow-lg">
+    <div class="card-body p-4">
+      <h1 class="fantasy-title text-primary mb-4">CREACIÓN DE PERSONAJE</h1>
+
+      <div class="mb-4">
+        <div class="d-flex justify-content-between mb-2">
+          <button class="btn btn-sm step-btn active" data-step="1">1</button>
+          <button class="btn btn-sm step-btn" data-step="2">2</button>
+          <button class="btn btn-sm step-btn" data-step="3">3</button>
+          <button class="btn btn-sm step-btn" data-step="4">4</button>
+          <button class="btn btn-sm step-btn" data-step="5">5</button>
+        </div>
+        <div class="progress">
+          <div class="progress-bar bg-custom-amber" role="progressbar" style="width: 20%"></div>
+        </div>
+      </div>
+
+      <form id="creacionForm">
+        <!-- Información Básica -->
+        <div class="step-content" id="step1">
+          <h2 class="h4 mb-3">Información Básica</h2>
+
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre del Personaje</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="raza" class="form-label">Raza</label>
+            <select class="form-select" id="raza" name="raza" required>
+              <option value="">Selecciona una raza</option>
+              <option value="Humano">Humano</option>
+              <option value="Elfo">Elfo</option>
+              <option value="Enano">Enano</option>
+              <option value="Mediano">Mediano</option>
+              <option value="Semielfo">Semielfo</option>
+              <option value="Semiorco">Semiorco</option>
+              <option value="Gnomo">Gnomo</option>
+              <option value="Tiefling">Tiefling</option>
+              <option value="Dracónido">Dracónido</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="clase" class="form-label">Clase</label>
+            <select class="form-select" id="clase" name="clase" required>
+              <option value="">Selecciona una clase</option>
+              <option value="Bárbaro">Bárbaro</option>
+              <option value="Bardo">Bardo</option>
+              <option value="Clérigo">Clérigo</option>
+              <option value="Druida">Druida</option>
+              <option value="Guerrero">Guerrero</option>
+              <option value="Monje">Monje</option>
+              <option value="Paladín">Paladín</option>
+              <option value="Explorador">Explorador</option>
+              <option value="Pícaro">Pícaro</option>
+              <option value="Hechicero">Hechicero</option>
+              <option value="Brujo">Brujo</option>
+              <option value="Mago">Mago</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="nivel" class="form-label">Nivel</label>
+            <input type="number" class="form-control" id="nivel" name="nivel" min="1" max="20" value="1" required>
+          </div>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="step-content d-none" id="step2">
+          <h2 class="h4 mb-3">Estadísticas</h2>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="fuerza" class="form-label">Fuerza (STR)</label>
+              <input type="number" class="form-control" id="fuerza" name="fuerza" min="3" max="20" value="10" required>
+            </div>
+
+            <div class="col-md-6">
+              <label for="destreza" class="form-label">Destreza (DEX)</label>
+              <input type="number" class="form-control" id="destreza" name="destreza" min="3" max="20" value="10" required>
+            </div>
+
+            <div class="col-md-6">
+              <label for="constitucion" class="form-label">Constitución (CON)</label>
+              <input type="number" class="form-control" id="constitucion" name="constitucion" min="3" max="20" value="10" required>
+            </div>
+
+            <div class="col-md-6">
+              <label for="inteligencia" class="form-label">Inteligencia (INT)</label>
+              <input type="number" class="form-control" id="inteligencia" name="inteligencia" min="3" max="20" value="10" required>
+            </div>
+
+            <div class="col-md-6">
+              <label for="sabiduria" class="form-label">Sabiduría (WIS)</label>
+              <input type="number" class="form-control" id="sabiduria" name="sabiduria" min="3" max="20" value="10" required>
+            </div>
+
+            <div class="col-md-6">
+              <label for="carisma" class="form-label">Carisma (CHA)</label>
+              <input type="number" class="form-control" id="carisma" name="carisma" min="3" max="20" value="10" required>
+            </div>
+          </div>
+        </div>
+
+        <!--  Historia y Personalidad -->
+        <div class="step-content d-none" id="step3">
+          <h2 class="h4 mb-3">Historia y Personalidad</h2>
+
+          <div class="mb-3">
+            <label for="historia" class="form-label">Historia del Personaje</label>
+            <textarea class="form-control" id="historia" name="historia" rows="4"></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label for="rasgos" class="form-label">Rasgos de Personalidad</label>
+            <textarea class="form-control" id="rasgos" name="personalidad.rasgos" rows="2"></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label for="ideales" class="form-label">Ideales</label>
+            <textarea class="form-control" id="ideales" name="personalidad.ideales" rows="2"></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label for="vinculos" class="form-label">Vínculos</label>
+            <textarea class="form-control" id="vinculos" name="personalidad.vinculos" rows="2"></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label for="defectos" class="form-label">Defectos</label>
+            <textarea class="form-control" id="defectos" name="personalidad.defectos" rows="2"></textarea>
+          </div>
+        </div>
+
+        <!-- Apariencia Física -->
+        <div class="step-content d-none" id="step4">
+          <h2 class="h4 mb-3">Apariencia Física</h2>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="edad" class="form-label">Edad</label>
+              <input type="number" class="form-control" id="edad" name="fisico.edad" value="25">
+            </div>
+
+            <div class="col-md-6">
+              <label for="altura" class="form-label">Altura (cm)</label>
+              <input type="number" class="form-control" id="altura" name="fisico.altura" value="170">
+            </div>
+
+            <div class="col-md-6">
+              <label for="peso" class="form-label">Peso (kg)</label>
+              <input type="number" class="form-control" id="peso" name="fisico.peso" value="70">
+            </div>
+
+            <div class="col-md-6">
+              <label for="piel" class="form-label">Color de Piel</label>
+              <input type="text" class="form-control" id="piel" name="fisico.piel">
+            </div>
+
+            <div class="col-md-6">
+              <label for="pelo" class="form-label">Color de Pelo</label>
+              <input type="text" class="form-control" id="pelo" name="fisico.pelo">
+            </div>
+
+            <div class="col-md-6">
+              <label for="ojos" class="form-label">Color de Ojos</label>
+              <input type="text" class="form-control" id="ojos" name="fisico.ojos">
+            </div>
+          </div>
+        </div>
+
+        <!-- Equipamiento -->
+        <div class="step-content d-none" id="step5">
+          <h2 class="h4 mb-3">Equipamiento</h2>
+
+          <div class="mb-4">
+            <h3 class="h5 mb-2">EQUIPABLES</h3>
+            <div class="parchment-bg p-3 rounded">
+              <div class="mb-2">
+                <label class="form-label">Arma 1</label>
+                <input type="text" class="form-control" name="equipamiento.arma1" placeholder="Ej: Espada larga">
+              </div>
+              <div class="mb-2">
+                <label class="form-label">Arma 2</label>
+                <input type="text" class="form-control" name="equipamiento.arma2" placeholder="Ej: Daga">
+              </div>
+              <div>
+                <label class="form-label">Armadura</label>
+                <input type="text" class="form-control" name="equipamiento.armadura" placeholder="Ej: Cota de malla">
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="h5 mb-2">CONSUMIBLES</h3>
+            <div class="parchment-bg p-3 rounded">
+              <div class="mb-2">
+                <label class="form-label">Objeto 1</label>
+                <input type="text" class="form-control" name="equipamiento.objeto1" placeholder="Ej: Poción de curación">
+              </div>
+              <div>
+                <label class="form-label">Objeto 2</label>
+                <input type="text" class="form-control" name="equipamiento.objeto2" placeholder="Ej: Pergamino">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+          <button type="button" id="prevBtn" class="btn btn-secondary" style="visibility: hidden;">Anterior</button>
+          <button type="button" id="nextBtn" class="btn btn-custom-amber">Siguiente</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="js/creacion.js"></script>
+</body>
+</html>
+

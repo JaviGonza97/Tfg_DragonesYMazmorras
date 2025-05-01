@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lanzador de Dados</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="dungeon-bg">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-75">
+    <div class="container">
+        <a class="navbar-brand fantasy-title" href="#">D&D Dice Roller</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">INICIO</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="creacion.html">CREACIÓN</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="explorar.html">EXPLORAR</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="prueba.html">PRUEBA</a>
+                </li>
+            </ul>
+            <div class="d-flex">
+                <a href="index.html" class="btn btn-outline-light btn-sm">Volver</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-4">
+    <div class="card bg-white bg-opacity-90 shadow-lg">
+        <div class="card-body p-4">
+            <h1 class="fantasy-title text-primary mb-4 d-flex align-items-center">
+                <i class="fas fa-dice-d20 me-2"></i> D&D DICE ROLLER
+            </h1>
+
+            <div class="parchment-bg p-4 rounded mb-4">
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="btn-group w-100" role="group">
+                            <button type="button" class="btn btn-dice" data-dice="4">d4</button>
+                            <button type="button" class="btn btn-dice" data-dice="6">d6</button>
+                            <button type="button" class="btn btn-dice" data-dice="8">d8</button>
+                            <button type="button" class="btn btn-dice" data-dice="10">d10</button>
+                            <button type="button" class="btn btn-dice" data-dice="12">d12</button>
+                            <button type="button" class="btn btn-dice active" data-dice="20">d20</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <label for="quantity" class="form-label">Cantidad</label>
+                        <input type="number" class="form-control" id="quantity" min="1" max="10" value="1">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="modifier" class="form-label">Modificador</label>
+                        <input type="number" class="form-control" id="modifier" value="0">
+                    </div>
+
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button id="rollBtn" class="btn btn-custom-amber w-100">Lanzar Dados</button>
+                    </div>
+                </div>
+
+                <div id="resultsContainer" class="d-none">
+                    <h2 class="h4 mb-3">Resultados</h2>
+
+                    <div class="d-flex flex-wrap gap-2 mb-4" id="diceResults">
+                        <!-- Aquí se mostrarán los resultados de los dados -->
+                    </div>
+
+                    <div class="d-flex align-items-center mb-2">
+                        <div id="totalResult" class="bg-light p-3 rounded border border-secondary text-center">
+                            <span class="fs-4 fw-bold">0</span>
+                        </div>
+                        <div class="ms-2 text-muted">
+                            <small id="resultBreakdown"></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center text-muted">
+                <small>Selecciona el tipo de dado, la cantidad y el modificador, luego haz clic en "Lanzar Dados".</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/dados.js"></script>
+</body>
+</html>
+

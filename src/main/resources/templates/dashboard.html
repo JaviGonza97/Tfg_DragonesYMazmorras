@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="dungeon-bg">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-75">
+  <div class="container">
+    <a class="navbar-brand fantasy-title" href="#">D&D Dice Roller</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="dashboard.html">INICIO</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="creacion.html">CREACIÓN</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="explorar.html">EXPLORAR</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="dashboard.html" id="characterName">GORAM</a>
+        </li>
+      </ul>
+      <div class="d-flex">
+        <a href="index.html" class="btn btn-outline-light btn-sm">
+          <i class="fas fa-sign-out-alt me-1"></i> Cerrar sesión
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-4">
+  <div class="character-card mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h1 class="fantasy-title text-primary" id="characterTitle">GORAM</h1>
+        <p class="text-muted" id="characterClass">Bárbaro · Nivel 1</p>
+      </div>
+      <div>
+        <select class="form-select" id="characterSelector">
+          <option value="Goram" selected>Goram</option>
+          <option value="Thordak">Thordak</option>
+          <option value="Elindra">Elindra</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row mb-4">
+      <div class="col-2">
+        <div class="stat-box">
+          <div class="text-muted small">STR</div>
+          <div class="fs-4 fw-bold">16</div>
+          <div class="small">+3</div>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="stat-box">
+          <div class="text-muted small">DEX</div>
+          <div class="fs-4 fw-bold">12</div>
+          <div class="small">+1</div>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="stat-box">
+          <div class="text-muted small">CON</div>
+          <div class="fs-4 fw-bold">16</div>
+          <div class="small">+3</div>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="stat-box">
+          <div class="text-muted small">INT</div>
+          <div class="fs-4 fw-bold">8</div>
+          <div class="small">-1</div>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="stat-box">
+          <div class="text-muted small">WIS</div>
+          <div class="fs-4 fw-bold">10</div>
+          <div class="small">+0</div>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="stat-box">
+          <div class="text-muted small">CHA</div>
+          <div class="fs-4 fw-bold">12</div>
+          <div class="small">+1</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <h2 class="h4 mb-3">Lanzador de Dados</h2>
+      <div class="row mb-3">
+        <div class="col-12">
+          <div class="btn-group w-100" role="group">
+            <button type="button" class="btn btn-dice" data-dice="4">d4</button>
+            <button type="button" class="btn btn-dice" data-dice="6">d6</button>
+            <button type="button" class="btn btn-dice" data-dice="8">d8</button>
+            <button type="button" class="btn btn-dice" data-dice="10">d10</button>
+            <button type="button" class="btn btn-dice" data-dice="12">d12</button>
+            <button type="button" class="btn btn-dice active" data-dice="20">d20</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3 align-items-end">
+        <div class="col-md-3">
+          <label for="dashboardQuantity" class="form-label">Cantidad</label>
+          <input type="number" class="form-control" id="dashboardQuantity" min="1" max="10" value="1">
+        </div>
+
+        <div class="col-md-3">
+          <label for="dashboardModifier" class="form-label">Modificador</label>
+          <input type="number" class="form-control" id="dashboardModifier" value="0">
+        </div>
+
+        <div class="col-md-3">
+          <button id="dashboardRollBtn" class="btn btn-custom-amber w-100">Lanzar</button>
+        </div>
+
+        <div class="col-md-3">
+          <div class="bg-light p-2 rounded border border-secondary text-center">
+            <span class="fs-4 fw-bold" id="dashboardResult">-</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <a href="personaje-datos.html" class="btn btn-custom-amber w-100 py-3">
+          <i class="fas fa-user me-2"></i> Datos del Personaje
+        </a>
+      </div>
+      <div class="col-md-6">
+        <a href="personaje-equipamiento.html" class="btn btn-custom-amber w-100 py-3">
+          <i class="fas fa-shield-alt me-2"></i> Equipamiento
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>
+
