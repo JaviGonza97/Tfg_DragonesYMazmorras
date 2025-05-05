@@ -19,10 +19,13 @@ public class Personaje {
     private String nombre;
     private String raza;
     private String clase;
+
     @OneToMany(mappedBy = "personaje", cascade = CascadeType.ALL)
     private List<Habilidad> habilidades;
+
     @OneToMany(mappedBy = "personaje", cascade = CascadeType.ALL)
     private List<Equipo> equipo;
+
     @OneToMany(mappedBy = "personaje", cascade = CascadeType.ALL)
     private List<Hechizo> hechizos;
 }
