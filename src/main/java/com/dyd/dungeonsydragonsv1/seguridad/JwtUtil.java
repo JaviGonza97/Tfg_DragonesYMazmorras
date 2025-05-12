@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-
+    //Utilizar la version 11.5 de JWT
     private final String SECRET = "clave_secreta_12345";
     private final long EXPIRACION = 1000 * 60 * 60 * 10; // 10 horas PPARA QUE SE EXPIRE
 
