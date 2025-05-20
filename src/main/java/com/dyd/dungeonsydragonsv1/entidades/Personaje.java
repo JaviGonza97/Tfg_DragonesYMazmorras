@@ -17,8 +17,14 @@ public class Personaje {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
-    private String raza;
-    private String clase;
+    
+    @ManyToOne
+    @JoinColumn(name = "raza_id")
+    private Raza raza;
+
+    @ManyToOne
+    @JoinColumn(name = "clase_id")
+    private Clase clase;
 
     @OneToMany(mappedBy = "personaje", cascade = CascadeType.ALL)
     private List<Habilidad> habilidades;
