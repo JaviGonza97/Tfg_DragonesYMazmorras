@@ -8,7 +8,7 @@
     --muted-bg: #2c2c2c;
     --success-color: #4caf50;
     --danger-color: #f44336;
-    background-image: url("/imagenes/fondo.jpg");
+    background-image: url("/img/fondo.jpg");
 }
 
 * {
