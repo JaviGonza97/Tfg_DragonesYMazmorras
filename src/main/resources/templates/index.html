@@ -1,18 +1,34 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Dragones y Mazmorras - Inicio</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inicio</title>
   <link rel="stylesheet" href="/css/styles.css">
-  <script defer src="/js/index.js"></script>
+  <script defer src="index.js"></script>
 </head>
 <body>
+<nav class="navbar">
+  <div class="navbar-container">
+    <a href="index.html" class="navbar-logo">
+      <img src="img/logo.jpg" alt="Logo" />
+    </a>
+    <div class="navbar-links">
+      <a href="dashboard.html">Inicio</a>
+      <a href="creacion.html">Crear Personaje</a>
+      <a href="dados.html">Dados</a>
+      <a href="login.html">Login</a>
+      <a href="registro.html">Registro</a>
+    </div>
+  </div>
+</nav>
+<div style="height: 60px;"></div>
   <div class="container">
-    <header>
-      <h1>Bienvenido a Dragones y Mazmorras</h1>
-      <p>Tu portal para crear personajes, lanzar hechizos y vivir aventuras.</p>
-    </header>
-
+    <h1>Bienvenido a Dragones y Mazmorras</h1>
+    <img src="img/logo.jpg" alt="Logo principal" class="centered-img">
+    <p style="text-align: center; margin-bottom: 2rem;">
+      Tu portal para crear personajes, lanzar hechizos y vivir aventuras.
+    </p>
     <div class="actions" style="justify-content: center;">
       <a href="login.html" class="btn">Iniciar Sesión</a>
       <a href="registro.html" class="btn btn-outline">Registrarse</a>

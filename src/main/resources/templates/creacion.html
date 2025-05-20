@@ -1,20 +1,41 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Crear Personaje</title>
-  <link rel="stylesheet" href="/css/styles.css">
-  <script defer src="/js/creacion.js"></script>
+  <link rel="stylesheet" href="css/styles.css" />
+  <script defer src="creacion.js"></script>
 </head>
 <body>
+<nav class="navbar">
+  <div class="navbar-container">
+    <a href="index.html" class="navbar-logo">
+      <img src="img/logo.jpg" alt="Logo" />
+    </a>
+    <div class="navbar-links">
+      <a href="dashboard.html">Inicio</a>
+      <a href="creacion.html">Crear Personaje</a>
+      <a href="dados.html">Dados</a>
+      <a href="login.html">Login</a>
+      <a href="registro.html">Registro</a>
+    </div>
+  </div>
+</nav>
+
+<div style="height: 60px;"></div>
+
   <div class="container">
     <h1>Crear Personaje</h1>
     <form id="character-form" class="form-grid">
+
+      <!-- Nombre -->
       <div class="form-group">
-        <label for="name">Nombre</label>
-        <input type="text" id="name" required>
+        <label for="name">Nombre del Personaje</label>
+        <input type="text" id="name" required />
       </div>
 
+      <!-- Raza -->
       <div class="form-group">
         <label for="race">Raza</label>
         <select id="race" required>
@@ -27,6 +48,7 @@
         </select>
       </div>
 
+      <!-- Clase -->
       <div class="form-group">
         <label for="class">Clase</label>
         <select id="class" required>
@@ -37,47 +59,52 @@
         </select>
       </div>
 
+      <!-- Equipo -->
       <div class="form-group">
         <label for="equipment-name">Nombre del equipo</label>
-        <input type="text" id="equipment-name">
+        <input type="text" id="equipment-name" placeholder="Ej. Espada de fuego" />
       </div>
 
       <div class="form-group">
         <label for="equipment-type">Tipo de equipo</label>
-        <input type="text" id="equipment-type">
+        <input type="text" id="equipment-type" placeholder="Ej. Espada, Escudo..." />
       </div>
 
       <div class="form-group">
         <label for="equipment-level">Nivel del equipo</label>
         <select id="equipment-level">
+          <option value="">Selecciona un nivel</option>
           <option>Bajo</option>
           <option>Medio</option>
           <option>Alto</option>
         </select>
       </div>
 
+      <!-- Habilidad -->
       <div class="form-group">
         <label for="skill-name">Nombre de habilidad</label>
-        <input type="text" id="skill-name">
+        <input type="text" id="skill-name" placeholder="Ej. Golpe poderoso" />
       </div>
 
       <div class="form-group">
         <label for="skill-value">Valor (1-99)</label>
-        <input type="number" id="skill-value" min="1" max="99">
+        <input type="number" id="skill-value" min="1" max="99" />
       </div>
 
+      <!-- Hechizo -->
       <div class="form-group">
         <label for="spell-name">Nombre del hechizo</label>
-        <input type="text" id="spell-name">
+        <input type="text" id="spell-name" placeholder="Ej. Bola de fuego" />
       </div>
 
       <div class="form-group">
         <label for="spell-desc">Descripción del hechizo</label>
-        <textarea id="spell-desc"></textarea>
+        <textarea id="spell-desc" placeholder="Describe el hechizo..."></textarea>
       </div>
 
+      <!-- Botón -->
       <div class="actions">
-        <button type="submit" class="btn">Guardar</button>
+        <button type="submit" class="btn">Guardar Personaje</button>
       </div>
     </form>
   </div>
