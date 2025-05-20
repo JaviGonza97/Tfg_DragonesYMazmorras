@@ -1,8 +1,6 @@
 package com.dyd.dungeonsydragonsv1.servicios;
 
 import com.dyd.dungeonsydragonsv1.entidades.Equipo;
-import com.dyd.dungeonsydragonsv1.entidades.Hechizo;
-import com.dyd.dungeonsydragonsv1.entidades.Personaje;
 import com.dyd.dungeonsydragonsv1.repositorios.EquipoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

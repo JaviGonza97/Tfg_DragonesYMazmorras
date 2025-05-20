@@ -3,6 +3,7 @@ package com.dyd.dungeonsydragonsv1.controladores;
 import com.dyd.dungeonsydragonsv1.entidades.Personaje;
 import com.dyd.dungeonsydragonsv1.servicios.PersonajeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,53 +17,75 @@ public class PersonajeRestController {
 
     private final PersonajeService personajeService;
 
-    // Obtener todos los personajes
+    /** GET  /api/personajes → todos los personajes */
     @GetMapping
     public ResponseEntity<List<Personaje>> obtenerTodos() {
-        List<Personaje> personajes = personajeService.findAll();
+        List<Personaje> personajes = personajeService.getAllPersonajes();
         return ResponseEntity.ok(personajes);
     }
 
-    // Obtener un personaje por ID
+    /** GET /api/personajes/{id} → personaje por ID */
     @GetMapping("/{id}")
     public ResponseEntity<Personaje> obtenerPorId(@PathVariable Long id) {
         Optional<Personaje> personaje = personajeService.findById(id);
-        return personaje.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return personaje
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Buscar personajes por nombre
+    /** GET /api/personajes/buscar/{nombre} → buscar por nombre */
     @GetMapping("/buscar/{nombre}")
     public ResponseEntity<List<Personaje>> buscarPorNombre(@PathVariable String nombre) {
         List<Personaje> personajes = personajeService.findByNombre(nombre);
-        return personajes.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(personajes);
+        return personajes.isEmpty()
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.ok(personajes);
     }
 
-    // Crear un nuevo personaje
+    /** POST /api/personajes → crear personaje (resuelve Raza y Clase) */
     @PostMapping
     public ResponseEntity<Personaje> crear(@RequestBody Personaje personaje) {
-        Personaje nuevoPersonaje = personajeService.save(personaje);
-        return ResponseEntity.ok(nuevoPersonaje);
+        Personaje nuevo = personajeService.savePersonaje(personaje);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(nuevo);
     }
 
-    // Filtrar personajes por clase y raza
+    /**
+     * POST /api/personajes/filtrar
+     * Filtra por clase y raza usando los nombres de las entidades anidadas.
+     * Se espera un JSON como:
+     * {
+     *   "clase": { "nombre": "Guerrero" },
+     *   "raza":  { "nombre": "Enano" }
+     * }
+     */
+
+
     @PostMapping("/filtrar")
-    public ResponseEntity<List<Personaje>> filtrar(@RequestBody Personaje personajeFiltro) {
-        List<Personaje> personajes = personajeService.filtrarPorClaseYRaza(personajeFiltro.getClase(), personajeFiltro.getRaza());
-        return personajes.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(personajes);
+    public ResponseEntity<List<Personaje>> filtrar(@RequestBody Personaje filtro) {
+        String claseNombre = filtro.getClase()  != null ? filtro.getClase().getNombre() : "";
+        String razaNombre  = filtro.getRaza()   != null ? filtro.getRaza().getNombre()   : "";
+        List<Personaje> resultados = personajeService
+                .filtrarPorClaseYRaza(claseNombre, razaNombre);
+        return resultados.isEmpty()
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.ok(resultados);
     }
 
-    // Actualizar un personaje existente
+    /** PUT /api/personajes/{id} → actualizar (resuelve Raza y Clase) */
     @PutMapping("/{id}")
-    public ResponseEntity<Personaje> actualizar(@PathVariable Long id, @RequestBody Personaje personaje) {
+    public ResponseEntity<Personaje> actualizar(@PathVariable Long id,
+                                                @RequestBody Personaje personaje) {
         if (!personajeService.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
         personaje.setId(id);
-        Personaje actualizado = personajeService.save(personaje);
+        Personaje actualizado = personajeService.savePersonaje(personaje);
         return ResponseEntity.ok(actualizado);
     }
 
-    // Eliminar un personaje por ID
+    /** DELETE /api/personajes/{id} → eliminar */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         if (!personajeService.existsById(id)) {
