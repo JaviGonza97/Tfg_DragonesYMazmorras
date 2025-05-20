@@ -17,13 +17,13 @@ public class Personaje {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
-    
+
     @ManyToOne
-    @JoinColumn(name = "raza_id")
+    @JoinColumn(name = "raza_personaje")
     private Raza raza;
 
     @ManyToOne
-    @JoinColumn(name = "clase_id")
+    @JoinColumn(name = "clase_personaje")
     private Clase clase;
 
     @OneToMany(mappedBy = "personaje", cascade = CascadeType.ALL)
