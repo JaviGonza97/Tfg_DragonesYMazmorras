@@ -17,14 +17,12 @@ public class PersonajeRestController {
 
     private final PersonajeService personajeService;
 
-    /** GET  /api/personajes → todos los personajes */
     @GetMapping
     public ResponseEntity<List<Personaje>> obtenerTodos() {
         List<Personaje> personajes = personajeService.getAllPersonajes();
         return ResponseEntity.ok(personajes);
     }
 
-    /** GET /api/personajes/{id} → personaje por ID */
     @GetMapping("/{id}")
     public ResponseEntity<Personaje> obtenerPorId(@PathVariable Long id) {
         Optional<Personaje> personaje = personajeService.findById(id);
@@ -33,7 +31,6 @@ public class PersonajeRestController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    /** GET /api/personajes/buscar/{nombre} → buscar por nombre */
     @GetMapping("/buscar/{nombre}")
     public ResponseEntity<List<Personaje>> buscarPorNombre(@PathVariable String nombre) {
         List<Personaje> personajes = personajeService.findByNombre(nombre);
@@ -42,7 +39,6 @@ public class PersonajeRestController {
                 : ResponseEntity.ok(personajes);
     }
 
-    /** POST /api/personajes → crear personaje (resuelve Raza y Clase) */
     @PostMapping
     public ResponseEntity<Personaje> crear(@RequestBody Personaje personaje) {
         Personaje nuevo = personajeService.savePersonaje(personaje);

@@ -1,5 +1,6 @@
 package com.dyd.dungeonsydragonsv1.servicios;
 
+import com.dyd.dungeonsydragonsv1.entidades.Hechizo;
 import com.dyd.dungeonsydragonsv1.entidades.Personaje;
 import com.dyd.dungeonsydragonsv1.entidades.Raza;
 import com.dyd.dungeonsydragonsv1.entidades.Clase;
@@ -71,4 +72,19 @@ public class PersonajeService {
     public void deleteById(Long id) {
         personajeRepository.deleteById(id);
     }
+
+    public Personaje agregarHechizo(Long personajeId, Hechizo hechizo) {
+        Personaje personaje = personajeRepository.findById(personajeId)
+                .orElseThrow(() -> new RuntimeException("Personaje no encontrado con ID: " + personajeId));
+
+        String claseNombre = personaje.getClase().getNombre();
+        if (!claseNombre.equalsIgnoreCase("HECHICERO")) {
+            throw new IllegalArgumentException("Solo los personajes de clase HECHICERO pueden tener hechizos.");
+        }
+
+        personaje.getHechizos().add(hechizo);
+        return personajeRepository.save(personaje);
+    }
+
+
 }

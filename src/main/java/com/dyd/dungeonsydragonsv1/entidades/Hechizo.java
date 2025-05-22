@@ -16,7 +16,4 @@ public class Hechizo {
     private String nivel; // Bajo, Medio, Alto
     private String descripcion;
 
-    @ManyToOne
-    @JoinColumn(name = "personaje_id")
-    private Personaje personaje;
 }

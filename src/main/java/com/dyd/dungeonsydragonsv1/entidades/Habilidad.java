@@ -16,7 +16,4 @@ public class Habilidad {
     private String nombre;
     private int valor;
 
-    @ManyToOne
-    @JoinColumn(name = "personaje_id")
-    private Personaje personaje;
 }

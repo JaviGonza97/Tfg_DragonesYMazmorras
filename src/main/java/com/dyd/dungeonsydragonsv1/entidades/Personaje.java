@@ -27,11 +27,26 @@ public class Personaje {
     private Clase clase;
 
     @OneToMany(mappedBy = "personaje", cascade = CascadeType.ALL)
-    private List<Habilidad> habilidades;
-
-    @OneToMany(mappedBy = "personaje", cascade = CascadeType.ALL)
     private List<Equipo> equipo;
 
-    @OneToMany(mappedBy = "personaje", cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(
+            name = "personaje_hechizo",
+            joinColumns = @JoinColumn(name = "personaje_id"),
+            inverseJoinColumns = @JoinColumn(name = "hechizo_id")
+    )
     private List<Hechizo> hechizos;
+
+    @ManyToMany
+    @JoinTable(
+            name = "personaje_habilidad",
+            joinColumns = @JoinColumn(name = "personaje_id"),
+            inverseJoinColumns = @JoinColumn(name = "habilidad_id")
+    )
+    private List<Habilidad> habilidades;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_personaje")
+    private Usuario usuario;
+
 }
