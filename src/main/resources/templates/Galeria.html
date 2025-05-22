@@ -10,6 +10,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/script.js" defer></script>
+    <script src="js/Galeria.js" defer></script>
 </head>
 <body>
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:p-4" data-i18n="skipToContent">
@@ -37,7 +38,7 @@
         <div class="position-absolute top-0 start-0 w-100 h-100 bg-pattern"></div>
     </header>
     
-    <nav class="navbar navbar-expand-lg navbar-dark bg-secondary sticky-top" role="navigation" aria-label="Menú principal">
+<nav class="navbar navbar-expand-lg navbar-dark bg-secondary sticky-top" role="navigation" aria-label="Menú principal">
         <div class="container">
 
             <a class="nav-link active" href="index.html" aria-current="page">
@@ -86,67 +87,73 @@
         </div>
     </nav>
     
-    <main id="main-content" class="container my-5" role="main">
-        <h2 id="games-heading" class="text-center mb-4 position-relative animated">
-            <span class="badge bg-primary position-relative">
-                <span data-i18n="ourGames">OPCIONES</span>
-                <span class="position-absolute top-100 start-100 translate-middle badge rounded-pill bg-danger" aria-label="Nuevo contenido disponible" data-i18n="new">
-                    NUEVO
-                </span>
-            </span>
-        </h2>
-        <div class="row games g-4" aria-labelledby="games-heading">
-            <div class="col-md-6 col-lg-3 game" data-game="lol">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-badge position-absolute top-0 end-0 m-3">
-                        <span class="badge bg-primary" data-i18n="popular">Popular</span>
-                    </div>
-                    <img src="img/lol.jpg" alt="League of Legends" class="card-img-top game-image">
-                    <div class="card-body">
-                        <h3 class="card-title h5">Humano Guerrero</h3>
-                        <p class="card-text">Un combatiente disciplinado que confía en su espada. Entrenado en tácticas de batalla y siempre listo para liderar.</p>
-                        <button class="btn btn-outline-primary w-100 mt-2" data-bs-toggle="modal" data-bs-target="#gameModal">
-                            <i class="bi bi-info-circle me-2"></i><span data-i18n="moreInfo">Más información</span>
-                        </button>
-                    </div>
-                </div>
+<main id="main-content" class="container my-5" role="main">
+        <section>
+            <h2 class="mb-4 text-center">Galería de Personajes</h2>
+            
+            <div id="auth-status-container" class="mb-4">
+                <!-- Este contenedor mostrará mensajes según el estado de autenticación -->
             </div>
-            <div class="col-md-6 col-lg-3 game" data-game="tft">
-                <div class="card h-100 shadow-sm">
-                    <img src="img/lor.jpg" alt="Teamfight Tactics" class="card-img-top game-image">
-                    <div class="card-body">
-                        <h3 class="card-title h5">Enano Paladín</h3>
-                        <p class="card-text">Un defensor sagrado con armadura pesada y maza bendita. Lucha por la justicia y protege a los débiles con fe inquebrantable.</p>
-                        <button class="btn btn-outline-primary w-100 mt-2" data-bs-toggle="modal" data-bs-target="#gameModal">
-                            <i class="bi bi-info-circle me-2"></i><span data-i18n="moreInfo">Más información</span>
-                        </button>
-                    </div>
-                </div>
+            
+            <div id="galeria-personajes" class="row g-4 justify-content-center">
+                <!-- Los personajes se cargarán dinámicamente aquí -->
             </div>
-            <div class="col-md-6 col-lg-3 game" data-game="lor">
-                <div class="card h-100 shadow-sm">
-                    <img src="img/2xko.png" alt="Legends of Runeterra" class="card-img-top game-image">
-                    <div class="card-body">
-                        <h3 class="card-title h5">Orco Hechicero</h3>
-                        <p class="card-text">Una fusión de fuerza bruta y poder arcano. Canaliza energía mágica salvaje para dominar el campo de batalla.</p>
-                        <button class="btn btn-outline-primary w-100 mt-2" data-bs-toggle="modal" data-bs-target="#gameModal">
-                            <i class="bi bi-info-circle me-2"></i><span data-i18n="moreInfo">Más información</span>
-                        </button>
-                    </div>
-                </div>
+            
+            <div id="no-characters-container" class="text-center mt-4 d-none">
+                <p class="lead">Aún no tienes personajes creados.</p>
+                <a href="creacion.html" class="btn btn-lg mt-3" style="background-color: var(--primary); color: white;">
+                    <i class="bi bi-plus-circle me-2"></i>Crear mi primer personaje
+                </a>
             </div>
-            <div class="col-md-6 col-lg-3 game" data-game="2xko">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-badge position-absolute top-0 end-0 m-3">
-                        <span class="badge bg-danger" data-i18n="new">NUEVO</span>
+        </section>
+        
+        <!-- Modal de Detalles del Personaje -->
+        <div class="modal fade" id="characterModal" tabindex="-1" aria-labelledby="characterModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: var(--primary); color: white;">
+                        <h5 class="modal-title" id="characterModalLabel">Detalles del Personaje</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <img src="img/tft.jpg" alt="2XKO" class="card-img-top game-image">
-                    <div class="card-body">
-                        <h3 class="card-title h5">Humano Dracónico</h3>
-                        <p class="card-text">Descendiente de dragones, este guerrero blande un hacha con fuerza ancestral y escupe fuego cuando la batalla lo exige.</p>
-                        <button class="btn btn-outline-primary w-100 mt-2" data-bs-toggle="modal" data-bs-target="#gameModal">
-                            <i class="bi bi-info-circle me-2"></i><span data-i18n="moreInfo">Más información</span>
-                        </button>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-4 text-center mb-3">
+                                <div class="character-avatar rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 120px; height: 120px; font-size: 3rem; background-color: var(--primary); color: white;">
+                                    <span id="character-avatar-initial"></span>
+                                </div>
+                                <h3 id="character-name" class="h4 mb-1"></h3>
+                                <p id="character-race-class" class="text-muted"></p>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card mb-3">
+                                    <div class="card-header" style="background-color: rgba(219, 148, 41, 0.2);">
+                                        <h4 class="h6 mb-0">Características</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row" id="character-stats">
+                                            <!-- Las estadísticas se cargarán dinámicamente aquí -->
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card">
+                                    <div class="card-header" style="background-color: rgba(219, 148, 41, 0.2);">
+                                        <h4 class="h6 mb-0">Habilidades y Equipamiento</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="character-abilities">
+                                            <!-- Las habilidades se cargarán dinámicamente aquí -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <a id="edit-character-link" href="#" class="btn" style="background-color: var(--primary); color: white;">
+                            <i class="bi bi-pencil me-2"></i>Editar
+                        </a>
                     </div>
                 </div>
             </div>
@@ -182,7 +189,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="close">Cerrar</button>
-                    <button type="button" class="btn btn-primary" data-i18n="use">Crear</button>
+                    <button type="button" class="btn btn-primary" data-i18n="download">Descargar ahora</button>
                 </div>
             </div>
         </div>

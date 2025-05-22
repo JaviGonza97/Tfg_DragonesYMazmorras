@@ -1,48 +1,394 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro</title>
-   <link rel="stylesheet" href="/css/styles.css">
-  <script defer src="registro.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&D</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js" defer></script>
 </head>
 <body>
-<nav class="navbar">
-  <div class="navbar-container">
-    <a href="index.html" class="navbar-logo">
-      <img src="img/logo.jpg" alt="Logo" />
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:p-4" data-i18n="skipToContent">
+        Saltar al contenido principal
     </a>
-    <div class="navbar-links">
-      <a href="dashboard.html">Inicio</a>
-      <a href="creacion.html">Crear Personaje</a>
-      <a href="dados.html">Dados</a>
-      <a href="login.html">Login</a>
-      <a href="registro.html">Registro</a>
-    </div>
-  </div>
-</nav>
-<div style="height: 60px;"></div>
+    <header class="bg-dark text-white py-5 position-relative overflow-hidden" role="banner">
+        <div class="container position-relative z-3">
+            <h1 class="display-4 fw-bold text-center mb-4" data-i18n="title">D&D</h1>
+            <p class="lead text-center mb-4" data-i18n="subtitle">Crea tu propio personaje de Dragones y Mazmorras</p>
+            <div class="download-buttons d-flex justify-content-center flex-wrap gap-3">
+                <a href="#" class="btn btn-primary btn-lg">
+                    <i class="bi bi-apple me-2"></i><span data-i18n="appStore">App Store</span>
+                </a>
+                <a href="#" class="btn btn-success btn-lg">
+                    <i class="bi bi-google-play me-2"></i><span data-i18n="googlePlay">Google Play</span>
+                </a>
+                <a href="#" class="btn btn-info btn-lg text-black">
+                    <i class="bi bi-steam me-2"></i><span data-i18n="steam">Steam</span>
+                </a>
+                <a href="#" class="btn btn-warning btn-lg">
+                    <i class="bi bi-amazon me-2"></i><span data-i18n="amazon">Amazon</span>
+                </a>
+            </div>
+        </div>
+        <div class="position-absolute top-0 start-0 w-100 h-100 bg-pattern"></div>
+    </header>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-secondary sticky-top" role="navigation" aria-label="Menú principal">
+        <div class="container">
 
-  <div class="container">
-    <h1>Registro de Usuario</h1>
-    <form id="register-form" class="form-grid">
-      <div class="form-group">
-        <label for="username">Usuario</label>
-        <input type="text" id="username" required>
-      </div>
-      <div class="form-group">
-        <label for="email">Correo Electrónico</label>
-        <input type="email" id="email" required>
-      </div>
-      <div class="form-group">
-        <label for="password">Contraseña</label>
-        <input type="password" id="password" required>
-      </div>
-      <div class="actions">
-        <button type="submit" class="btn">Registrarse</button>
-      </div>
-    </form>
-  </div>
+            <a class="nav-link active" href="index.html" aria-current="page">
+                <i class="bi bi-house-door me-1"></i>
+                <span data-i18n="home">Inicio</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Alternar navegación">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="creacion.html" aria-current="page">
+                            <i class="bi bi-people me-1"></i><span data-i18n="crear">Crear personaje</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="dados.html" data-bs-toggle="dropdown">
+                            <i class="bi bi-dice-6"></i><span data-i18n="news"> Dados</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="#" data-i18n="D6">Dado de 6</a></li>
+                            <li><a class="dropdown-item" href="#" data-i18n="D12">Dado de 12</a></li>
+                            <li><a class="dropdown-item" href="#" data-i18n="D20">Dado de 20</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">
+                            <i class="bi bi-door-open"></i><span data-i18n="login"> inicia sesion</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="registro.html">
+                            <i class="bi bi-shift-fill"></i><span data-i18n="register"> registrate</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <main id="main-content" class="container my-5" role="main">
+        <div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header py-3 text-center" style="background-color: var(--primary); color: white;">
+                <h2 class="mb-0"><i class="bi bi-person-plus me-2"></i>Crear una cuenta</h2>
+            </div>
+            <div class="card-body p-4">
+                <div class="alert alert-danger d-none" id="register-error" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span id="register-error-message">Error en el registro. Por favor, inténtalo de nuevo.</span>
+                </div>
+                <div class="alert alert-success d-none" id="register-success" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <span id="register-success-message">¡Registro exitoso! Redirigiendo al inicio de sesión...</span>
+                </div>
+                <form id="register-form" class="needs-validation" novalidate>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                <input type="text" class="form-control" id="nombre" name="nombre" required>
+                            </div>
+                            <div class="invalid-feedback">Por favor, introduce tu nombre.</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="apellido" class="form-label">Apellido</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                <input type="text" class="form-control" id="apellido" name="apellido" required>
+                            </div>
+                            <div class="invalid-feedback">Por favor, introduce tu apellido.</div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Nombre de usuario</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="invalid-feedback">Por favor, elige un nombre de usuario.</div>
+                        <div class="form-text" id="username-feedback"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email-register" class="form-label">Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                            <input type="email" class="form-control" id="email-register" name="email" required>
+                        </div>
+                        <div class="invalid-feedback">Por favor, introduce un email válido.</div>
+                        <div class="form-text" id="email-feedback"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="password-register" class="form-label">Contraseña</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                <input type="password" class="form-control" id="password-register" name="password" required 
+                                       pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$">
+                                <button class="btn btn-outline-secondary" type="button" id="toggle-password-register">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                            <div class="invalid-feedback">La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.</div>
+                            <div class="form-text">
+                                <small>La contraseña debe contener:</small>
+                                <ul class="mb-0 ps-3 small">
+                                    <li id="length-check" class="text-muted">Al menos 8 caracteres</li>
+                                    <li id="uppercase-check" class="text-muted">Al menos una mayúscula</li>
+                                    <li id="lowercase-check" class="text-muted">Al menos una minúscula</li>
+                                    <li id="number-check" class="text-muted">Al menos un número</li>
+                                    <li id="special-check" class="text-muted">Al menos un carácter especial</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="confirm-password" class="form-label">Confirmar contraseña</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                <input type="password" class="form-control" id="confirm-password" name="confirmPassword" required>
+                                <button class="btn btn-outline-secondary" type="button" id="toggle-confirm-password">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                            <div class="invalid-feedback">Las contraseñas no coinciden.</div>
+                            <div class="form-text" id="password-match-feedback"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
+                            <label class="form-check-label" for="terms">
+                                Acepto los <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">términos y condiciones</a>
+                            </label>
+                            <div class="invalid-feedback">Debes aceptar los términos y condiciones para continuar.</div>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-lg" style="background-color: var(--primary); color: white;">
+                            <i class="bi bi-person-plus me-2"></i>Crear cuenta
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center py-3">
+                <p class="mb-0">¿Ya tienes una cuenta? <a href="login.html" class="text-decoration-none" style="color: var(--primary);">Inicia sesión aquí</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Términos y Condiciones -->
+<div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: var(--primary); color: white;">
+                <h5 class="modal-title" id="termsModalLabel">Términos y Condiciones</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6>1. Aceptación de los Términos</h6>
+                <p>Al registrarte en D&D, aceptas cumplir con estos términos y condiciones. Si no estás de acuerdo con alguna parte de estos términos, no podrás utilizar nuestros servicios.</p>
+                
+                <h6>2. Uso de la Cuenta</h6>
+                <p>Eres responsable de mantener la confidencialidad de tu contraseña y de todas las actividades que ocurran bajo tu cuenta.</p>
+                
+                <h6>3. Privacidad</h6>
+                <p>Tu privacidad es importante para nosotros. Consulta nuestra Política de Privacidad para entender cómo recopilamos y utilizamos tu información.</p>
+                
+                <h6>4. Contenido del Usuario</h6>
+                <p>Al subir contenido a nuestra plataforma, nos otorgas una licencia mundial, no exclusiva y libre de regalías para usar, reproducir y distribuir dicho contenido en relación con el servicio.</p>
+                
+                <h6>5. Conducta</h6>
+                <p>No permitimos el uso de nuestra plataforma para actividades ilegales o abusivas. Nos reservamos el derecho de suspender o terminar cuentas que violen estas normas.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn" id="accept-terms" data-bs-dismiss="modal" style="background-color: var(--primary); color: white;">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Script para validación en tiempo real de la contraseña
+    document.addEventListener('DOMContentLoaded', function() {
+        const passwordInput = document.getElementById('password-register');
+        if (passwordInput) {
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                
+                // Validar longitud
+                const lengthCheck = document.getElementById('length-check');
+                if (password.length >= 8) {
+                    lengthCheck.classList.remove('text-muted');
+                    lengthCheck.classList.add('text-success');
+                } else {
+                    lengthCheck.classList.remove('text-success');
+                    lengthCheck.classList.add('text-muted');
+                }
+                
+                // Validar mayúscula
+                const uppercaseCheck = document.getElementById('uppercase-check');
+                if (/[A-Z]/.test(password)) {
+                    uppercaseCheck.classList.remove('text-muted');
+                    uppercaseCheck.classList.add('text-success');
+                } else {
+                    uppercaseCheck.classList.remove('text-success');
+                    uppercaseCheck.classList.add('text-muted');
+                }
+                
+                // Validar minúscula
+                const lowercaseCheck = document.getElementById('lowercase-check');
+                if (/[a-z]/.test(password)) {
+                    lowercaseCheck.classList.remove('text-muted');
+                    lowercaseCheck.classList.add('text-success');
+                } else {
+                    lowercaseCheck.classList.remove('text-success');
+                    lowercaseCheck.classList.add('text-muted');
+                }
+                
+                // Validar número
+                const numberCheck = document.getElementById('number-check');
+                if (/\d/.test(password)) {
+                    numberCheck.classList.remove('text-muted');
+                    numberCheck.classList.add('text-success');
+                } else {
+                    numberCheck.classList.remove('text-success');
+                    numberCheck.classList.add('text-muted');
+                }
+                
+                // Validar carácter especial
+                const specialCheck = document.getElementById('special-check');
+                if (/[@$!%*?&]/.test(password)) {
+                    specialCheck.classList.remove('text-muted');
+                    specialCheck.classList.add('text-success');
+                } else {
+                    specialCheck.classList.remove('text-success');
+                    specialCheck.classList.add('text-muted');
+                }
+            });
+        }
+        
+        // Validación en tiempo real de coincidencia de contraseñas
+        const confirmPasswordInput = document.getElementById('confirm-password');
+        if (confirmPasswordInput && passwordInput) {
+            confirmPasswordInput.addEventListener('input', function() {
+                const password = passwordInput.value;
+                const confirmPassword = this.value;
+                const feedback = document.getElementById('password-match-feedback');
+                
+                if (confirmPassword === '') {
+                    feedback.textContent = '';
+                    feedback.className = 'form-text';
+                } else if (password === confirmPassword) {
+                    feedback.textContent = 'Las contraseñas coinciden.';
+                    feedback.className = 'form-text text-success';
+                } else {
+                    feedback.textContent = 'Las contraseñas no coinciden.';
+                    feedback.className = 'form-text text-danger';
+                }
+            });
+        }
+    });
+</script>
+    </main>
+    
+    <div class="modal fade" id="gameModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <img id="modalImage" src="/placeholder.svg" alt="" class="img-fluid rounded-3 shadow">
+                    </div>
+                    <p id="modalDescription" class="lead"></p>
+                    <div class="accordion" id="modalAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDetails">
+                                    <span data-i18n="technicalDetails">Detalles técnicos</span>
+                                </button>
+                            </h2>
+                            <div id="collapseDetails" class="accordion-collapse collapse show" data-bs-parent="#modalAccordion">
+                                <div class="accordion-body">
+                                    <ul id="modalDetails" class="list-group list-group-flush"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="close">Cerrar</button>
+                    <button type="button" class="btn btn-primary" data-i18n="download">Descargar ahora</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-4" role="contentinfo">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <h5 class="mb-3" data-i18n="aboutUs">Sobre nosotros</h5>
+                    <p class="mb-0" data-i18n="aboutText">D&D una pagina que se encarga de facilitar herramientas para crear personajes de rol</p>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <h5 class="mb-3" data-i18n="quickLinks">Enlaces rápidos</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50 text-decoration-none" data-i18n="support">Soporte</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none" data-i18n="careers">Carreras</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none" data-i18n="press">Prensa</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <h5 class="mb-3" data-i18n="followUs">Síguenos</h5>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white"><i class="bi bi-facebook fs-4"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-twitter fs-4"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-instagram fs-4"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-youtube fs-4"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <h5 id="newsletter-heading" class="mb-3" data-i18n="newsletter">Boletín</h5>
+                    <div class="input-group" role="form" aria-labelledby="newsletter-heading">
+                        <label for="newsletter-email" class="sr-only" data-i18n="emailLabel">Dirección de email</label>
+                        <input type="email" id="newsletter-email" class="form-control" placeholder="Tu email" aria-label="Dirección de email" data-i18n-placeholder="emailPlaceholder">
+                        <button class="btn btn-primary" type="submit" aria-label="Suscribirse al boletín" data-i18n="subscribe" style="background-color: #db9429;" >Suscribir</button>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0" data-i18n="copyright">&copy; 2025 D&D, Inc. Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
+
