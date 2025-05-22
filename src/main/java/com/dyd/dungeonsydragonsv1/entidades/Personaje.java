@@ -49,4 +49,10 @@ public class Personaje {
     @JoinColumn(name = "usuario_personaje")
     private Usuario usuario;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "estadistica_id")
+    private Estadistica estadistica;
+
+
+
 }

@@ -1,9 +1,11 @@
 package com.dyd.dungeonsydragonsv1.servicios;
 
+import com.dyd.dungeonsydragonsv1.entidades.Clase;
+import com.dyd.dungeonsydragonsv1.entidades.Estadistica;
 import com.dyd.dungeonsydragonsv1.entidades.Hechizo;
 import com.dyd.dungeonsydragonsv1.entidades.Personaje;
 import com.dyd.dungeonsydragonsv1.entidades.Raza;
-import com.dyd.dungeonsydragonsv1.entidades.Clase;
+import com.dyd.dungeonsydragonsv1.repositorios.HechizoRepository;
 import com.dyd.dungeonsydragonsv1.repositorios.PersonajeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,8 @@ public class PersonajeService {
     private final PersonajeRepository personajeRepository;
     private final RazaService razaService;
     private final ClaseService claseService;
+    private final HechizoRepository hechizoRepository;
+    private final EstadisticaService estadisticaService;
 
     public List<Personaje> getAllPersonajes() {
         return personajeRepository.findAll();
@@ -31,36 +35,46 @@ public class PersonajeService {
         return personajeRepository.findByNombre(nombre);
     }
 
-    /**
-     * Guarda un Personaje, asegurándose de que Raza y Clase existan y se enlacen correctamente.
-     */
     public Personaje savePersonaje(Personaje personaje) {
-        // Resolver Raza
+        // 1. Resolver Raza
         Long razaId = personaje.getRaza().getId();
         Raza raza = razaService.findById(razaId)
                 .orElseThrow(() -> new RuntimeException("Raza no encontrada con ID: " + razaId));
-        // Resolver Clase
+
+        // 2. Resolver Clase
         Long claseId = personaje.getClase().getId();
         Clase clase = claseService.findById(claseId)
                 .orElseThrow(() -> new RuntimeException("Clase no encontrada con ID: " + claseId));
 
+        // 3. Validar combinaciones prohibidas
+        if (raza.getNombre().equalsIgnoreCase("ELFO") &&
+                clase.getNombre().equalsIgnoreCase("GUERRERO")) {
+            throw new IllegalArgumentException("Un Elfo no puede ser Guerrero.");
+        }
+
+        if (raza.getNombre().equalsIgnoreCase("ORCO") &&
+                clase.getNombre().equalsIgnoreCase("PALADÍN")) {
+            throw new IllegalArgumentException("Un Orco no puede ser Paladín.");
+        }
+
+        // 4. Calcular estadísticas
+        Estadistica stats = estadisticaService.calcularEstadistica(raza, clase);
+        stats.setPersonaje(personaje); // asociación bidireccional
+        personaje.setEstadistica(stats);
+
+        // 5. Asignar raza y clase
         personaje.setRaza(raza);
         personaje.setClase(clase);
 
+        // 6. Guardar personaje
         return personajeRepository.save(personaje);
     }
 
-    /**
-     * Guarda varios personajes, aplicando la misma lógica de resolución de Raza y Clase.
-     */
     public List<Personaje> saveAll(List<Personaje> personajes) {
         personajes.forEach(this::savePersonaje);
         return personajes;
     }
 
-    /**
-     * Filtra personajes por nombre de clase y raza (Strings), haciendo join sobre las entidades.
-     */
     public List<Personaje> filtrarPorClaseYRaza(String claseNombre, String razaNombre) {
         return personajeRepository.filtrarPorClaseYRaza(claseNombre, razaNombre);
     }
@@ -86,5 +100,18 @@ public class PersonajeService {
         return personajeRepository.save(personaje);
     }
 
+    public Personaje agregarHechizoExistente(Long personajeId, Long hechizoId) {
+        Personaje personaje = personajeRepository.findById(personajeId)
+                .orElseThrow(() -> new RuntimeException("Personaje no encontrado con ID: " + personajeId));
 
+        if (!personaje.getClase().getNombre().equalsIgnoreCase("HECHICERO")) {
+            throw new IllegalArgumentException("Solo los personajes de clase HECHICERO pueden tener hechizos.");
+        }
+
+        Hechizo hechizo = hechizoRepository.findById(hechizoId)
+                .orElseThrow(() -> new RuntimeException("Hechizo no encontrado con ID: " + hechizoId));
+
+        personaje.getHechizos().add(hechizo);
+        return personajeRepository.save(personaje);
+    }
 }
