@@ -1,5 +1,6 @@
 package com.dyd.dungeonsydragonsv1.entidades;
 
+import com.dyd.dungeonsydragonsv1.entidades.enumerado.TipoEquipo;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,7 +16,10 @@ public class Equipo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
-    private String tipo; // Arma, Armadura, Objeto mágico
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipoEquipo tipo;
 
     @ManyToOne
     @JoinColumn(name = "personaje_id")

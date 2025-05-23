@@ -1,6 +1,8 @@
 package com.dyd.dungeonsydragonsv1.dto.personajes;
 
+import com.dyd.dungeonsydragonsv1.entidades.enumerado.TipoEquipo;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Data
@@ -14,6 +16,6 @@ public class EquipoBack {
     @NotBlank(message = "El nombre del equipo no puede estar vacío")
     private String nombre;
 
-    @NotBlank(message = "El tipo de equipo no puede estar vacío")
-    private String tipo;
+    @NotNull(message = "Debe especificar un tipo de equipo válido (ARMA, ARMADURA, OBJETO)")
+    private TipoEquipo tipo;
 }

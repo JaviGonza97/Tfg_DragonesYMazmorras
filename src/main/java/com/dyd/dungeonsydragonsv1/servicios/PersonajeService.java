@@ -114,4 +114,21 @@ public class PersonajeService {
         personaje.getHechizos().add(hechizo);
         return personajeRepository.save(personaje);
     }
+
+    public Personaje eliminarHechizoDePersonaje(Long personajeId, Long hechizoId) {
+        Personaje personaje = personajeRepository.findById(personajeId)
+                .orElseThrow(() -> new RuntimeException("Personaje no encontrado con ID: " + personajeId));
+
+        personaje.getHechizos().removeIf(h -> h.getId().equals(hechizoId));
+        return personajeRepository.save(personaje);
+    }
+
+    public Personaje eliminarTodosHechizos(Long personajeId) {
+        Personaje personaje = personajeRepository.findById(personajeId)
+                .orElseThrow(() -> new RuntimeException("Personaje no encontrado con ID: " + personajeId));
+
+        personaje.getHechizos().clear();
+        return personajeRepository.save(personaje);
+    }
+
 }

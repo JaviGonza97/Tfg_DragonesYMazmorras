@@ -18,4 +18,6 @@ public interface HechizoMapper {
 
     List<HechizoBack> toBackList(List<Hechizo> list);
     List<Hechizo> toEntityList(List<HechizoBack> list);
+
+
 }

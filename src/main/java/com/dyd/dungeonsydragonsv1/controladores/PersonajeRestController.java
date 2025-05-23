@@ -1,10 +1,10 @@
 package com.dyd.dungeonsydragonsv1.controladores;
 
-import com.dyd.dungeonsydragonsv1.dto.personajes.PersonajeBack;
-import com.dyd.dungeonsydragonsv1.dto.personajes.PersonajeFront;
-import com.dyd.dungeonsydragonsv1.dto.personajes.PersonajeMapper;
+import com.dyd.dungeonsydragonsv1.dto.personajes.*;
+import com.dyd.dungeonsydragonsv1.entidades.Hechizo;
 import com.dyd.dungeonsydragonsv1.entidades.Personaje;
 import com.dyd.dungeonsydragonsv1.servicios.ClaseService;
+import com.dyd.dungeonsydragonsv1.servicios.HechizoService;
 import com.dyd.dungeonsydragonsv1.servicios.PersonajeService;
 import com.dyd.dungeonsydragonsv1.servicios.RazaService;
 import jakarta.validation.Valid;
@@ -23,6 +23,7 @@ public class PersonajeRestController {
     private final PersonajeMapper personajeMapper;
     private final ClaseService claseService;
     private final RazaService razaService;
+    private final HechizoMapper hechizoMapper;
 
     @GetMapping
     public ResponseEntity<List<PersonajeFront>> obtenerTodos() {
@@ -84,4 +85,38 @@ public class PersonajeRestController {
         personajeService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{id}/hechizos/nuevo")
+    public ResponseEntity<PersonajeFront> agregarHechizoNuevo(@PathVariable Long id,
+                                                              @Valid @RequestBody HechizoBack dto) {
+        Hechizo hechizo = hechizoMapper.toEntity(dto); // Conversión del DTO a entidad
+        Personaje personaje = personajeService.agregarHechizo(id, hechizo);
+        return ResponseEntity.ok(personajeMapper.toFront(personaje));
+    }
+
+    @PostMapping("/{id}/hechizos/{hechizoId}")
+    public ResponseEntity<PersonajeFront> agregarHechizoExistente(@PathVariable Long id,
+                                                                  @PathVariable Long hechizoId) {
+        Personaje personaje = personajeService.agregarHechizoExistente(id, hechizoId);
+        return ResponseEntity.ok(personajeMapper.toFront(personaje));
+    }
+
+    // Elimina un hechizo específico de un personaje
+
+    @DeleteMapping("/{id}/hechizos/{hechizoId}")
+    public ResponseEntity<PersonajeFront> eliminarHechizoDePersonaje(@PathVariable Long id,
+                                                                     @PathVariable Long hechizoId) {
+        Personaje personaje = personajeService.eliminarHechizoDePersonaje(id, hechizoId);
+        return ResponseEntity.ok(personajeMapper.toFront(personaje));
+    }
+
+    // Elimina todos los hechizos de un personaje
+
+    @DeleteMapping("/{id}/hechizos")
+    public ResponseEntity<PersonajeFront> eliminarTodosLosHechizos(@PathVariable Long id) {
+        Personaje personaje = personajeService.eliminarTodosHechizos(id);
+        return ResponseEntity.ok(personajeMapper.toFront(personaje));
+    }
+
+
 }
