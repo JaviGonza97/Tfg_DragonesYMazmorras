@@ -6,16 +6,16 @@ import org.mapstruct.Mapper;
 
 import java.util.List;
 
-@Mapper(
-        componentModel = "spring",
-        collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED
-)
+@Mapper(componentModel = "spring",
+        collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED)
 public interface HechizoMapper {
 
-    HechizoDto toDto(Hechizo entity);
-    Hechizo toEntity(HechizoDto dto);
+    HechizoBack toBack(Hechizo entity);
+    Hechizo toEntity(HechizoBack dto);
 
-    List<HechizoDto> toDtoList(List<Hechizo> list);
-    List<Hechizo> toEntityList(List<HechizoDto> list);
+    HechizoFront toFront(Hechizo entity);
+    List<HechizoFront> toFrontList(List<Hechizo> list);
 
+    List<HechizoBack> toBackList(List<Hechizo> list);
+    List<Hechizo> toEntityList(List<HechizoBack> list);
 }

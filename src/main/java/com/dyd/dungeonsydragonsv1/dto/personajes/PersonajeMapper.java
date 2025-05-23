@@ -3,20 +3,22 @@ package com.dyd.dungeonsydragonsv1.dto.personajes;
 import com.dyd.dungeonsydragonsv1.entidades.Personaje;
 import org.mapstruct.CollectionMappingStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(
-        componentModel = "spring",
-        collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED
-)
+@Mapper(componentModel = "spring",
+        collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED)
 public interface PersonajeMapper {
 
+    // Para convertir de entidad a DTO de salida
+    @Mapping(source = "raza.nombre", target = "raza")
+    @Mapping(source = "clase.nombre", target = "clase")
+    PersonajeFront toFront(Personaje entity);
 
-    PersonajeDto toDto(Personaje entity);
-    Personaje toEntity(PersonajeDto dto);
+    List<PersonajeFront> toFrontList(List<Personaje> list);
 
-    List<PersonajeDto> toDtoList(List<Personaje> list);
-    List<Personaje> toEntityList(List<PersonajeDto> list);
-
+    // Para convertir entidad completa a DTO de entrada (opcional si lo necesitas)
+    PersonajeBack toBack(Personaje entity);
+    List<PersonajeBack> toBackList(List<Personaje> list);
 }

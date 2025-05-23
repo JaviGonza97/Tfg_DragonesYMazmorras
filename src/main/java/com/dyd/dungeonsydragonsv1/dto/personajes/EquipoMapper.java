@@ -10,12 +10,14 @@ import java.util.List;
         componentModel = "spring",
         collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED
 )
-public interface EquippoMapper {
+public interface EquipoMapper {
 
-    EquipoDto toDto(Equipo entity);
-    Equipo toEntity(EquipoDto dto);
+    EquipoBack toBack(Equipo entity);
+    Equipo toEntity(EquipoBack dto);
 
-    List<EquipoDto> toDtoList(List<Equipo> list);
-    List<Equipo> toEntityList(List<EquipoDto> list);
+    EquipoFront toFront(Equipo entity);
+    List<EquipoFront> toFrontList(List<Equipo> list);
 
+    List<EquipoBack> toBackList(List<Equipo> list);
+    List<Equipo> toEntityList(List<EquipoBack> list);
 }

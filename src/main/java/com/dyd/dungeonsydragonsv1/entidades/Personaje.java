@@ -1,6 +1,5 @@
 package com.dyd.dungeonsydragonsv1.entidades;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,9 +12,11 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class Personaje {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nombre;
 
     @ManyToOne
@@ -37,14 +38,6 @@ public class Personaje {
     )
     private List<Hechizo> hechizos;
 
-    @ManyToMany
-    @JoinTable(
-            name = "personaje_habilidad",
-            joinColumns = @JoinColumn(name = "personaje_id"),
-            inverseJoinColumns = @JoinColumn(name = "habilidad_id")
-    )
-    private List<Habilidad> habilidades;
-
     @ManyToOne
     @JoinColumn(name = "usuario_personaje")
     private Usuario usuario;
@@ -52,7 +45,4 @@ public class Personaje {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "estadistica_id")
     private Estadistica estadistica;
-
-
-
 }

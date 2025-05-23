@@ -6,16 +6,16 @@ import org.mapstruct.Mapper;
 
 import java.util.List;
 
-@Mapper(
-        componentModel = "spring",
-        collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED
-)
+@Mapper(componentModel = "spring",
+        collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED)
 public interface ClaseMapper {
 
-    ClaseDto toDto(Clase entity);
-    Clase toEntity(ClaseDto dto);
+    ClaseBack toBack(Clase entity);
+    Clase toEntity(ClaseBack dto);
 
-    List<ClaseDto> toDtoList(List<Clase> list);
-    List<Clase> toEntityList(List<ClaseDto> list);
+    ClaseFront toFront(Clase entity);
+    List<ClaseFront> toFrontList(List<Clase> list);
 
+    List<ClaseBack> toBackList(List<Clase> list);
+    List<Clase> toEntityList(List<ClaseBack> list);
 }

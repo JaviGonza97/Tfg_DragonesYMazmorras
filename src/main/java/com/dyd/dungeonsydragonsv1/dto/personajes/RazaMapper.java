@@ -6,16 +6,16 @@ import org.mapstruct.Mapper;
 
 import java.util.List;
 
-@Mapper(
-        componentModel = "spring",
-        collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED
-)
+@Mapper(componentModel = "spring",
+        collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED)
 public interface RazaMapper {
 
-    RazaDto toDto(Raza entity);
-    Raza toEntity(RazaDto dto);
+    RazaBack toBack(Raza entity);
+    Raza toEntity(RazaBack dto);
 
-    List<RazaDto> toDtoList(List<Raza> list);
-    List<Raza> toEntityList(List<RazaDto> list);
+    RazaFront toFront(Raza entity);
+    List<RazaFront> toFrontList(List<Raza> list);
 
+    List<RazaBack> toBackList(List<Raza> list);
+    List<Raza> toEntityList(List<RazaBack> list);
 }
