@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&D</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js" defer></script>
+    <script src="js/dashboard.js" defer></script>
+
+</head>
+<body>
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:p-4" data-i18n="skipToContent">
+        Saltar al contenido principal
+    </a>
+    <header class="bg-dark text-white py-5 position-relative overflow-hidden" role="banner">
+        <div class="container position-relative z-3">
+            <h1 class="display-4 fw-bold text-center mb-4" data-i18n="title">D&D</h1>
+            <p class="lead text-center mb-4" data-i18n="subtitle">Crea tu propio personaje de Dragones y Mazmorras</p>
+            <div class="download-buttons d-flex justify-content-center flex-wrap gap-3">
+                <a href="#" class="btn btn-primary btn-lg">
+                    <i class="bi bi-apple me-2"></i><span data-i18n="appStore">App Store</span>
+                </a>
+                <a href="#" class="btn btn-success btn-lg">
+                    <i class="bi bi-google-play me-2"></i><span data-i18n="googlePlay">Google Play</span>
+                </a>
+                <a href="#" class="btn btn-info btn-lg text-black">
+                    <i class="bi bi-steam me-2"></i><span data-i18n="steam">Steam</span>
+                </a>
+                <a href="#" class="btn btn-warning btn-lg">
+                    <i class="bi bi-amazon me-2"></i><span data-i18n="amazon">Amazon</span>
+                </a>
+            </div>
+        </div>
+        <div class="position-absolute top-0 start-0 w-100 h-100 bg-pattern"></div>
+    </header>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-secondary sticky-top" role="navigation" aria-label="Menú principal">
+        <div class="container">
+
+            <a class="nav-link active" href="index.html" aria-current="page">
+                <i class="bi bi-house-door me-1"></i>
+                <span data-i18n="home">Inicio</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Alternar navegación">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="creacion.html" aria-current="page">
+                            <i class="bi bi-people me-1"></i><span data-i18n="crear">Crear personaje</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="dados.html">
+                            <i class="bi bi-dice-6"></i><span data-i18n="dice"> Dados</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="Galeria.html">
+                            <i class="bi bi-book"></i><span data-i18n="gallery"> Galeria</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">
+                            <i class="bi bi-door-open"></i><span data-i18n="login"> inicia sesion</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="registro.html">
+                            <i class="bi bi-shift-fill"></i><span data-i18n="register"> registrate</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <main id="main-content" class="container my-5" role="main">
+        <div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card shadow">
+            <div class="card-header py-3 text-center" style="background-color: var(--primary); color: white;">
+                <h2 class="h5 mb-0">Mi Perfil</h2>
+            </div>
+            <div class="card-body text-center">
+                <div class="avatar-container mb-3">
+                    <div class="avatar rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 100px; height: 100px; font-size: 2.5rem; background-color: var(--primary); color: white;">
+                        <span id="avatar-initials"></span>
+                    </div>
+                </div>
+                <h3 class="h4 mb-2" id="profile-name"></h3>
+                <p class="text-muted mb-3" id="profile-username"></p>
+                <p class="mb-2"><i class="bi bi-envelope me-2"></i><span id="profile-email"></span></p>
+                <button class="btn btn-outline-primary mt-3" data-bs-toggle="modal" data-bs-target="#editProfileModal" style="border-color: var(--primary); color: var(--primary);">
+                    <i class="bi bi-pencil me-2"></i>Editar perfil
+                </button>
+            </div>
+        </div>
+        
+        <div class="card shadow mt-4">
+            <div class="card-header py-3" style="background-color: var(--primary); color: white;">
+                <h2 class="h5 mb-0">Estadísticas</h2>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-4">
+                        <div class="stat-circle rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2" style="width: 60px; height: 60px; background-color: rgba(219, 148, 41, 0.2);">
+                            <i class="bi bi-person-fill" style="color: var(--primary); font-size: 1.5rem;"></i>
+                        </div>
+                        <h3 class="h5" id="character-count">0</h3>
+                        <p class="text-muted small">Personajes</p>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat-circle rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2" style="width: 60px; height: 60px; background-color: rgba(219, 148, 41, 0.2);">
+                            <i class="bi bi-map-fill" style="color: var(--primary); font-size: 1.5rem;"></i>
+                        </div>
+                        <h3 class="h5" id="campaign-count">0</h3>
+                        <p class="text-muted small">Campañas</p>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat-circle rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2" style="width: 60px; height: 60px; background-color: rgba(219, 148, 41, 0.2);">
+                            <i class="bi bi-dice-6-fill" style="color: var(--primary); font-size: 1.5rem;"></i>
+                        </div>
+                        <h3 class="h5" id="roll-count">0</h3>
+                        <p class="text-muted small">Tiradas</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow mt-4">
+            <div class="card-header py-3" style="background-color: var(--primary); color: white;">
+                <h2 class="h5 mb-0">Actividades Recientes</h2>
+            </div>
+            <div class="card-body p-0">
+                <div id="recent-activities">
+                    <!-- Las actividades se cargarán dinámicamente aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center" style="background-color: var(--primary); color: white;">
+                <h2 class="h5 mb-0">Mis Personajes</h2>
+                <a href="creacion.html" class="btn btn-sm" style="background-color: white; color: var(--primary);">
+                    <i class="bi bi-plus-circle me-1"></i>Crear
+                </a>
+            </div>
+            <div class="card-body">
+                <div id="recent-characters" class="row g-3">
+                    <!-- Los personajes se cargarán dinámicamente aquí -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center" style="background-color: var(--primary); color: white;">
+                <h2 class="h5 mb-0">Mis Campañas</h2>
+                <button class="btn btn-sm" style="background-color: white; color: var(--primary);">
+                    <i class="bi bi-plus-circle me-1"></i>Unirse
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="recent-campaigns" class="row g-3">
+                    <!-- Las campañas se cargarán dinámicamente aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Editar Perfil -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: var(--primary); color: white;">
+                <h5 class="modal-title" id="editProfileModalLabel">Editar Perfil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-profile-form">
+                    <div class="mb-3">
+                        <label for="edit-nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="edit-nombre" name="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-apellido" class="form-label">Apellido</label>
+                        <input type="text" class="form-control" id="edit-apellido" name="apellido" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-username" class="form-label">Nombre de usuario</label>
+                        <input type="text" class="form-control" id="edit-username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="edit-email" name="email" required readonly>
+                        <div class="form-text">El email no se puede cambiar.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-current-password" class="form-label">Contraseña actual</label>
+                        <input type="password" class="form-control" id="edit-current-password" name="currentPassword">
+                        <div class="form-text">Deja en blanco si no quieres cambiar la contraseña.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-new-password" class="form-label">Nueva contraseña</label>
+                        <input type="password" class="form-control" id="edit-new-password" name="newPassword">
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-confirm-password" class="form-label">Confirmar nueva contraseña</label>
+                        <input type="password" class="form-control" id="edit-confirm-password" name="confirmPassword">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn" id="save-profile" style="background-color: var(--primary); color: white;">Guardar cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+    </main>
+    
+    <div class="modal fade" id="gameModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <img id="modalImage" src="/placeholder.svg" alt="" class="img-fluid rounded-3 shadow">
+                    </div>
+                    <p id="modalDescription" class="lead"></p>
+                    <div class="accordion" id="modalAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDetails">
+                                    <span data-i18n="technicalDetails">Detalles técnicos</span>
+                                </button>
+                            </h2>
+                            <div id="collapseDetails" class="accordion-collapse collapse show" data-bs-parent="#modalAccordion">
+                                <div class="accordion-body">
+                                    <ul id="modalDetails" class="list-group list-group-flush"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="close">Cerrar</button>
+                    <button type="button" class="btn btn-primary" data-i18n="download">Descargar ahora</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-4" role="contentinfo">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <h5 class="mb-3" data-i18n="aboutUs">Sobre nosotros</h5>
+                    <p class="mb-0" data-i18n="aboutText">D&D una pagina que se encarga de facilitar herramientas para crear personajes de rol</p>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <h5 class="mb-3" data-i18n="quickLinks">Enlaces rápidos</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50 text-decoration-none" data-i18n="support">Soporte</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none" data-i18n="careers">Carreras</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none" data-i18n="press">Prensa</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <h5 class="mb-3" data-i18n="followUs">Síguenos</h5>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white"><i class="bi bi-facebook fs-4"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-twitter fs-4"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-instagram fs-4"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-youtube fs-4"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <h5 id="newsletter-heading" class="mb-3" data-i18n="newsletter">Boletín</h5>
+                    <div class="input-group" role="form" aria-labelledby="newsletter-heading">
+                        <label for="newsletter-email" class="sr-only" data-i18n="emailLabel">Dirección de email</label>
+                        <input type="email" id="newsletter-email" class="form-control" placeholder="Tu email" aria-label="Dirección de email" data-i18n-placeholder="emailPlaceholder">
+                        <button class="btn btn-primary" type="submit" aria-label="Suscribirse al boletín" data-i18n="subscribe" style="background-color: #db9429;" >Suscribir</button>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0" data-i18n="copyright">&copy; 2025 D&D, Inc. Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+

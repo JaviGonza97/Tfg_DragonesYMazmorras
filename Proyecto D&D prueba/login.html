@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&D</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js" defer></script>
+    <script src="js/auth.js" defer></script>
+
+</head>
+<body>
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:p-4" data-i18n="skipToContent">
+        Saltar al contenido principal
+    </a>
+    <header class="bg-dark text-white py-5 position-relative overflow-hidden" role="banner">
+        <div class="container position-relative z-3">
+            <h1 class="display-4 fw-bold text-center mb-4" data-i18n="title">D&D</h1>
+            <p class="lead text-center mb-4" data-i18n="subtitle">Crea tu propio personaje de Dragones y Mazmorras</p>
+            <div class="download-buttons d-flex justify-content-center flex-wrap gap-3">
+                <a href="#" class="btn btn-primary btn-lg">
+                    <i class="bi bi-apple me-2"></i><span data-i18n="appStore">App Store</span>
+                </a>
+                <a href="#" class="btn btn-success btn-lg">
+                    <i class="bi bi-google-play me-2"></i><span data-i18n="googlePlay">Google Play</span>
+                </a>
+                <a href="#" class="btn btn-info btn-lg text-black">
+                    <i class="bi bi-steam me-2"></i><span data-i18n="steam">Steam</span>
+                </a>
+                <a href="#" class="btn btn-warning btn-lg">
+                    <i class="bi bi-amazon me-2"></i><span data-i18n="amazon">Amazon</span>
+                </a>
+            </div>
+        </div>
+        <div class="position-absolute top-0 start-0 w-100 h-100 bg-pattern"></div>
+    </header>
+    
+<nav class="navbar navbar-expand-lg navbar-dark bg-secondary sticky-top" role="navigation" aria-label="Menú principal">
+        <div class="container">
+
+            <a class="nav-link active" href="index.html" aria-current="page">
+                <i class="bi bi-house-door me-1"></i>
+                <span data-i18n="home">Inicio</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Alternar navegación">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="creacion.html" aria-current="page">
+                            <i class="bi bi-people me-1"></i><span data-i18n="crear">Crear personaje</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="dados.html">
+                            <i class="bi bi-dice-6"></i><span data-i18n="dice"> Dados</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="Galeria.html">
+                            <i class="bi bi-book"></i><span data-i18n="gallery"> Galeria</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">
+                            <i class="bi bi-door-open"></i><span data-i18n="login"> inicia sesion</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="registro.html">
+                            <i class="bi bi-shift-fill"></i><span data-i18n="register"> registrate</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+<main id="main-content" class="container my-5" role="main">
+        <div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header py-3 text-center" style="background-color: var(--primary); color: white;">
+                <h2 class="mb-0"><i class="bi bi-door-open me-2"></i>Iniciar Sesión</h2>
+            </div>
+            <div class="card-body p-4">
+                <div id="login-alert" class="alert alert-danger d-none" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span id="login-alert-message">Credenciales incorrectas. Por favor, inténtalo de nuevo.</span>
+                </div>
+                <div id="login-success" class="alert alert-success d-none" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <span id="login-success-message">¡Inicio de sesión exitoso! Redirigiendo...</span>
+                </div>
+                <form id="login-form" novalidate>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">
+                            <i class="bi bi-envelope me-2"></i>Correo electrónico
+                        </label>
+                        <input type="email" class="form-control" id="email" required>
+                        <div class="invalid-feedback">
+                            Por favor, introduce un correo electrónico válido.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">
+                            <i class="bi bi-lock me-2"></i>Contraseña
+                        </label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="password" required>
+                            <button class="btn btn-outline-secondary" type="button" id="toggle-password">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                        <div class="invalid-feedback">
+                            Por favor, introduce tu contraseña.
+                        </div>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="remember-me">
+                        <label class="form-check-label" for="remember-me">Recordarme</label>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-lg" style="background-color: var(--primary); color: white;">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+                        </button>
+                    </div>
+                </form>
+                <div class="text-center mt-3">
+                    <a href="#" class="text-decoration-none" style="color: var(--primary);" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">¿Olvidaste tu contraseña?</a>
+                </div>
+            </div>
+            <div class="card-footer text-center py-3">
+                <p class="mb-0">¿No tienes una cuenta? <a href="registro.html" class="text-decoration-none" style="color: var(--primary);">Regístrate</a></p>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <p>O inicia sesión con:</p>
+            <div class="d-flex justify-content-center gap-3">
+                <button class="btn btn-outline-primary" style="min-width: 120px; border-color: var(--primary); color: var(--primary);">
+                    <i class="bi bi-google me-2"></i>Google
+                </button>
+                <button class="btn btn-outline-primary" style="min-width: 120px; border-color: var(--primary); color: var(--primary);">
+                    <i class="bi bi-facebook me-2"></i>Facebook
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Recuperación de Contraseña -->
+<div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: var(--primary); color: white;">
+                <h5 class="modal-title" id="forgotPasswordModalLabel">Recuperar Contraseña</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Introduce tu dirección de correo electrónico y te enviaremos un enlace para restablecer tu contraseña.</p>
+                <form id="forgot-password-form">
+                    <div class="mb-3">
+                        <label for="recovery-email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="recovery-email" required>
+                    </div>
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        <span>Nota: Esta es una demostración. En un entorno real, se enviaría un correo electrónico con un enlace para restablecer la contraseña.</span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn" id="send-recovery" style="background-color: var(--primary); color: white;">Enviar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Script para manejar la recuperación de contraseña
+    document.addEventListener('DOMContentLoaded', function() {
+        const sendRecoveryBtn = document.getElementById('send-recovery');
+        if (sendRecoveryBtn) {
+            sendRecoveryBtn.addEventListener('click', function() {
+                const email = document.getElementById('recovery-email').value;
+                if (!email) {
+                    alert('Por favor, introduce tu dirección de correo electrónico.');
+                    return;
+                }
+                
+                // Simular envío de correo de recuperación
+                alert(`Se ha enviado un correo de recuperación a ${email}. Por favor, revisa tu bandeja de entrada.`);
+                
+                // Cerrar modal
+                const modalElement = document.getElementById('forgotPasswordModal');
+                const modal = bootstrap.Modal.getInstance(modalElement);
+                modal.hide();
+            });
+        }
+    });
+</script>
+    </main>
+    
+    <div class="modal fade" id="gameModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <img id="modalImage" src="/placeholder.svg" alt="" class="img-fluid rounded-3 shadow">
+                    </div>
+                    <p id="modalDescription" class="lead"></p>
+                    <div class="accordion" id="modalAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDetails">
+                                    <span data-i18n="technicalDetails">Detalles técnicos</span>
+                                </button>
+                            </h2>
+                            <div id="collapseDetails" class="accordion-collapse collapse show" data-bs-parent="#modalAccordion">
+                                <div class="accordion-body">
+                                    <ul id="modalDetails" class="list-group list-group-flush"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="close">Cerrar</button>
+                    <button type="button" class="btn btn-primary" data-i18n="download">Descargar ahora</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-4" role="contentinfo">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <h5 class="mb-3" data-i18n="aboutUs">Sobre nosotros</h5>
+                    <p class="mb-0" data-i18n="aboutText">D&D una pagina que se encarga de facilitar herramientas para crear personajes de rol</p>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <h5 class="mb-3" data-i18n="quickLinks">Enlaces rápidos</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50 text-decoration-none" data-i18n="support">Soporte</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none" data-i18n="careers">Carreras</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none" data-i18n="press">Prensa</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <h5 class="mb-3" data-i18n="followUs">Síguenos</h5>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white"><i class="bi bi-facebook fs-4"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-twitter fs-4"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-instagram fs-4"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-youtube fs-4"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <h5 id="newsletter-heading" class="mb-3" data-i18n="newsletter">Boletín</h5>
+                    <div class="input-group" role="form" aria-labelledby="newsletter-heading">
+                        <label for="newsletter-email" class="sr-only" data-i18n="emailLabel">Dirección de email</label>
+                        <input type="email" id="newsletter-email" class="form-control" placeholder="Tu email" aria-label="Dirección de email" data-i18n-placeholder="emailPlaceholder">
+                        <button class="btn btn-primary" type="submit" aria-label="Suscribirse al boletín" data-i18n="subscribe" style="background-color: #db9429;" >Suscribir</button>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0" data-i18n="copyright">&copy; 2025 D&D, Inc. Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+

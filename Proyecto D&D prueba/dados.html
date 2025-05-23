@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&D</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js" defer></script>
+    <script src="js/dados.js" defer></script>
+    <style>
+        :root {
+            --primary: #db9429;
+        }
+        
+        .result-highlight {
+            background-color: rgba(219, 148, 41, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        
+        .dice-container {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        /* Estilos para el cuadro de resultado final */
+        .resultado-final-container {
+            position: relative;
+            margin: 30px auto;
+            max-width: 200px;
+            height: 200px;
+        }
+        
+        .resultado-final-box {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .resultado-final-box:hover {
+            transform: scale(1.05);
+        }
+        
+        .resultado-final-box::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .resultado-final-box.show-result::before {
+            opacity: 1;
+            animation: shine 1.5s ease-out;
+        }
+        
+        @keyframes shine {
+            0% { transform: rotate(0deg); opacity: 0; }
+            25% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { transform: rotate(360deg); opacity: 0; }
+        }
+        
+        .resultado-final-valor {
+            font-size: 5rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            z-index: 2;
+        }
+        
+        .resultado-final-label {
+            position: absolute;
+            top: 10px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .resultado-final-tipo {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .dice-icon-mini {
+            position: absolute;
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.3);
+        }
+        
+        .dice-icon-mini:nth-child(1) { top: 10px; left: 10px; transform: rotate(-15deg); }
+        .dice-icon-mini:nth-child(2) { top: 10px; right: 10px; transform: rotate(15deg); }
+        .dice-icon-mini:nth-child(3) { bottom: 10px; left: 10px; transform: rotate(15deg); }
+        .dice-icon-mini:nth-child(4) { bottom: 10px; right: 10px; transform: rotate(-15deg); }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:p-4" data-i18n="skipToContent">
+        Saltar al contenido principal
+    </a>
+    <header class="bg-dark text-white py-5 position-relative overflow-hidden" role="banner">
+        <div class="container position-relative z-3">
+            <h1 class="display-4 fw-bold text-center mb-4" data-i18n="title">D&D</h1>
+            <p class="lead text-center mb-4" data-i18n="subtitle">Crea tu propio personaje de Dragones y Mazmorras</p>
+            <div class="download-buttons d-flex justify-content-center flex-wrap gap-3">
+                <a href="#" class="btn btn-primary btn-lg">
+                    <i class="bi bi-apple me-2"></i><span data-i18n="appStore">App Store</span>
+                </a>
+                <a href="#" class="btn btn-success btn-lg">
+                    <i class="bi bi-google-play me-2"></i><span data-i18n="googlePlay">Google Play</span>
+                </a>
+                <a href="#" class="btn btn-info btn-lg text-black">
+                    <i class="bi bi-steam me-2"></i><span data-i18n="steam">Steam</span>
+                </a>
+                <a href="#" class="btn btn-warning btn-lg">
+                    <i class="bi bi-amazon me-2"></i><span data-i18n="amazon">Amazon</span>
+                </a>
+            </div>
+        </div>
+        <div class="position-absolute top-0 start-0 w-100 h-100 bg-pattern"></div>
+    </header>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-secondary sticky-top" role="navigation" aria-label="Menú principal">
+        <div class="container">
+
+            <a class="nav-link active" href="index.html" aria-current="page">
+                <i class="bi bi-house-door me-1"></i>
+                <span data-i18n="home">Inicio</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Alternar navegación">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="creacion.html" aria-current="page">
+                            <i class="bi bi-people me-1"></i><span data-i18n="crear">Crear personaje</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="dados.html">
+                            <i class="bi bi-dice-6"></i><span data-i18n="dice"> Dados</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="Galeria.html">
+                            <i class="bi bi-book"></i><span data-i18n="gallery"> Galeria</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">
+                            <i class="bi bi-door-open"></i><span data-i18n="login"> inicia sesion</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="registro.html">
+                            <i class="bi bi-shift-fill"></i><span data-i18n="register"> registrate</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <main id="main-content" class="container my-5" role="main">
+        <section class="text-center mb-5">
+            <h2 class="mb-4">Lanzador de Dados</h2>
+            
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <div class="card shadow">
+                        <div class="card-header py-3 text-center" style="background-color: var(--primary); color: white;">
+                            <h3 class="h5 mb-0"><i class="bi bi-dice-5 me-2"></i>Tira tus dados</h3>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="row mb-4">
+                                <div class="col-md-6 mb-3 mb-md-0">
+                                    <label for="num-dados" class="form-label">Número de dados</label>
+                                    <div class="input-group">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="document.getElementById('num-dados').value = Math.max(1, parseInt(document.getElementById('num-dados').value) - 1); document.dispatchEvent(new Event('dice-update'));">-</button>
+                                        <input type="number" id="num-dados" class="form-control text-center" min="1" max="20" value="1">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="document.getElementById('num-dados').value = Math.min(20, parseInt(document.getElementById('num-dados').value) + 1); document.dispatchEvent(new Event('dice-update'));">+</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="dado-select" class="form-label">Tipo de dado</label>
+                                    <select id="dado-select" class="form-select">
+                                        <option value="4">D4</option>
+                                        <option value="6">D6</option>
+                                        <option value="8">D8</option>
+                                        <option value="10">D10</option>
+                                        <option value="12">D12</option>
+                                        <option value="20" selected>D20</option>
+                                        <option value="100">D100</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="modificador" class="form-label">Modificador</label>
+                                <div class="input-group w-50 mx-auto">
+                                    <button class="btn btn-outline-secondary" type="button" id="decrease-mod">-</button>
+                                    <input type="number" id="modificador" class="form-control text-center" value="0">
+                                    <button class="btn btn-outline-secondary" type="button" id="increase-mod">+</button>
+                                </div>
+                                <small class="text-muted d-block mt-1">Valor que se suma al resultado total</small>
+                            </div>
+                            
+                            <div class="result-highlight mb-3">
+                                <p class="mb-1">Vas a lanzar:</p>
+                                <h4 id="dice-preview" class="mb-0">1D20+0</h4>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button id="lanzar-btn" class="btn btn-lg" style="background-color: var(--primary); color: white;">
+                                    <i class="bi bi-dice-3 me-2"></i>Lanzar dados
+                                </button>
+                            </div>
+                            
+                            <div class="mt-3 text-center">
+                                <small class="text-muted">Ejemplo: 3D6+2 significa lanzar 3 dados de 6 caras y sumar 2 al resultado total</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="resultado-container" class="mt-4 d-none">
+                        <div class="card shadow">
+                            <div class="card-header py-3 text-center" style="background-color: var(--primary); color: white;">
+                                <h3 class="h5 mb-0">Resultado</h3>
+                            </div>
+                            <div class="card-body p-4 text-center">
+                                <div class="dice-container mb-3">
+                                    <div id="animacion-dados">
+                                        <!-- Aquí se mostrarán los dados -->
+                                    </div>
+                                </div>
+                                
+                                <!-- Cuadro de resultado final -->
+                                <div class="resultado-final-container">
+                                    <div class="resultado-final-box" id="resultado-final-box">
+                                        <i class="bi bi-dice-6-fill dice-icon-mini"></i>
+                                        <i class="bi bi-dice-3-fill dice-icon-mini"></i>
+                                        <i class="bi bi-dice-2-fill dice-icon-mini"></i>
+                                        <i class="bi bi-dice-5-fill dice-icon-mini"></i>
+                                        <div class="resultado-final-label">Resultado</div>
+                                        <div class="resultado-final-valor" id="resultado-final-valor">-</div>
+                                        <div class="resultado-final-tipo" id="resultado-final-tipo">-</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="result-highlight mt-4">
+                                    <h3 class="mb-1">Detalles</h3>
+                                    <div id="resultado-dado" class="h4 fw-bold" style="color: var(--primary);"></div>
+                                    <div id="detalles-tirada" class="text-muted mt-2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="historial-container" class="mt-4 d-none">
+                        <div class="card shadow">
+                            <div class="card-header py-3 d-flex justify-content-between align-items-center" style="background-color: var(--primary); color: white;">
+                                <h3 class="h5 mb-0">Historial de tiradas</h3>
+                                <button id="clear-history" class="btn btn-sm" style="background-color: white; color: var(--primary);">
+                                    <i class="bi bi-trash me-1"></i>Limpiar
+                                </button>
+                            </div>
+                            <div class="card-body p-0">
+                                <ul id="historial-tiradas" class="list-group list-group-flush">
+                                    <!-- El historial se cargará dinámicamente aquí -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow">
+                        <div class="card-header py-3 text-center" style="background-color: var(--primary); color: white;">
+                            <h3 class="h5 mb-0">Combinaciones comunes</h3>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="row g-3">
+                                <div class="col-6 col-md-4 col-lg-3">
+                                    <button class="btn btn-outline-secondary w-100 preset-dice" data-num="1" data-type="20" data-mod="0">
+                                        1D20
+                                    </button>
+                                </div>
+                                <div class="col-6 col-md-4 col-lg-3">
+                                    <button class="btn btn-outline-secondary w-100 preset-dice" data-num="2" data-type="20" data-mod="0">
+                                        2D20 (Ventaja)
+                                    </button>
+                                </div>
+                                <div class="col-6 col-md-4 col-lg-3">
+                                    <button class="btn btn-outline-secondary w-100 preset-dice" data-num="3" data-type="6" data-mod="0">
+                                        3D6
+                                    </button>
+                                </div>
+                                <div class="col-6 col-md-4 col-lg-3">
+                                    <button class="btn btn-outline-secondary w-100 preset-dice" data-num="2" data-type="6" data-mod="0">
+                                        2D6
+                                    </button>
+                                </div>
+                                <div class="col-6 col-md-4 col-lg-3">
+                                    <button class="btn btn-outline-secondary w-100 preset-dice" data-num="1" data-type="12" data-mod="0">
+                                        1D12
+                                    </button>
+                                </div>
+                                <div class="col-6 col-md-4 col-lg-3">
+                                    <button class="btn btn-outline-secondary w-100 preset-dice" data-num="1" data-type="10" data-mod="0">
+                                        1D10
+                                    </button>
+                                </div>
+                                <div class="col-6 col-md-4 col-lg-3">
+                                    <button class="btn btn-outline-secondary w-100 preset-dice" data-num="1" data-type="8" data-mod="0">
+                                        1D8
+                                    </button>
+                                </div>
+                                <div class="col-6 col-md-4 col-lg-3">
+                                    <button class="btn btn-outline-secondary w-100 preset-dice" data-num="1" data-type="4" data-mod="0">
+                                        1D4
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    // Añadir eventos a los botones de combinaciones predefinidas
+                                    document.querySelectorAll('.preset-dice').forEach(button => {
+                                        button.addEventListener('click', function() {
+                                            const num = this.getAttribute('data-num');
+                                            const type = this.getAttribute('data-type');
+                                            const mod = this.getAttribute('data-mod');
+                                            
+                                            document.getElementById('num-dados').value = num;
+                                            document.getElementById('dado-select').value = type;
+                                            document.getElementById('modificador').value = mod;
+                                            
+                                            // Actualizar vista previa
+                                            document.dispatchEvent(new Event('dice-update'));
+                                            
+                                            // Hacer scroll al formulario de dados
+                                            document.querySelector('.card-header').scrollIntoView({ behavior: 'smooth' });
+                                        });
+                                    });
+                                    
+                                    // Evento personalizado para actualizar la vista previa
+                                    document.addEventListener('dice-update', function() {
+                                        const numDadosValue = document.getElementById('num-dados').value;
+                                        const tipoDadoValue = document.getElementById('dado-select').value;
+                                        const modValue = document.getElementById('modificador').value;
+                                        const modStr = modValue > 0 ? '+' + modValue : (modValue < 0 ? modValue : '');
+                                        
+                                        const dicePreview = document.getElementById('dice-preview');
+                                        if (dicePreview) {
+                                            dicePreview.textContent = `${numDadosValue}D${tipoDadoValue}${modStr}`;
+                                        }
+                                    });
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <div class="modal fade" id="gameModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <img id="modalImage" src="/placeholder.svg" alt="" class="img-fluid rounded-3 shadow">
+                    </div>
+                    <p id="modalDescription" class="lead"></p>
+                    <div class="accordion" id="modalAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDetails">
+                                    <span data-i18n="technicalDetails">Detalles técnicos</span>
+                                </button>
+                            </h2>
+                            <div id="collapseDetails" class="accordion-collapse collapse show" data-bs-parent="#modalAccordion">
+                                <div class="accordion-body">
+                                    <ul id="modalDetails" class="list-group list-group-flush"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="close">Cerrar</button>
+                    <button type="button" class="btn btn-primary" data-i18n="download">Descargar ahora</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-4" role="contentinfo">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <h5 class="mb-3" data-i18n="aboutUs">Sobre nosotros</h5>
+                    <p class="mb-0" data-i18n="aboutText">D&D una pagina que se encarga de facilitar herramientas para crear personajes de rol</p>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <h5 class="mb-3" data-i18n="quickLinks">Enlaces rápidos</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50 text-decoration-none" data-i18n="support">Soporte</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none" data-i18n="careers">Carreras</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none" data-i18n="press">Prensa</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <h5 class="mb-3" data-i18n="followUs">Síguenos</h5>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white"><i class="bi bi-facebook fs-4"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-twitter fs-4"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-instagram fs-4"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-youtube fs-4"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <h5 id="newsletter-heading" class="mb-3" data-i18n="newsletter">Boletín</h5>
+                    <div class="input-group" role="form" aria-labelledby="newsletter-heading">
+                        <label for="newsletter-email" class="sr-only" data-i18n="emailLabel">Dirección de email</label>
+                        <input type="email" id="newsletter-email" class="form-control" placeholder="Tu email" aria-label="Dirección de email" data-i18n-placeholder="emailPlaceholder">
+                        <button class="btn btn-primary" type="submit" aria-label="Suscribirse al boletín" data-i18n="subscribe" style="background-color: #db9429;" >Suscribir</button>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0" data-i18n="copyright">&copy; 2025 D&D, Inc. Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+
