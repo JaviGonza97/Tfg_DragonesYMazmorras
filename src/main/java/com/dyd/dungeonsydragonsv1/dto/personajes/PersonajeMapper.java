@@ -21,4 +21,6 @@ public interface PersonajeMapper {
     // Para convertir entidad completa a DTO de entrada (opcional si lo necesitas)
     PersonajeBack toBack(Personaje entity);
     List<PersonajeBack> toBackList(List<Personaje> list);
+
+    Personaje toEntity(PersonajeBack dto);
 }
