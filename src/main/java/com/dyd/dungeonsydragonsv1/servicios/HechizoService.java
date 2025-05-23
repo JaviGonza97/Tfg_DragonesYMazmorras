@@ -45,4 +45,10 @@ public class HechizoService {
     public List<Hechizo> saveAll(List<Hechizo> hechizos) {
         return hechizoRepository.saveAll(hechizos);
     }
+
+    // busqueda por el nombre del hechizo
+    public List<Hechizo> buscarPorNombre(String nombre) {
+        return hechizoRepository.findByNombreContainingIgnoreCase(nombre);
+    }
+
 }

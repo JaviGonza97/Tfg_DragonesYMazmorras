@@ -20,6 +20,15 @@ public class HechizoRestController {
     private final HechizoService hechizoService;
     private final HechizoMapper hechizoMapper;
 
+    // busca hechizo por su nombre
+    @GetMapping("/buscar/{nombre}")
+    public ResponseEntity<List<HechizoFront>> buscarPorNombre(@PathVariable String nombre) {
+        List<Hechizo> resultados = hechizoService.buscarPorNombre(nombre);
+        return resultados.isEmpty()
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.ok(hechizoMapper.toFrontList(resultados));
+    }
+
     @GetMapping
     public ResponseEntity<List<HechizoFront>> obtenerTodos() {
         List<Hechizo> hechizos = hechizoService.getAllHechizos();
@@ -41,4 +50,7 @@ public class HechizoRestController {
         Hechizo guardado = hechizoService.guardarSiNoExiste(hechizo);
         return ResponseEntity.status(201).body(hechizoMapper.toFront(guardado));
     }
+
 }
+
+

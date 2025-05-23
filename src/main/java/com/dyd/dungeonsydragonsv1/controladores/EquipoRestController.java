@@ -20,6 +20,15 @@ public class EquipoRestController {
     private final EquipoService equipoService;
     private final EquipoMapper equipoMapper;
 
+    //buscar por nombre del equipo
+    @GetMapping("/buscar/{nombre}")
+    public ResponseEntity<List<EquipoFront>> buscarPorNombre(@PathVariable String nombre) {
+        List<Equipo> resultados = equipoService.buscarPorNombre(nombre);
+        return resultados.isEmpty()
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.ok(equipoMapper.toFrontList(resultados));
+    }
+
     @GetMapping
     public ResponseEntity<List<EquipoFront>> obtenerTodos() {
         List<Equipo> equipos = equipoService.getAllEquipos();

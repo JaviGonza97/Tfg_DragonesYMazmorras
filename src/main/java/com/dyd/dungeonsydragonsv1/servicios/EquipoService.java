@@ -15,7 +15,6 @@ public class EquipoService {
     private final EquipoRepository equipoRepository;
 
     // Guardar un nuevo equipo si no está ya asignado a otro personaje
-
     public Equipo guardarEquipo(Equipo equipo) {
         if (equipo.getPersonaje() != null) {
             boolean yaAsignado = equipoRepository.findById(equipo.getId())
@@ -26,6 +25,10 @@ public class EquipoService {
             }
         }
         return equipoRepository.save(equipo);
+    }
+
+    public List<Equipo> buscarPorNombre(String nombre) {
+        return equipoRepository.findByNombreContainingIgnoreCase(nombre);
     }
 
     public List<Equipo> saveAll(List<Equipo> listEquipos) {
