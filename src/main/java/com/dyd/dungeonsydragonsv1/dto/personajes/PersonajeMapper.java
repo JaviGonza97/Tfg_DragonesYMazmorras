@@ -7,8 +7,7 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring",
-        collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED)
+@Mapper(componentModel = "spring")
 public interface PersonajeMapper {
 
     // Para convertir de entidad a DTO de salida

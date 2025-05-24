@@ -21,6 +21,6 @@ public class Estadistica {
     private int resistencia;
     private int magia;
 
-    @OneToOne(mappedBy = "estadisticas", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "estadistica", cascade = CascadeType.ALL)
     private Personaje personaje;
 }

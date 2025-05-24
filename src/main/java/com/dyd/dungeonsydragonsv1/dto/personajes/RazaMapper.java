@@ -6,8 +6,7 @@ import org.mapstruct.Mapper;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring",
-        collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED)
+@Mapper(componentModel = "spring")
 public interface RazaMapper {
 
     RazaBack toBack(Raza entity);
