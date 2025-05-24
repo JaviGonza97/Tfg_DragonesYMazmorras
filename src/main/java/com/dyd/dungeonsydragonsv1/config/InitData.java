@@ -2,10 +2,13 @@ package com.dyd.dungeonsydragonsv1.config;
 
 import com.dyd.dungeonsydragonsv1.entidades.*;
 import com.dyd.dungeonsydragonsv1.entidades.enumerado.TipoEquipo;
+import com.dyd.dungeonsydragonsv1.repositorios.RolRepository;
+import com.dyd.dungeonsydragonsv1.repositorios.UsuarioRepository;
 import com.dyd.dungeonsydragonsv1.servicios.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,12 +24,44 @@ public class InitData {
     private final EquipoService equipoService;
     private final HechizoService hechizoService;
     private final PersonajeService personajeService;
+    private final RolRepository rolRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     @EventListener(ApplicationReadyEvent.class)
     public void onApplicationEvent(ApplicationReadyEvent event) {
+        crearRolesSiNoExisten();
+        crearAdminPorDefecto();
         initDatos();
     }
+
+    private void crearRolesSiNoExisten() {
+        if (rolRepository.findByNombre("ADMIN").isEmpty()) {
+            rolRepository.save(Rol.builder().nombre("ADMIN").build());
+        }
+        if (rolRepository.findByNombre("USUARIO").isEmpty()) {
+            rolRepository.save(Rol.builder().nombre("USUARIO").build());
+        }
+    }
+
+    private void crearAdminPorDefecto() {
+        if (usuarioRepository.findByUsername("admin").isEmpty()) {
+            Rol rolAdmin = rolRepository.findByNombre("ADMIN")
+                    .orElseThrow(() -> new RuntimeException("Rol ADMIN no encontrado"));
+
+            Usuario admin = Usuario.builder()
+                    .username("admin")
+                    .email("admin@dyd.com")
+                    .password(passwordEncoder.encode("admin123")) //
+                    .roles(Set.of(rolAdmin))
+                    .build();
+
+            usuarioRepository.save(admin);
+            System.out.println("🛡 Usuario admin creado: admin / admin123");
+        }
+    }
+
 
     public void initDatos() {
         List<Raza> razas = razaService.saveAll(Arrays.asList(

@@ -51,18 +51,18 @@ public class EstadisticaService {
 
     // Esto me ayuda a normalizar el texto así quito acentos y mayúsculas.
 
-    /*📚 Referencias oficiales y útiles:
-Documentación oficial de Java SE sobre Normalizer:
-https://docs.oracle.com/javase/8/docs/api/java/text/Normalizer.html
+        /*📚 Referencias oficiales y útiles:
+    Documentación oficial de Java SE sobre Normalizer:
+    https://docs.oracle.com/javase/8/docs/api/java/text/Normalizer.html
 
-Explicación sobre la expresión regular [\\p{InCombiningDiacriticalMarks}]:
-Esta clase de caracteres captura todos los signos diacríticos (tildes, diéresis, etc.) que siguen a una letra base cuando el texto está en forma NFD.
-Más info sobre esto en:
+    Explicación sobre la expresión regular [\\p{InCombiningDiacriticalMarks}]:
+    Esta clase de caracteres captura todos los signos diacríticos (tildes, diéresis, etc.) que siguen a una letra base cuando el texto está en forma NFD.
+    Más info sobre esto en:
 
-Unicode Character Categories – \p{} Syntax
+    Unicode Character Categories – \p{} Syntax
 
-También lo puedes ver en Stack Overflow con ejemplos prácticos:
-https://stackoverflow.com/questions/15190656/remove-accents-from-a-java-string*/
+    También lo puedes ver en Stack Overflow con ejemplos prácticos:
+    https://stackoverflow.com/questions/15190656/remove-accents-from-a-java-string*/
 
     private String normalizar(String texto) {
         if (texto == null) return "";

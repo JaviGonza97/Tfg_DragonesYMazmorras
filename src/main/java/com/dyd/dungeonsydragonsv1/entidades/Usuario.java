@@ -3,7 +3,9 @@ package com.dyd.dungeonsydragonsv1.entidades;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Builder
 @Getter
@@ -22,6 +24,19 @@ public class Usuario {
 
     private String password;
 
+    @Column(unique = true)
+    private String email;
+
+
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Personaje> personajes;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "usuario_roles",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "rol_id")
+    )
+    private Set<Rol> roles = new HashSet<>();
+
 }

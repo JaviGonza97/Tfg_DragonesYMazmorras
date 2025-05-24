@@ -1,36 +1,26 @@
-package com.dyd.dungeonsydragonsv1.dto.usuario;
+package com.dyd.dungeonsydragonsv1.dto.jwt;
 
-import com.dyd.dungeonsydragonsv1.constraints.PasswordIgual;
-import com.dyd.dungeonsydragonsv1.entidades.Rol;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.util.Set;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@PasswordIgual
-public class UsuarioDto {
-
-    private Long id;
+public class JwtRegistroRequest {
 
     @NotBlank
+    @Size(min = 3, max = 20)
     private String username;
 
     @Email
     private String email;
 
     @NotBlank
-    @Size(min = 6)
+    @Size(min = 6, max = 40)
     private String password;
 
     @NotBlank
     private String passwordConfirm;
-
-    private Set<Rol> roles;
-
 }

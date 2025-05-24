@@ -1,0 +1,29 @@
+### Registro de administrador
+POST http://localhost:8080/auth/register
+Content-Type: application/json
+
+{
+  "username": "admin1",
+  "email": "admin1@email.com",
+  "password": "admin123",
+  "passwordConfirm": "admin123",
+  "roles": [
+    {
+      "id": 1,
+      "nombre": "ADMIN"
+    }
+  ]
+}
+
+### Login como administrador
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin1",
+  "password": "admin123"
+}
+
+### Petición protegida como admin
+GET http://localhost:8080/personajes
+Authorization: Bearer {{auth_token_admin}}

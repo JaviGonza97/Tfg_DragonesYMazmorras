@@ -1,0 +1,29 @@
+### Registro de usuario normal
+POST http://localhost:8080/auth/register
+Content-Type: application/json
+
+{
+  "username": "usuario1",
+  "email": "usuario1@email.com",
+  "password": "usuario123",
+  "passwordConfirm": "usuario123",
+  "roles": [
+    {
+      "id": 2,
+      "nombre": "USUARIO"
+    }
+  ]
+}
+
+### Login como usuario normal
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "usuario1",
+  "password": "usuario123"
+}
+
+### Petición protegida como usuario
+GET http://localhost:8080/personajes
+Authorization: Bearer {{auth_token_usuario}}
