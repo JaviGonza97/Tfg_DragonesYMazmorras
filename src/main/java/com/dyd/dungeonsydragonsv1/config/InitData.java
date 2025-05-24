@@ -1,6 +1,7 @@
 package com.dyd.dungeonsydragonsv1.config;
 
 import com.dyd.dungeonsydragonsv1.entidades.*;
+import com.dyd.dungeonsydragonsv1.entidades.enumerado.TipoEquipo;
 import com.dyd.dungeonsydragonsv1.servicios.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -45,10 +46,11 @@ public class InitData {
         Map<String, Clase> claseMap = clases.stream().collect(Collectors.toMap(Clase::getNombre, c -> c));
 
         List<Equipo> equipos = equipoService.saveAll(Arrays.asList(
-                Equipo.builder().nombre("Espada de hierro").tipo("Arma").build(),
-                Equipo.builder().nombre("Báculo mágico").tipo("Arma").build(),
-                Equipo.builder().nombre("Escudo de hierro").tipo("Defensa").build(),
-                Equipo.builder().nombre("Garra de dragón").tipo("Arma").build()
+                Equipo.builder().nombre("Espada de hierro").tipo(TipoEquipo.ARMA).build(),
+                Equipo.builder().nombre("Báculo mágico").tipo(TipoEquipo.ARMA).build(),
+                Equipo.builder().nombre("Escudo de hierro").tipo(TipoEquipo.ARMADURA).build(),
+                Equipo.builder().nombre("Garra de dragón").tipo(TipoEquipo.ARMA).build(),
+                Equipo.builder().nombre("Poción curativa").tipo(TipoEquipo.OBJETO).build()
         ));
 
         List<Hechizo> hechizos = hechizoService.saveAll(Arrays.asList(
@@ -85,7 +87,7 @@ public class InitData {
                 .nombre("Merlín")
                 .raza(razaMap.get("Humano"))
                 .clase(claseMap.get("Hechicero"))
-                .equipo(List.of(equipos.get(1)))
+                .equipo(List.of(equipos.get(1), equipos.get(4))) // Báculo + Poción
                 .hechizos(List.of(hechizos.get(1)))
                 .build());
 
@@ -93,7 +95,7 @@ public class InitData {
                 .nombre("Morgana")
                 .raza(razaMap.get("Elfo"))
                 .clase(claseMap.get("Hechicero"))
-                .equipo(List.of(equipos.get(1)))
+                .equipo(List.of(equipos.get(1), equipos.get(4))) // Báculo + Poción
                 .hechizos(List.of(hechizos.get(0), hechizos.get(1)))
                 .build());
 
