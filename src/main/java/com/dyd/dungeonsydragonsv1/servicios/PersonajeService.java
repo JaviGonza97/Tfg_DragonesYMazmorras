@@ -57,6 +57,14 @@ public class PersonajeService {
             throw new IllegalArgumentException("Un Orco no puede ser Paladín.");
         }
 
+        // 3.5 Valdiar hechizos que si es Dragon da igual la clase
+        boolean esDragon = raza.getNombre().equalsIgnoreCase("DRAGÓN");
+        boolean esHechicero = clase.getNombre().equalsIgnoreCase("HECHICERO");
+
+        if (!esDragon && !esHechicero && personaje.getHechizos() != null && !personaje.getHechizos().isEmpty()) {
+            throw new IllegalArgumentException("Solo los Hechiceros o los Dragones pueden tener hechizos.");
+        }
+
         // 4. Calcular estadísticas
         Estadistica stats = estadisticaService.calcularEstadistica(raza, clase);
         stats.setPersonaje(personaje); // asociación bidireccional
@@ -92,20 +100,28 @@ public class PersonajeService {
                 .orElseThrow(() -> new RuntimeException("Personaje no encontrado con ID: " + personajeId));
 
         String claseNombre = personaje.getClase().getNombre();
-        if (!claseNombre.equalsIgnoreCase("HECHICERO")) {
-            throw new IllegalArgumentException("Solo los personajes de clase HECHICERO pueden tener hechizos.");
+        String razaNombre = personaje.getRaza().getNombre();
+
+        if (!claseNombre.equalsIgnoreCase("HECHICERO") &&
+                !razaNombre.equalsIgnoreCase("DRAGÓN")) {
+            throw new IllegalArgumentException("Solo los HECHICEROS o los de raza DRAGÓN pueden tener hechizos.");
         }
 
         personaje.getHechizos().add(hechizo);
         return personajeRepository.save(personaje);
     }
 
+
     public Personaje agregarHechizoExistente(Long personajeId, Long hechizoId) {
         Personaje personaje = personajeRepository.findById(personajeId)
                 .orElseThrow(() -> new RuntimeException("Personaje no encontrado con ID: " + personajeId));
 
-        if (!personaje.getClase().getNombre().equalsIgnoreCase("HECHICERO")) {
-            throw new IllegalArgumentException("Solo los personajes de clase HECHICERO pueden tener hechizos.");
+        String claseNombre = personaje.getClase().getNombre();
+        String razaNombre = personaje.getRaza().getNombre();
+
+        if (!claseNombre.equalsIgnoreCase("HECHICERO") &&
+                !razaNombre.equalsIgnoreCase("DRAGÓN")) {
+            throw new IllegalArgumentException("Solo los HECHICEROS o los de raza DRAGÓN pueden tener hechizos.");
         }
 
         Hechizo hechizo = hechizoRepository.findById(hechizoId)
@@ -114,6 +130,7 @@ public class PersonajeService {
         personaje.getHechizos().add(hechizo);
         return personajeRepository.save(personaje);
     }
+
 
     public Personaje eliminarHechizoDePersonaje(Long personajeId, Long hechizoId) {
         Personaje personaje = personajeRepository.findById(personajeId)
