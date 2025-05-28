@@ -9,9 +9,9 @@
     <link rel="stylesheet" href="css/styles.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="module" src="../js/script.js" defer></script>
-    <script type="module" src="../js/auth.js" defer></script>
-    <script type="module" src="../js/creacion.js" defer></script>
+    <script type="module" src="js/script.js" defer></script>
+    <script type="module" src="js/auth.js" defer></script>
+    <script type="module" src="js/creacion.js" defer></script>
     <style>
         :root {
             --primary: #db9429;
@@ -161,6 +161,7 @@
             font-size: 0.7rem;
             font-weight: bold;
         }
+
     </style>
 </head>
 <body>
@@ -290,7 +291,7 @@
                     
                     <div class="row g-3" id="race-selection">
                         <div class="col-md-4">
-                            <div class="card race-card" data-race="humano">
+                            <div class="card race-card" data-race="humano" data-id="4">
                                 <div class="card-body text-center">
                                     <i class="bi bi-person race-icon"></i>
                                     <h5 class="card-title">Humano</h5>
@@ -302,7 +303,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card race-card" data-race="orco">
+                            <div class="card race-card" data-race="orco" data-id="2">
                                 <div class="card-body text-center">
                                     <i class="bi bi-shield-shaded race-icon"></i>
                                     <h5 class="card-title">Orco</h5>
@@ -317,7 +318,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card race-card" data-race="enano">
+                            <div class="card race-card" data-race="enano" data-id="1">
                                 <div class="card-body text-center">
                                     <i class="bi bi-hammer race-icon"></i>
                                     <h5 class="card-title">Enano</h5>
@@ -329,7 +330,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card race-card" data-race="elfo">
+                            <div class="card race-card" data-race="elfo" data-id="3">
                                 <div class="card-body text-center">
                                     <i class="bi bi-tree race-icon"></i>
                                     <h5 class="card-title">Elfo</h5>
@@ -344,7 +345,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card race-card" data-race="dragon">
+                            <div class="card race-card" data-race="dragon" data-id="5">
                                 <div class="card-body text-center">
                                     <i class="bi bi-fire race-icon"></i>
                                     <h5 class="card-title">Dragón</h5>
@@ -366,7 +367,7 @@
                     
                     <div class="row g-3" id="class-selection">
                         <div class="col-md-4">
-                            <div class="card class-card" data-class="guerrero">
+                            <div class="card class-card" data-class="guerrero" data-id="1">
                                 <div class="card-body text-center">
                                     <i class="bi bi-shield-fill class-icon"></i>
                                     <h5 class="card-title">Guerrero</h5>
@@ -378,7 +379,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card class-card" data-class="paladin">
+                            <div class="card class-card" data-class="paladin" data-id="3">
                                 <div class="card-body text-center">
                                     <i class="bi bi-star-fill class-icon"></i>
                                     <h5 class="card-title">Paladín</h5>
@@ -390,7 +391,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card class-card" data-class="hechicero">
+                            <div class="card class-card" data-class="hechicero" data-id="2">
                                 <div class="card-body text-center">
                                     <i class="bi bi-magic class-icon"></i>
                                     <h5 class="card-title">Hechicero</h5>
@@ -474,19 +475,19 @@
                         <h5 class="mb-3">Estadísticas</h5>
                         <div class="row text-center">
                             <div class="col-6 mb-2">
-                                <div class="fw-bold" id="preview-fuerza">8</div>
+                                <div class="fw-bold" id="preview-fuerza">0</div>
                                 <small>Fuerza</small>
                             </div>
                             <div class="col-6 mb-2">
-                                <div class="fw-bold" id="preview-destreza">8</div>
+                                <div class="fw-bold" id="preview-destreza">0</div>
                                 <small>Destreza</small>
                             </div>
                             <div class="col-6">
-                                <div class="fw-bold" id="preview-defensa">8</div>
+                                <div class="fw-bold" id="preview-defensa">0</div>
                                 <small>Defensa</small>
                             </div>
                             <div class="col-6">
-                                <div class="fw-bold" id="preview-magia">8</div>
+                                <div class="fw-bold" id="preview-magia">0</div>
                                 <small>Magia</small>
                             </div>
                         </div>
@@ -521,7 +522,6 @@
                 </div>
                 <div class="modal-body">
                     <div class="text-center mb-4">
-                        <img id="modalImage" src="/placeholder.svg" alt="" class="img-fluid rounded-3 shadow">
                     </div>
                     <p id="modalDescription" class="lead"></p>
                     <div class="accordion" id="modalAccordion">

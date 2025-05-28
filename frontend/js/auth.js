@@ -2,9 +2,23 @@
 import { apiRequest } from "./api.js";
 
 export async function loginUser(email, password) {
-  const response = await apiRequest("/auth/login", "POST", { email, password });
+  const response = await apiRequest("/auth/login", "POST", {
+    username: email, // Enviamos el "email" como username porque el backend así lo espera
+    password,
+  });
+
+  if (!response || !response.token) {
+    throw new Error("Token no recibido del servidor");
+  }
+
   localStorage.setItem("token", response.token);
-  localStorage.setItem("user", JSON.stringify(response.usuario));
+
+  const userInfo = {
+    username: response.username,
+    roles: response.roles,
+  };
+
+  localStorage.setItem("user", JSON.stringify(userInfo));
 }
 
 export async function registerUser(registroDto) {
@@ -38,7 +52,7 @@ export function logoutUser() {
 }
 
 export function getToken() {
-  return localStorage.getItem('token');
+  return localStorage.getItem("token");
 }
 
 export function isLoggedIn() {
@@ -47,11 +61,11 @@ export function isLoggedIn() {
 
 export function requireAuth() {
   if (!isLoggedIn()) {
-    window.location.href = 'login.html';
+    window.location.href = "login.html";
   }
 }
 
 export function logout() {
-  localStorage.removeItem('token');
-  window.location.href = 'login.html';
+  localStorage.removeItem("token");
+  window.location.href = "login.html";
 }

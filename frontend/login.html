@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="css/styles.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="module" src="../js/script.js" defer></script>
-    <script type="module" src="../js/login.js" defer></script>
+    <script type="module" src="js/script.js" defer></script>
+    <script type="module" src="js/login.js" defer></script>
 
 </head>
 <body>
@@ -94,48 +94,46 @@
         </div>
     </nav>
     
-<main id="main-content" class="container my-5" role="main">
-<main id="main-content" class="container my-5" role="main">
-  <div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-      <div class="card shadow-sm border-0">
-        <div class="card-header bg-primary text-white text-center">
-          <h4 class="mb-0">Iniciar sesión</h4>
-        </div>
-        <div class="card-body">
-          <form id="login-form" novalidate>
-            <div class="mb-3">
-              <label for="email" class="form-label">Correo electrónico</label>
-              <input type="email" class="form-control" id="email" required placeholder="nombre@ejemplo.com">
-            </div>
-            <div class="mb-3">
-              <label for="password" class="form-label">Contraseña</label>
-              <input type="password" class="form-control" id="password" required placeholder="********">
-            </div>
+<main class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm border-0">
+          <div class="card-header bg-primary text-white text-center">
+            <h4 class="mb-0">Iniciar sesión</h4>
+          </div>
+          <div class="card-body">
+            <form id="login-form" novalidate>
+              <div class="mb-3">
+                <label for="email" class="form-label">Usuario</label>
+                <input type="text" class="form-control" id="email" required placeholder="nombre de usuario" />
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" class="form-control" id="password" required placeholder="********" />
+              </div>
 
-            <div id="login-alert" class="alert alert-danger d-none" role="alert">
-              Credenciales incorrectas. Intenta nuevamente.
-            </div>
+              <div id="login-alert" class="alert alert-danger d-none" role="alert">
+                Credenciales incorrectas. Intenta nuevamente.
+              </div>
 
-            <div id="login-success" class="alert alert-success d-none" role="alert">
-              Inicio de sesión exitoso. Redirigiendo...
-            </div>
+              <div id="login-success" class="alert alert-success d-none" role="alert">
+                Inicio de sesión exitoso. Redirigiendo...
+              </div>
 
-            <div class="d-grid">
-              <button type="submit" class="btn btn-primary">Ingresar</button>
-            </div>
-          </form>
-          <hr>
-          <p class="text-center mb-0">
-            ¿No tienes una cuenta? <a href="registro.html">Regístrate aquí</a>
-          </p>
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Ingresar</button>
+              </div>
+            </form>
+
+            <hr />
+            <p class="text-center mb-0">
+              ¿No tienes una cuenta? <a href="registro.html">Regístrate aquí</a>
+            </p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</main>
-
-    </main>
+  </main>
     
     <div class="modal fade" id="gameModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">

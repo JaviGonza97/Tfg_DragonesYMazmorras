@@ -14,7 +14,7 @@ $(document).ready(() => {
       title: "Humano Guerrero",
       description:
         "Un combatiente disciplinado que confía en su espada. Entrenado en tácticas de batalla y siempre listo para liderar.",
-      image: "../img/lol.jpg",
+      image: "img/lol.jpg",
       details: [
         "Arma: Espada larga",
         "Objetos: Poción de salud, brújula",
@@ -27,7 +27,7 @@ $(document).ready(() => {
       title: "Enano Paladin",
       description:
         "Un defensor sagrado con armadura pesada y maza bendita. Lucha por la justicia y protege a los débiles con fe inquebrantable.",
-      image: "../img/lor.jpg",
+      image: "img/lor.jpg",
       details: [
         "Arma: Maza de justicia",
         "Objetos: Libro sagrado, amuleto",
@@ -40,7 +40,7 @@ $(document).ready(() => {
       title: "Orco Hechicero",
       description:
         "Una fusión de fuerza bruta y poder arcano. Canaliza energía mágica salvaje para dominar el campo de batalla.",
-      image: "../img/2xko.png",
+      image: "img/2xko.png",
       details: [
         "Arma: Bastón rúnico",
         "Objetos: Cristal arcano, grimorio",
@@ -53,7 +53,7 @@ $(document).ready(() => {
       title: "Draconico",
       description:
         "Descendiente de dragones, este guerrero blande un hacha con fuerza ancestral y escupe fuego cuando la batalla lo exige.",
-      image: "../img/tft.jpg",
+      image: "img/tft.jpg",
       details: [
         "Arma: Hacha de escamas rojas",
         "Objetos: Talismán dracónico, piedra de fuego",
