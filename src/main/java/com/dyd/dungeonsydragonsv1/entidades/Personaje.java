@@ -3,6 +3,7 @@ package com.dyd.dungeonsydragonsv1.entidades;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Builder
@@ -20,15 +21,16 @@ public class Personaje {
     private String nombre;
 
     @ManyToOne
-    @JoinColumn(name = "raza_personaje")
+    @JoinColumn(name = "raza_id")
     private Raza raza;
 
     @ManyToOne
-    @JoinColumn(name = "clase_personaje")
+    @JoinColumn(name = "clase_id")
     private Clase clase;
 
     @OneToMany(mappedBy = "personaje", cascade = CascadeType.ALL)
-    private List<Equipo> equipo;
+    @Builder.Default
+    private List<Equipo> equipo = new ArrayList<>();  // ← inicializada
 
     @ManyToMany
     @JoinTable(
@@ -45,4 +47,14 @@ public class Personaje {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "estadistica_id")
     private Estadistica estadistica;
+
+    public void addEquipo(Equipo e) {
+        e.setPersonaje(this);
+        this.equipo.add(e);
+    }
+
+    public void removeEquipo(Equipo e) {
+        e.setPersonaje(null);
+        this.equipo.remove(e);
+    }
 }

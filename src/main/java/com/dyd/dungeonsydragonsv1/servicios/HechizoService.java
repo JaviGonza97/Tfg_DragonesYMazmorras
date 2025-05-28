@@ -51,4 +51,16 @@ public class HechizoService {
         return hechizoRepository.findByNombreContainingIgnoreCase(nombre);
     }
 
+    public boolean existsById(Long id) {
+        return hechizoRepository.existsById(id);
+    }
+
+    public void deleteById(Long id) {
+        hechizoRepository.deleteById(id);
+    }
+
+    public List<Hechizo> findAllById(List<Long> ids) {
+        return hechizoRepository.findAllById(ids);
+    }
+
 }

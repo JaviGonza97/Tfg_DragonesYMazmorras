@@ -1,10 +1,6 @@
 package com.dyd.dungeonsydragonsv1.servicios;
 
-import com.dyd.dungeonsydragonsv1.entidades.Clase;
-import com.dyd.dungeonsydragonsv1.entidades.Estadistica;
-import com.dyd.dungeonsydragonsv1.entidades.Hechizo;
-import com.dyd.dungeonsydragonsv1.entidades.Personaje;
-import com.dyd.dungeonsydragonsv1.entidades.Raza;
+import com.dyd.dungeonsydragonsv1.entidades.*;
 import com.dyd.dungeonsydragonsv1.repositorios.HechizoRepository;
 import com.dyd.dungeonsydragonsv1.repositorios.PersonajeRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +18,8 @@ public class PersonajeService {
     private final ClaseService claseService;
     private final HechizoRepository hechizoRepository;
     private final EstadisticaService estadisticaService;
+    private final EquipoService equipoService;
+    private final HechizoService hechizoService;
 
     public List<Personaje> getAllPersonajes() {
         return personajeRepository.findAll();
@@ -36,46 +34,54 @@ public class PersonajeService {
     }
 
     public Personaje savePersonaje(Personaje personaje) {
-        // 1. Resolver Raza
-        Long razaId = personaje.getRaza().getId();
-        Raza raza = razaService.findById(razaId)
-                .orElseThrow(() -> new RuntimeException("Raza no encontrada con ID: " + razaId));
-
-        // 2. Resolver Clase
-        Long claseId = personaje.getClase().getId();
-        Clase clase = claseService.findById(claseId)
-                .orElseThrow(() -> new RuntimeException("Clase no encontrada con ID: " + claseId));
-
-        // 3. Validar combinaciones prohibidas
-        if (raza.getNombre().equalsIgnoreCase("ELFO") &&
-                clase.getNombre().equalsIgnoreCase("GUERRERO")) {
-            throw new IllegalArgumentException("Un Elfo no puede ser Guerrero.");
-        }
-
-        if (raza.getNombre().equalsIgnoreCase("ORCO") &&
-                clase.getNombre().equalsIgnoreCase("PALADÍN")) {
-            throw new IllegalArgumentException("Un Orco no puede ser Paladín.");
-        }
-
-        // 3.5 Valdiar hechizos que si es Dragon da igual la clase
-        boolean esDragon = raza.getNombre().equalsIgnoreCase("DRAGÓN");
-        boolean esHechicero = clase.getNombre().equalsIgnoreCase("HECHICERO");
-
-        if (!esDragon && !esHechicero && personaje.getHechizos() != null && !personaje.getHechizos().isEmpty()) {
-            throw new IllegalArgumentException("Solo los Hechiceros o los Dragones pueden tener hechizos.");
-        }
-
-        // 4. Calcular estadísticas
-        Estadistica stats = estadisticaService.calcularEstadistica(raza, clase);
-        stats.setPersonaje(personaje); // asociación bidireccional
-        personaje.setEstadistica(stats);
-
-        // 5. Asignar raza y clase
+        // 1) Resuelvo raza y clase
+        Raza raza = razaService.findById(personaje.getRaza().getId())
+                .orElseThrow(() -> new RuntimeException("Raza no encontrada"));
+        Clase clase = claseService.findById(personaje.getClase().getId())
+                .orElseThrow(() -> new RuntimeException("Clase no encontrada"));
         personaje.setRaza(raza);
         personaje.setClase(clase);
 
-        // 6. Guardar personaje
-        return personajeRepository.save(personaje);
+        // 2) Calculo y asigno estadisticas
+        Estadistica stats = estadisticaService.calcularEstadistica(raza, clase);
+        stats.setPersonaje(personaje);
+        personaje.setEstadistica(stats);
+
+        // 3) Guardo primero el Personaje (sin equipos ni hechizos todavía)
+        Personaje guardado = personajeRepository.save(personaje);
+
+        // 4) Ahora asocio sus Equipos SIN duplicar asignaciones
+        if (personaje.getEquipo() != null && !personaje.getEquipo().isEmpty()) {
+            List<Long> equipoIds = personaje.getEquipo().stream()
+                    .map(Equipo::getId)
+                    .toList();
+            List<Equipo> equipos = equipoService.findAllById(equipoIds);
+
+            for (Equipo e : equipos) {
+                // sólo asigno si está libre o ya apuntando a este mismo personaje
+                if (e.getPersonaje() == null || e.getPersonaje().getId().equals(guardado.getId())) {
+                    e.setPersonaje(guardado);
+                    equipoService.guardarEquipo(e);
+                }
+            }
+        }
+
+        // 5) Ahora asocio sus Hechizos (si permite)
+        boolean esDragon    = raza.getNombre().equalsIgnoreCase("DRAGON");
+        boolean esHechicero = clase.getNombre().equalsIgnoreCase("HECHICERO");
+        if (personaje.getHechizos() != null && !personaje.getHechizos().isEmpty()) {
+            if (!esDragon && !esHechicero) {
+                throw new IllegalArgumentException("Solo Dragones o Hechiceros pueden llevar hechizos");
+            }
+            List<Long> hechizoIds = personaje.getHechizos().stream()
+                    .map(Hechizo::getId)
+                    .toList();
+            List<Hechizo> hechizos = hechizoService.findAllById(hechizoIds);
+            guardado.setHechizos(hechizos);
+        }
+
+        // 6) Finalmente recargo para devolver todo ligado
+        return personajeRepository.findById(guardado.getId()).orElse(guardado);
     }
 
     public List<Personaje> saveAll(List<Personaje> personajes) {
@@ -103,8 +109,8 @@ public class PersonajeService {
         String razaNombre = personaje.getRaza().getNombre();
 
         if (!claseNombre.equalsIgnoreCase("HECHICERO") &&
-                !razaNombre.equalsIgnoreCase("DRAGÓN")) {
-            throw new IllegalArgumentException("Solo los HECHICEROS o los de raza DRAGÓN pueden tener hechizos.");
+                !razaNombre.equalsIgnoreCase("DRAGON")) {
+            throw new IllegalArgumentException("Solo los HECHICEROS o los de raza DRAGON pueden tener hechizos.");
         }
 
         personaje.getHechizos().add(hechizo);
@@ -120,8 +126,8 @@ public class PersonajeService {
         String razaNombre = personaje.getRaza().getNombre();
 
         if (!claseNombre.equalsIgnoreCase("HECHICERO") &&
-                !razaNombre.equalsIgnoreCase("DRAGÓN")) {
-            throw new IllegalArgumentException("Solo los HECHICEROS o los de raza DRAGÓN pueden tener hechizos.");
+                !razaNombre.equalsIgnoreCase("DRAGON")) {
+            throw new IllegalArgumentException("Solo los HECHICEROS o los de raza DRAGON pueden tener hechizos.");
         }
 
         Hechizo hechizo = hechizoRepository.findById(hechizoId)

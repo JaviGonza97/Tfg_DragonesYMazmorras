@@ -1,5 +1,6 @@
 package com.dyd.dungeonsydragonsv1.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,5 +23,6 @@ public class Estadistica {
     private int magia;
 
     @OneToOne(mappedBy = "estadistica", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Personaje personaje;
 }

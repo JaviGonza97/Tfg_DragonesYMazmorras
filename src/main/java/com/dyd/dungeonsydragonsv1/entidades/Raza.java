@@ -1,5 +1,6 @@
 package com.dyd.dungeonsydragonsv1.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,5 +22,6 @@ public class Raza {
     private String nombre;
 
     @OneToMany(mappedBy = "raza")
+    @JsonIgnore
     private List<Personaje> personajes;
 }

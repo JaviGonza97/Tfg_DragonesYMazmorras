@@ -20,7 +20,6 @@ public class EquipoRestController {
     private final EquipoService equipoService;
     private final EquipoMapper equipoMapper;
 
-    //buscar por nombre del equipo
     @GetMapping("/buscar/{nombre}")
     public ResponseEntity<List<EquipoFront>> buscarPorNombre(@PathVariable String nombre) {
         List<Equipo> resultados = equipoService.buscarPorNombre(nombre);
@@ -46,7 +45,7 @@ public class EquipoRestController {
     @PostMapping
     public ResponseEntity<EquipoFront> crear(@Valid @RequestBody EquipoBack dto) {
         Equipo equipo = equipoMapper.toEntity(dto);
-        Equipo creado = equipoService.guardarEquipo(equipo);
+        Equipo creado = equipoService.guardarEquipo(equipo); // ahora funcionará correctamente
         return ResponseEntity.status(201).body(equipoMapper.toFront(creado));
     }
 
@@ -58,4 +57,15 @@ public class EquipoRestController {
         equipoService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{id}/asignar-personaje/{personajeId}")
+    public ResponseEntity<?> asignarPersonaje(
+            @PathVariable Long id,
+            @PathVariable Long personajeId) {
+        equipoService.asignarAEquipoExistente(id, personajeId);
+        return ResponseEntity.ok().build();
+    }
+
+
+
 }

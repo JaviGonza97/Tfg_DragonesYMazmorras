@@ -1,5 +1,6 @@
 package com.dyd.dungeonsydragonsv1.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,5 +22,6 @@ public class Rol {
     private String nombre; // Ej: "ADMIN", "USUARIO"
 
     @ManyToMany(mappedBy = "roles")
+    @JsonIgnore
     private Set<Usuario> usuarios;
 }

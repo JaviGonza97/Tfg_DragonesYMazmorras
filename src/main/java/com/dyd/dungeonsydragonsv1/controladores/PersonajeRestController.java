@@ -1,15 +1,17 @@
 package com.dyd.dungeonsydragonsv1.controladores;
 
 import com.dyd.dungeonsydragonsv1.dto.personajes.*;
-import com.dyd.dungeonsydragonsv1.entidades.Hechizo;
-import com.dyd.dungeonsydragonsv1.entidades.Personaje;
+import com.dyd.dungeonsydragonsv1.entidades.*;
+import com.dyd.dungeonsydragonsv1.seguridad.UsuarioDetails;
 import com.dyd.dungeonsydragonsv1.servicios.ClaseService;
 import com.dyd.dungeonsydragonsv1.servicios.HechizoService;
 import com.dyd.dungeonsydragonsv1.servicios.PersonajeService;
 import com.dyd.dungeonsydragonsv1.servicios.RazaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,28 +50,69 @@ public class PersonajeRestController {
     }
 
     @PostMapping
-    public ResponseEntity<PersonajeFront> crear(@Valid @RequestBody PersonajeBack dto) {
-        Personaje personaje = personajeMapper.toEntity(dto);
-        Personaje creado = personajeService.savePersonaje(personaje);
-        return ResponseEntity.status(201).body(personajeMapper.toFront(creado));
+    public ResponseEntity<PersonajeFront> crear(@Valid @RequestBody PersonajeBack dto,
+                                                @AuthenticationPrincipal UsuarioDetails userDetails) {
+        Personaje p = new Personaje();
+        p.setNombre(dto.getNombre());
+        p.setRaza(Raza.builder().id(dto.getRazaId()).build());
+        p.setClase(Clase.builder().id(dto.getClaseId()).build());
+        p.setUsuario(userDetails.getUsuario());
+
+        p.setRaza(Raza.builder().id(dto.getRazaId()).build());
+        p.setClase(Clase.builder().id(dto.getClaseId()).build());
+
+        if (dto.getHechizoIds() != null) {
+            List<Hechizo> hz = dto.getHechizoIds().stream()
+                    .map(id -> Hechizo.builder().id(id).build())
+                    .toList();
+            p.setHechizos(hz);
+        }
+
+        Personaje creado = personajeService.savePersonaje(p);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(personajeMapper.toFront(creado));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PersonajeFront> actualizar(@PathVariable Long id,
-                                                     @Valid @RequestBody PersonajeBack dto) {
+    public ResponseEntity<PersonajeFront> actualizar(
+            @PathVariable Long id,
+            @Valid @RequestBody PersonajeBack dto
+    ) {
         if (!personajeService.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        Personaje personaje = personajeMapper.toEntity(dto);
-        personaje.setId(id);
-        Personaje actualizado = personajeService.savePersonaje(personaje);
+
+        Personaje p = new Personaje();
+        p.setId(id);
+        p.setNombre(dto.getNombre());
+        p.setRaza(Raza.builder().id(dto.getRazaId()).build());
+        p.setClase(Clase.builder().id(dto.getClaseId()).build());
+        if (dto.getEquipoIds() != null) {
+            List<Equipo> eq = dto.getEquipoIds().stream()
+                    .map(i -> Equipo.builder().id(i).build())
+                    .toList();
+            p.setEquipo(eq);
+        }
+        if (dto.getHechizoIds() != null) {
+            List<Hechizo> hz = dto.getHechizoIds().stream()
+                    .map(i -> Hechizo.builder().id(i).build())
+                    .toList();
+            p.setHechizos(hz);
+        }
+
+        Personaje actualizado = personajeService.savePersonaje(p);
         return ResponseEntity.ok(personajeMapper.toFront(actualizado));
     }
 
     @PostMapping("/filtrar")
     public ResponseEntity<List<PersonajeFront>> filtrar(@RequestBody PersonajeBack filtro) {
-        String claseNombre = filtro.getClaseId() != null ? claseService.findById(filtro.getClaseId()).map(c -> c.getNombre()).orElse("") : "";
-        String razaNombre  = filtro.getRazaId() != null  ? razaService.findById(filtro.getRazaId()).map(r -> r.getNombre()).orElse("")  : "";
+        String claseNombre = filtro.getClaseId() != null
+                ? claseService.findById(filtro.getClaseId()).map(Clase::getNombre).orElse("")
+                : "";
+        String razaNombre = filtro.getRazaId() != null
+                ? razaService.findById(filtro.getRazaId()).map(Raza::getNombre).orElse("")
+                : "";
 
         List<Personaje> resultados = personajeService.filtrarPorClaseYRaza(claseNombre, razaNombre);
         return resultados.isEmpty()

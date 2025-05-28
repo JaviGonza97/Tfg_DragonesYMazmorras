@@ -51,6 +51,15 @@ public class HechizoRestController {
         return ResponseEntity.status(201).body(hechizoMapper.toFront(guardado));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        if (!hechizoService.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        hechizoService.deleteById(id);
+        return ResponseEntity.noContent().build(); // 204 No Content
+    }
+
 }
 
 

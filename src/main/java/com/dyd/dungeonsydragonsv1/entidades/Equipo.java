@@ -1,10 +1,8 @@
 package com.dyd.dungeonsydragonsv1.entidades;
 
 import com.dyd.dungeonsydragonsv1.entidades.enumerado.TipoEquipo;
-import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.*;
-
 
 @Data
 @NoArgsConstructor
@@ -12,6 +10,7 @@ import lombok.*;
 @Builder
 @Entity
 public class Equipo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

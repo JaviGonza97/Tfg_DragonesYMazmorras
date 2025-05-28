@@ -1,5 +1,6 @@
 package com.dyd.dungeonsydragonsv1.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,6 +30,7 @@ public class Usuario {
 
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Personaje> personajes;
 
     @ManyToMany(fetch = FetchType.EAGER)

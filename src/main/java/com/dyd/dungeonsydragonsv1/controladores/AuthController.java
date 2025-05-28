@@ -30,6 +30,8 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody UsuarioDto dto) {
+        System.out.println("Intentando registrar usuario: " + dto);
+
         if (usuarioRepository.findByUsername(dto.getUsername()).isPresent()) {
             return ResponseEntity.badRequest().body("Usuario ya existe");
         }
@@ -38,7 +40,7 @@ public class AuthController {
                 .username(dto.getUsername())
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
-                .roles(dto.getRoles()) // ya viene como Set<Rol>
+                .roles(dto.getRoles())
                 .build();
 
         usuarioRepository.save(usuario);

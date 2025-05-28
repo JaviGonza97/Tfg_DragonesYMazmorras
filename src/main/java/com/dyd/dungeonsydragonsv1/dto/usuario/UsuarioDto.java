@@ -18,17 +18,18 @@ public class UsuarioDto {
 
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "El nombre de usuario es obligatorio")
     private String username;
 
-    @Email
+    @NotBlank(message = "El email es obligatorio")
+    @Email(message = "El email no es válido")
     private String email;
 
-    @NotBlank
-    @Size(min = 6)
+    @NotBlank(message = "La contraseña es obligatoria")
+    @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
     private String password;
 
-    @NotBlank
+    @NotBlank(message = "Debes confirmar la contraseña")
     private String passwordConfirm;
 
     private Set<Rol> roles;

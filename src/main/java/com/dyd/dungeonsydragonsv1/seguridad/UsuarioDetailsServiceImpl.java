@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import com.dyd.dungeonsydragonsv1.seguridad.UsuarioDetails;
 
 import java.util.stream.Collectors;
 
@@ -30,10 +31,6 @@ public class UsuarioDetailsServiceImpl implements UserDetailsService {
                 .map(rol -> new SimpleGrantedAuthority("ROLE_" + rol.getNombre()))
                 .collect(Collectors.toSet());
 
-        return new User(
-                usuario.getUsername(),
-                usuario.getPassword(),
-                authorities
-        );
+        return new UsuarioDetails(usuario);
     }
 }

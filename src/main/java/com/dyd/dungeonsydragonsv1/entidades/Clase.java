@@ -1,5 +1,6 @@
 package com.dyd.dungeonsydragonsv1.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,5 +20,6 @@ public class Clase {
     private String nombre;
 
     @OneToMany(mappedBy = "clase")
+    @JsonIgnore
     private List<Personaje> personajes;
 }
