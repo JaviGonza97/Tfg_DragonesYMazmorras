@@ -123,24 +123,6 @@
     </dependencies>
 
     <build>
-        <!-- 1) Recursos filtrados (todos excepto application-railway.properties) -->
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-                <excludes>
-                    <exclude>application-railway.properties</exclude>
-                </excludes>
-            </resource>
-            <!-- 2) application-railway.properties sin filtrar -->
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>false</filtering>
-                <includes>
-                    <include>application-railway.properties</include>
-                </includes>
-            </resource>
-        </resources>
 
         <plugins>
             <!-- Maven Compiler -->
