@@ -120,6 +120,14 @@
     </dependencies>
 
     <build>
+        <!-- Copia TODOS los recursos sin filtrar para evitar errores con acentos -->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+
         <plugins>
             <!-- Maven Compiler -->
             <plugin>
@@ -152,7 +160,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!-- Copia recursos sin filtrar y con encoding UTF-8 -->
+            <!-- Copia recursos con encoding UTF-8 pero sin filtrar -->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.3.1</version>
