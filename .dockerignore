@@ -1,6 +1,5 @@
 # Directorios y archivos que no quieres copiar al contexto de Docker
 target
-.mvn
 .idea
 .vscode
 .DS_Store
