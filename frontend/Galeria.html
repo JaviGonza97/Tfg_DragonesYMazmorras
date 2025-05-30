@@ -94,13 +94,10 @@
         </div>
     </nav>
     
-<<main id="main-content" class="container my-5" role="main">
+<main id="main-content" class="container my-5" role="main">
   <section>
-    <h2 class="mb-4 text-center">Galería de Personajes</h2>
+    <h2 class="mb-4 text-center">Mi Galería de Personajes</h2>
 
-    <div id="auth-status-container" class="mb-4"></div>
-
-    <!-- Filtros -->
     <div class="row mb-4">
       <div class="col-md-6">
         <label for="filtro-raza" class="form-label">Filtrar por Raza:</label>
@@ -116,10 +113,8 @@
       </div>
     </div>
 
-    <!-- Contenedor de tarjetas -->
     <div id="galeria-personajes" class="row g-4 justify-content-center"></div>
 
-    <!-- Mensaje si no hay personajes -->
     <div id="no-characters-container" class="text-center mt-4 d-none">
       <p class="lead">Aún no tienes personajes creados.</p>
       <a href="creacion.html" class="btn btn-lg mt-3" style="background-color: var(--primary); color: white;">
@@ -128,28 +123,25 @@
     </div>
   </section>
 
-  <!-- Modal de detalles -->
+  <!-- Modal bonito de detalles -->
   <div class="modal fade" id="characterModal" tabindex="-1" aria-labelledby="characterModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content shadow-lg">
         <div class="modal-header" style="background-color: var(--primary); color: white;">
           <h5 class="modal-title" id="characterModalLabel">Detalles del Personaje</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
           <div class="row">
             <div class="col-md-4 text-center mb-3">
-              <div class="character-avatar rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
-                   style="width: 120px; height: 120px; font-size: 3rem; background-color: var(--primary); color: white;">
-                <span id="character-avatar-initial"></span>
-              </div>
-              <h3 id="character-name" class="h4 mb-1"></h3>
+              <img id="character-avatar-img" class="character-avatar-img" src="" alt="Avatar">
+              <h3 id="character-name" class="h4 mt-3 mb-1"></h3>
               <p id="character-race-class" class="text-muted"></p>
             </div>
             <div class="col-md-8">
               <div class="card mb-3">
                 <div class="card-header" style="background-color: rgba(219, 148, 41, 0.2);">
-                  <h4 class="h6 mb-0">Características</h4>
+                  <h4 class="h6 mb-0">Estadísticas</h4>
                 </div>
                 <div class="card-body">
                   <div class="row" id="character-stats"></div>
@@ -158,7 +150,7 @@
 
               <div class="card">
                 <div class="card-header" style="background-color: rgba(219, 148, 41, 0.2);">
-                  <h4 class="h6 mb-0">Habilidades y Equipamiento</h4>
+                  <h4 class="h6 mb-0">Hechizos & Equipamiento</h4>
                 </div>
                 <div class="card-body" id="character-abilities"></div>
               </div>
@@ -167,16 +159,13 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-          <a id="edit-character-link" href="#" class="btn" style="background-color: var(--primary); color: white;">
-            <i class="bi bi-pencil me-2"></i>Editar
-          </a>
         </div>
       </div>
     </div>
   </div>
 </main>
 
-    
+
     <div class="modal fade" id="gameModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
@@ -186,8 +175,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="text-center mb-4">
-                        <img id="modalImage" src="/placeholder.svg" alt="" class="img-fluid rounded-3 shadow">
-                    </div>
+                </div>
                     <p id="modalDescription" class="lead"></p>
                     <div class="accordion" id="modalAccordion">
                         <div class="accordion-item">
