@@ -1,6 +1,7 @@
 package com.dyd.dungeonsydragonsv1.repositorios;
 
 import com.dyd.dungeonsydragonsv1.entidades.Personaje;
+import com.dyd.dungeonsydragonsv1.entidades.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,4 +19,7 @@ public interface PersonajeRepository extends JpaRepository<Personaje, Long> {
             @Param("clase") String clase,
             @Param("raza")  String raza
     );
+
+    List<Personaje> findByUsuario(Usuario usuario);
+
 }

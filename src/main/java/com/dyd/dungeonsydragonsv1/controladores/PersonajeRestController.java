@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -160,6 +161,16 @@ public class PersonajeRestController {
         Personaje personaje = personajeService.eliminarTodosHechizos(id);
         return ResponseEntity.ok(personajeMapper.toFront(personaje));
     }
+
+    //Para galeria de personajes
+
+    @GetMapping("/mios")
+    public ResponseEntity<List<PersonajeGaleriaDto>> obtenerMisPersonajes(Authentication authentication) {
+        String username = authentication.getName();
+        List<Personaje> personajesDelUsuario = personajeService.getPersonajesDelUsuario(username);
+        return ResponseEntity.ok(personajeMapper.toGaleriaList(personajesDelUsuario));
+    }
+
 
 
 }

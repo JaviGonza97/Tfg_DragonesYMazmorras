@@ -3,6 +3,7 @@ package com.dyd.dungeonsydragonsv1.servicios;
 import com.dyd.dungeonsydragonsv1.entidades.*;
 import com.dyd.dungeonsydragonsv1.repositorios.HechizoRepository;
 import com.dyd.dungeonsydragonsv1.repositorios.PersonajeRepository;
+import com.dyd.dungeonsydragonsv1.repositorios.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ public class PersonajeService {
     private final EstadisticaService estadisticaService;
     private final EquipoService equipoService;
     private final HechizoService hechizoService;
+    private final UsuarioRepository usuarioRepository;
 
     public List<Personaje> getAllPersonajes() {
         return personajeRepository.findAll();
@@ -153,5 +155,13 @@ public class PersonajeService {
         personaje.getHechizos().clear();
         return personajeRepository.save(personaje);
     }
+
+    //Metodo para obtener los personajes que creo un usuario
+    public List<Personaje> getPersonajesDelUsuario(String username) {
+        Usuario usuario = usuarioRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        return personajeRepository.findByUsuario(usuario);
+    }
+
 
 }
