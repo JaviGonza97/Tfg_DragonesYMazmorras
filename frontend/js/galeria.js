@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       card.className = 'col-md-4 col-lg-3 mb-4';
       card.innerHTML = `
         <div class="card shadow-sm h-100">
-          <img src="img/${imgName}" class="card-img-top" style="height: 200px; object-fit: cover;">
+          <img src="img/${imgName}" class="card-img-top" style="height: 200px; object-fit: cover; object-position: top center;">
           <div class="card-body text-center">
             <h5>${character.nombre}</h5>
             <p class="text-muted">${character.raza} - ${character.clase}</p>
@@ -114,7 +114,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>
     `).join("");
 
-    
     const abilitiesContainer = document.getElementById("character-abilities");
     abilitiesContainer.innerHTML = `
       <h5>Hechizos:</h5>
