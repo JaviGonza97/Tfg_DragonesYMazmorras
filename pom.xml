@@ -98,7 +98,7 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- PostgreSQL para Railway -->
+        <!-- PostgreSQL para Render -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
