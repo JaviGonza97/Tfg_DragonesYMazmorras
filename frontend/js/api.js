@@ -1,6 +1,6 @@
 // js/api.js
+import { API_BASE_URL } from "./config.js";
 
-const API_BASE_URL = "http://192.168.1.17:8080"; // Ajusta al dominio/IP real de tu backend
 
 /**
  * Función para realizar solicitudes a la API.

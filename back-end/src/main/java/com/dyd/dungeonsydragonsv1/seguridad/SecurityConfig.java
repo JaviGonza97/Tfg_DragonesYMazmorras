@@ -57,25 +57,28 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
+        CorsConfiguration cfg = new CorsConfiguration();
 
-        // Dominios explícitos
-        config.setAllowedOrigins(List.of(
-                "http://localhost:5500",
-                "https://tfg-dragones-y-mazmorras.vercel.app"
-        ));
+        // Producción (dominio fijo)
+        cfg.addAllowedOrigin("https://tfg-dragones-y-mazmorras.vercel.app");
 
-        // Previews y subdominios con hash
-        config.addAllowedOriginPattern("https://tfg-dragones-y-mazmorras-*.vercel.app");
+        // Todos los previews de Vercel para este proyecto
+        // cualquier sub-dominio que empiece por "tfg-dragones-y-mazmor"
+        cfg.addAllowedOriginPattern("https://tfg-dragones-y-mazmor*.vercel.app");
 
-        // Métodos / cabeceras / credenciales
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
+        // Live-server local
+        cfg.addAllowedOrigin("http://localhost:5500");
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return source;
+        /* resto igual */
+        cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
+        cfg.setAllowedHeaders(List.of("Authorization","Content-Type","Accept"));
+        cfg.setExposedHeaders(List.of("Authorization"));
+        cfg.setAllowCredentials(true);
+        cfg.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource src = new UrlBasedCorsConfigurationSource();
+        src.registerCorsConfiguration("/**", cfg);
+        return src;
     }
 
 
