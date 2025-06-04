@@ -59,25 +59,25 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        // ───── Orígenes que SÍ pueden pedir la API ─────
+        // Dominios explícitos
         config.setAllowedOrigins(List.of(
-                "http://localhost:5500",                     // pruebas locales (Live Server)
-                "https://tfg-dragonesymazmorras.vercel.app"  // dominio de producción en Vercel
-                // Si quieres valerte de las previews de Vercel:
-                // usa config.addAllowedOriginPattern("https://*.vercel.app");
+                "http://localhost:5500",
+                "https://tfg-dragones-y-mazmorras.vercel.app"
         ));
 
-        // ───── Métodos y cabeceras permitidos ─────
+        // Previews y subdominios con hash
+        config.addAllowedOriginPattern("https://tfg-dragones-y-mazmorras-*.vercel.app");
+
+        // Métodos / cabeceras / credenciales
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
-
-        // Si usas token Bearer o cookies
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
     }
+
 
 
     /*@Bean
