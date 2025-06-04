@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a3579687-3b15-4ebe-9666-ccceed9e30f0" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/DungeonsYDragonsV1.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back-end/Personaje.http" beforeDir="false" afterPath="$PROJECT_DIR$/back-end/Personaje.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back-end/admin.http" beforeDir="false" afterPath="$PROJECT_DIR$/back-end/admin.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back-end/src/main/java/com/dyd/dungeonsydragonsv1/DungeonsYDragonsV1Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/back-end/src/main/java/com/dyd/dungeonsydragonsv1/DungeonsYDragonsV1Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back-end/src/main/java/com/dyd/dungeonsydragonsv1/controladores/PersonajeRestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/back-end/src/main/java/com/dyd/dungeonsydragonsv1/controladores/PersonajeRestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back-end/src/main/java/com/dyd/dungeonsydragonsv1/servicios/ClaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/back-end/src/main/java/com/dyd/dungeonsydragonsv1/servicios/ClaseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back-end/src/test/java/com/dyd/dungeonsydragonsv1/DungeonsYDragonsV1ApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/back-end/usuario.http" beforeDir="false" afterPath="$PROJECT_DIR$/back-end/usuario.txt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JUnit5 Test Class" />
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="mergePrueba" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2wzDNcUkqkdZQQ21UjRKkIgopMl" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;HTTP Request.All in admin.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.admin | Login como administrador.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.admin | Petición protegida como admin.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.admin | Registro de administrador.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.usuario | Login como usuario normal.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.usuario | Petición protegida como usuario.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.usuario | Registro de usuario normal.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.DungeonsYDragonsV1ApplicationTests.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.PersonajeRestControllerTest.crear_deberiaRetornar201ConCuerpo.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.PersonajeRestControllerTest.eliminar_noExistente_deberiaRetornar404.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.PersonajeRestControllerTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.PersonajeRestControllerTest.obtenerPorId_existente_deberiaRetornar200.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.PersonajeRestControllerTest.obtenerTodos_deberiaRetornarLista.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.PersonajeServiceTest.filtrarPorClaseYRaza_delegatesToRepository.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.PersonajeServiceTest.findById_delegatesToRepository.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.PersonajeServiceTest.findByNombre_delegatesToRepository.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.PersonajeServiceTest.getAllPersonajes_delegatesToRepository.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.DungeonsYDragonsV1Application.executor&quot;: &quot;Debug&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/JavierAlejandroGonzá/Tfg_DragonesYMazmorras&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\JavierAlejandroGonzá\Tfg_DragonesYMazmorras\src\main\java\com\dyd\dungeonsydragonsv1\dto\personajes\clase" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\JavierAlejandroGonzá\Tfg_DragonesYMazmorras\back-end" />
+      <recent name="C:\Users\JavierAlejandroGonzá\Tfg_DragonesYMazmorras" />
+      <recent name="C:\Users\JavierAlejandroGonzá\Tfg_DragonesYMazmorras\back-end\src" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.dyd.dungeonsydragonsv1.servicios" />
+      <recent name="com.dyd.dungeonsydragonsv1.controladores" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="excludedTypes">
+      <set>
+        <option value="HttpClient.HttpRequestRunConfigurationType" />
+      </set>
+    </option>
+  </component>
+  <component name="RunManager" selected="Database Script.schema.sql">
+    <configuration name="schema.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
+      <script-file value="$PROJECT_DIR$/src/main/resources/db/schema.sql" />
+      <script-mode>FILE</script-mode>
+      <method v="2" />
+    </configuration>
+    <configuration name="admin | Login como administrador" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/admin.http" executionIdentifier="Login como administrador" index="2" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="admin | Registro de administrador" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/admin.http" executionIdentifier="Registro de administrador" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="admin | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="&lt;No Environment&gt;" path="$PROJECT_DIR$/admin.http" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="admin | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" environment="&lt;No Environment&gt;" path="$PROJECT_DIR$/admin.http" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="usuario | Login como usuario normal" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/usuario.http" executionIdentifier="Login como usuario normal" index="2" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="usuario | Registro de usuario normal" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/usuario.http" executionIdentifier="Registro de usuario normal" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="Tfg_DragonesYMazmorras" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DungeonsYDragonsV1Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="DungeonsYDragonsV1" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.dyd.dungeonsydragonsv1.DungeonsYDragonsV1Application" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="HTTP Request.admin | #1" />
+        <item itemvalue="HTTP Request.admin | #1" />
+        <item itemvalue="HTTP Request.usuario | Registro de usuario normal" />
+        <item itemvalue="HTTP Request.usuario | Login como usuario normal" />
+        <item itemvalue="HTTP Request.admin | Registro de administrador" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.25410.109" />
+        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-IU-251.25410.109" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a3579687-3b15-4ebe-9666-ccceed9e30f0" name="Changes" comment="" />
+      <created>1747035470281</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1747035470281</updated>
+      <workItem from="1747035472547" duration="272000" />
+      <workItem from="1747035753152" duration="9550000" />
+      <workItem from="1747059592444" duration="1612000" />
+      <workItem from="1747659792917" duration="1216000" />
+      <workItem from="1747727068655" duration="7268000" />
+      <workItem from="1747816754079" duration="9546000" />
+      <workItem from="1747909005184" duration="4913000" />
+      <workItem from="1747916288872" duration="38179000" />
+      <workItem from="1748167515527" duration="1092000" />
+      <workItem from="1748243144147" duration="229000" />
+      <workItem from="1748337392843" duration="66000" />
+      <workItem from="1748352893375" duration="362000" />
+      <workItem from="1748367970536" duration="10892000" />
+      <workItem from="1748414538162" duration="27719000" />
+      <workItem from="1748539368208" duration="1902000" />
+      <workItem from="1748544998154" duration="11513000" />
+      <workItem from="1748585608693" duration="191000" />
+      <workItem from="1748599416341" duration="15338000" />
+      <workItem from="1748685682405" duration="1431000" />
+      <workItem from="1748795406972" duration="2570000" />
+      <workItem from="1748875129131" duration="3318000" />
+      <workItem from="1748947997985" duration="2525000" />
+      <workItem from="1748951871239" duration="12000" />
+      <workItem from="1749033353221" duration="1082000" />
+      <workItem from="1749043486600" duration="2228000" />
+      <workItem from="1749045849985" duration="2016000" />
+      <workItem from="1749047912575" duration="163000" />
+      <workItem from="1749048090429" duration="218000" />
+      <workItem from="1749048355041" duration="254000" />
+      <workItem from="1749048628124" duration="3136000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
