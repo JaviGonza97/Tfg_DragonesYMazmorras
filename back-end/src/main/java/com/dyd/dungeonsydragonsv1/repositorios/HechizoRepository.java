@@ -8,6 +8,7 @@ import java.util.Optional;
 
 
 public interface HechizoRepository extends JpaRepository<Hechizo, Long> {
+    boolean existsByNombre(String nombre);
 
     Optional<Hechizo> findByNombreIgnoreCase(String nombre);
 
