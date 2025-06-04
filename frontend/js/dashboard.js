@@ -10,8 +10,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const user = getUserInfo();
 
   if (user) {
-    document.getElementById("profile-username").textContent = user.username || `${user.nombre} ${user.apellido}`;
-    document.getElementById("profile-email").textContent = user.email || "Sin email";
+    document.getElementById("profile-username").textContent = user.username || `${user.nombre}`;
+    document.getElementById("profile-email").textContent = user.email || "email vinculado";
   }
 
   const logoutBtn = document.getElementById("logout-btn");
