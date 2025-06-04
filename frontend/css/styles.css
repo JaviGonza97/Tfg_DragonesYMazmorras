@@ -14,7 +14,7 @@
   --card-bg: #2d2d2d;
   --border: #404040;
   --primary: #db9429;
-  --secondary: #9ca3af;
+  --secondary: #acabaa;
   --accent: #583b27;
 
 }
@@ -187,12 +187,12 @@ header p.lead {
 }
 
 footer {
-  background: #f8fafc !important;
-  color: #0f172a !important;
+  background: #493223 !important;
+  color: #ffffff !important;
 }
 
 footer a {
-  color: #0f172a !important;
+  color: #ffffff !important;
   opacity: 0.8;
 }
 
@@ -264,7 +264,7 @@ button {
 }
 
 .navbar-dark {
-  background-color: #1e293b !important; 
+  background-color: #493223 !important; 
 }
 
 .navbar-dark .nav-link,
@@ -356,4 +356,205 @@ button {
   box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 
 }
+#personaje-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 10px;
+    border: 2px solid var(--primary);
+    object-fit: cover;
+    object-position: top;
+}
 
+.perfil-header {
+  background-color: var(--primary);
+  color: white;
+  border-bottom: 2px solid var(--primary);
+}
+.perfil-icono {
+  color: var(--primary);
+}
+
+.perfil-email {
+  color: var(--secondary);
+}
+
+.btn-outline-personal {
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  background: transparent;
+}
+.btn-outline-personal:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-outline-personal2 {
+  border: 2px solid var(--secondary);
+  color: var(--secondary);
+  background: transparent;
+}
+.btn-outline-personal2:hover {
+  background: var(--secondary);
+  color: #fff;
+}
+
+.btn-personal-danger {
+  background: #e63946;
+  color: #fff;
+  border: none;
+}
+.btn-personal-danger:hover {
+  background: #b61d33;
+}
+
+
+.login-header {
+  background: var(--primary); /* dorado personalizado */
+  color: #fff;
+}
+body.dark .login-header {
+  background: var(--primary); /* marrón/oscuro en modo dark */
+  color: var(--text); /* dorado para contraste */
+  border-bottom: 2px solid var(--primary);
+}
+
+.card {
+  background-color: var(--card-bg);
+  color: var(--text);
+}
+
+body.dark .card {
+  background-color: var(--card-bg);
+  color: var(--text);
+}
+.btn-primary {
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: #fff !important;
+}
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: var(--secondary) !important;
+  border-color: var(--secondary) !important;
+  color: #fff !important;
+}
+.registro-header {
+  background: var(--primary); /* dorado personalizado */
+  color: #fff;
+  border-bottom: 2px solid var(--primary);
+}
+body.dark .registro-header {
+  background: var(--primary);
+  color: var(--text);
+  border-bottom: 2px solid var(--primary);
+}
+/* Botón personalizado */
+.btn-registro {
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  transition: background 0.3s;
+}
+.btn-registro:hover,
+.btn-registro:focus {
+  background-color: var(--secondary);
+  color: var(--primary);
+  border: none;
+}
+body.dark .btn-registro {
+  background-color: var(--primary);
+  color: var(--text);
+}
+body.dark .btn-registro:hover,
+body.dark .btn-registro:focus {
+  background-color: var(--primary);
+  color: var(--secondary);
+}
+.badge-stat {
+  background: var(--primary);
+  color: #fff;
+  font-weight: 500;
+  font-size: 1rem;
+}
+body.dark .badge-stat {
+  background: var(--secondary);
+  color: var(--primary);
+}
+/* Opcional: un poco de sombra */
+.badge-stat {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+.simulador-header {
+  background: var(--primary);
+  color: #fff;
+}
+body.dark .simulador-header {
+  background: var(--secondary);
+  color: var(--primary);
+}
+.btn-primary {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: #fff !important;
+}
+.btn-primary:hover,
+.btn-primary:focus {
+  background: var(--secondary) !important;
+  border-color: var(--secondary) !important;
+  color: var(--primary) !important;
+}
+body.dark .btn-primary {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: var(--text) !important;
+}
+body.dark .btn-primary:hover,
+body.dark .btn-primary:focus {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: var(--secondary) !important;
+}
+.race-card, .class-card {
+  background: var(--card-bg) !important;
+  color: var(--text) !important;
+  border: 2px solid var(--primary);
+  border-radius: 15px;
+  transition: background 0.3s, color 0.3s, border 0.3s;
+}
+
+body.dark .race-card, body.dark .class-card {
+  color: var(--text) !important;
+  border-color: var(--);
+}
+
+.character-preview {
+  background: var(--card-bg);
+  color: var(--text);
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  padding: 2rem 1rem;
+  border: 2px solid var(--primary);
+}
+
+body.dark .character-preview {
+  background: var(--accent);
+  color: var(--text);
+  border-color: var(--primary);
+}
+.form-section {
+  background: var(--card-bg);
+  border-radius: 15px;
+  padding: 1.5rem 1rem;
+  margin-bottom: 2rem;
+}
+
+body.dark .form-section {
+  background: var(--card-bg);
+}
+#character-race-class {
+  color: var(--text) !important;  /* O cualquier variable/color que prefieras */
+}
+
+body.dark #character-race-class {
+  color: var(--text) !important;
+}
