@@ -1,54 +1,191 @@
-// js/creacion.js
 import { apiRequest } from "./api.js";
 import { requireAuth, getUserInfo } from "./auth.js";
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   requireAuth();
 
+  const user = getUserInfo();
+  if (!user) {
+    alert("No se pudo obtener la información del usuario.");
+    return;
+  }
+
   const formBtn = document.getElementById("create-character");
+  const nameInput = document.getElementById("character-name");
+  const namePreview = document.getElementById("preview-name");
+
+  nameInput.addEventListener("input", () => {
+    namePreview.textContent = nameInput.value || "Nombre del personaje";
+  });
+
+  const razaBonos = {
+    humano: { fuerza: 2, destreza: 3, defensa: 2, magia: -3 },
+    orco: { fuerza: 3, destreza: -1, defensa: 3, magia: 0 },
+    enano: { fuerza: 1, destreza: -3, defensa: 5, magia: 1 },
+    elfo: { fuerza: -2, destreza: 2, defensa: 0, magia: 4 },
+    dragon: { fuerza: 3, destreza: -2, defensa: 0, magia: 4 },
+  };
+
+  const claseBonos = {
+    guerrero: { fuerza: 4, destreza: 3, defensa: 1, magia: -4 },
+    paladin: { fuerza: 2, destreza: -5, defensa: 6, magia: 2 },
+    hechicero: { fuerza: -2, destreza: -2, defensa: 2, magia: 6 },
+  };
+
+  let selectedRaza = null;
+  let selectedClase = null;
+
+  function actualizarStats() {
+    const base = { fuerza: 0, destreza: 0, defensa: 0, magia: 0 };
+    const raza = razaBonos[selectedRaza?.nombre] || {};
+    const clase = claseBonos[selectedClase?.nombre] || {};
+
+    const total = {
+      fuerza: base.fuerza + (raza.fuerza || 0) + (clase.fuerza || 0),
+      destreza: base.destreza + (raza.destreza || 0) + (clase.destreza || 0),
+      defensa: base.defensa + (raza.defensa || 0) + (clase.defensa || 0),
+      magia: base.magia + (raza.magia || 0) + (clase.magia || 0),
+    };
+
+    document.getElementById("preview-fuerza").textContent = total.fuerza;
+    document.getElementById("preview-destreza").textContent = total.destreza;
+    document.getElementById("preview-defensa").textContent = total.defensa;
+    document.getElementById("preview-magia").textContent = total.magia;
+  }
+
+  document.querySelectorAll(".race-card").forEach((card) => {
+    card.addEventListener("click", () => {
+      document.querySelectorAll(".race-card").forEach((c) => c.classList.remove("selected"));
+      card.classList.add("selected");
+      selectedRaza = {
+        nombre: card.dataset.race,
+        id: parseInt(card.dataset.id),
+      };
+      toggleSpellSection();
+      actualizarStats();
+    });
+  });
+
+  document.querySelectorAll(".class-card").forEach((card) => {
+    card.addEventListener("click", () => {
+      const claseNombre = card.dataset.class;
+      const claseId = parseInt(card.dataset.id);
+
+      if ((selectedRaza?.nombre === "orco" && claseNombre === "paladin") ||
+          (selectedRaza?.nombre === "elfo" && claseNombre === "guerrero")) {
+        alert("Combinación no permitida por las restricciones.");
+        return;
+      }
+
+      document.querySelectorAll(".class-card").forEach((c) => c.classList.remove("selected"));
+      card.classList.add("selected");
+
+      selectedClase = {
+        nombre: claseNombre,
+        id: claseId,
+      };
+
+      toggleSpellSection();
+      actualizarStats();
+    });
+  });
+
+  function toggleSpellSection() {
+    const spellSection = document.getElementById("spell-section");
+    if (selectedClase?.nombre === "hechicero" || selectedRaza?.nombre === "dragon") {
+      spellSection.classList.remove("d-none");
+    } else {
+      spellSection.classList.add("d-none");
+    }
+  }
+
+  const equipoList = document.getElementById("equipment-list");
+
+  function agregarEquipo(tipo) {
+    const nombre = prompt(`Nombre del ${tipo.toLowerCase()}`);
+    if (!nombre) return;
+    const li = document.createElement("li");
+    li.classList.add("equipment-item");
+    li.textContent = `${nombre} (${tipo})`;
+    li.dataset.tipo = tipo;
+    const removeBtn = document.createElement("button");
+    removeBtn.textContent = "x";
+    removeBtn.classList.add("btn", "btn-sm", "btn-danger", "ms-2");
+    removeBtn.onclick = () => li.remove();
+    li.appendChild(removeBtn);
+    equipoList.appendChild(li);
+  }
+
+  document.getElementById("add-weapon").addEventListener("click", () => agregarEquipo("ARMA"));
+  document.getElementById("add-armor").addEventListener("click", () => agregarEquipo("ARMADURA"));
+  document.getElementById("add-item").addEventListener("click", () => agregarEquipo("OBJETO"));
 
   formBtn.addEventListener("click", async () => {
-    const nombre = document.getElementById("character-name").value;
+    const nombre = nameInput.value.trim();
     const nivel = parseInt(document.getElementById("character-level").value);
-    const raza = document.querySelector(".race-card.selected")?.dataset.race;
-    const clase = document.querySelector(".class-card.selected")?.dataset.class;
-
-    const fuerza = parseInt(document.getElementById("fuerza-value").textContent);
-    const destreza = parseInt(document.getElementById("destreza-value").textContent);
-    const defensa = parseInt(document.getElementById("defensa-value").textContent);
-    const magia = parseInt(document.getElementById("magia-value").textContent);
-
     const hechizoNombre = document.getElementById("spell-name")?.value || null;
     const hechizoDescripcion = document.getElementById("spell-description")?.value || null;
+    const equipos = Array.from(document.querySelectorAll(".equipment-item")).map((el) => ({
+      nombre: el.textContent.replace("x", "").trim(),
+      tipo: el.dataset.tipo,
+    }));
 
-    // Equipamiento: asumiendo que hay <li class="equipment-item"> con dataset.type y texto
-    const items = Array.from(document.querySelectorAll("#equipment-list .equipment-item"))
-      .map(el => el.textContent.trim());
-
-    if (!nombre || !raza || !clase) {
-      alert("Debes completar el nombre, raza y clase del personaje.");
+    if (!nombre || !selectedClase?.id || !selectedRaza?.id) {
+      alert("Debes completar nombre, raza y clase.");
       return;
     }
 
-    const payload = {
-      nombre,
-      nivel,
-      raza,
-      clase,
-      fuerza,
-      destreza,
-      defensa,
-      magia,
-      hechizoNombre,
-      hechizoDescripcion,
-      equipamiento: items
-    };
+    if (equipos.length < 1) {
+      alert("Debes agregar al menos un equipo.");
+      return;
+    }
 
     try {
-      await apiRequest("/personajes", "POST", payload, true);
+      let hechizoId = null;
+
+      if ((selectedClase.nombre === "hechicero" || selectedRaza.nombre === "dragon") &&
+          hechizoNombre && hechizoDescripcion) {
+        const hechizo = await apiRequest(
+          "/api/hechizos",
+          "POST",
+          {
+            nombre: hechizoNombre,
+            nivel: `Nivel ${nivel}`,
+            descripcion: hechizoDescripcion,
+          },
+          true
+        );
+        hechizoId = hechizo.id;
+      }
+
+      const equipoIds = await Promise.all(
+        equipos.map((eq) =>
+          apiRequest("/api/equipos", "POST", eq, true).then((e) => e.id)
+        )
+      );
+
+      const personajePayload = {
+        nombre,
+        claseId: selectedClase.id,
+        razaId: selectedRaza.id,
+        equipoIds,
+        hechizoIds: hechizoId ? [hechizoId] : [],
+      };
+
+      console.log("Payload a enviar:", personajePayload);
+
+      const personajeCreado = await apiRequest("/api/personajes", "POST", personajePayload, true);
+
+      await Promise.all(
+        equipoIds.map(equipoId =>
+          apiRequest(`/api/equipos/${equipoId}/asignar-personaje/${personajeCreado.id}`, "PUT", null, true)
+        )
+      );
+
       alert("Personaje creado con éxito.");
       window.location.href = "Galeria.html";
     } catch (err) {
+      console.error(err);
       alert("Error al crear personaje: " + err.message);
     }
   });

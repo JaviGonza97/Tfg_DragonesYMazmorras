@@ -1,11 +1,7 @@
 // js/api.js
-const API_BASE_URL =
-  (location.hostname === "localhost")
-    ? "http://localhost:8080"                       // desarrollo local
-    : "https://tfg-dragonesymazmorras.onrender.com"; // back-end en Render
+const API_BASE_URL = "http://localhost:8080"; // ajusta al dominio real si es diferente
 
 export async function apiRequest(endpoint, method = "GET", data = null, requiresAuth = false) {
-
   const headers = {
     "Content-Type": "application/json",
   };
