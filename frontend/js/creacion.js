@@ -131,9 +131,10 @@ function agregarEquipo(tipo) {
 
     // Ahora se recolecta nombre y tipo de cada equipo por separado
     const equipos = Array.from(document.querySelectorAll(".equipment-item")).map((el) => ({
-      nombre: el.dataset.nombre,
-      tipo: el.dataset.tipo,
+    nombre: el.dataset.nombre,
+    tipo: el.dataset.tipo.toUpperCase() // Asegura que siempre es ARMA, ARMADURA u OBJETO
     }));
+
 
     if (!nombre || !selectedClase?.id || !selectedRaza?.id) {
       alert("Debes completar nombre, raza y clase.");
