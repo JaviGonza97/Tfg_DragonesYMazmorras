@@ -101,20 +101,22 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const equipoList = document.getElementById("equipment-list");
 
-  function agregarEquipo(tipo) {
-    const nombre = prompt(`Nombre del ${tipo.toLowerCase()}`);
-    if (!nombre) return;
-    const li = document.createElement("li");
-    li.classList.add("equipment-item");
-    li.textContent = `${nombre} (${tipo})`;
-    li.dataset.tipo = tipo;
-    const removeBtn = document.createElement("button");
-    removeBtn.textContent = "x";
-    removeBtn.classList.add("btn", "btn-sm", "btn-danger", "ms-2");
-    removeBtn.onclick = () => li.remove();
-    li.appendChild(removeBtn);
-    equipoList.appendChild(li);
-  }
+function agregarEquipo(tipo) {
+  const nombre = prompt(`Nombre del ${tipo.toLowerCase()}`);
+  if (!nombre) return;
+  const li = document.createElement("li");
+  li.classList.add("equipment-item");
+  li.dataset.tipo = tipo;
+  li.dataset.nombre = nombre; // <--- Guarda el nombre correctamente
+  li.innerHTML = `
+    <span class="equipment-nombre">${nombre}</span>
+    <span class="badge bg-secondary ms-2">${tipo}</span>
+    <button type="button" class="btn btn-sm btn-danger ms-2 remove-equipment">x</button>
+  `;
+  li.querySelector('.remove-equipment').onclick = () => li.remove();
+  equipoList.appendChild(li);
+}
+
 
   document.getElementById("add-weapon").addEventListener("click", () => agregarEquipo("ARMA"));
   document.getElementById("add-armor").addEventListener("click", () => agregarEquipo("ARMADURA"));
@@ -126,9 +128,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const hechizoNombre = document.getElementById("spell-name")?.value || null;
     const hechizoDescripcion = document.getElementById("spell-description")?.value || null;
     const equipos = Array.from(document.querySelectorAll(".equipment-item")).map((el) => ({
-      nombre: el.textContent.replace("x", "").trim(),
+      nombre: el.dataset.nombre,
       tipo: el.dataset.tipo,
     }));
+
 
     if (!nombre || !selectedClase?.id || !selectedRaza?.id) {
       alert("Debes completar nombre, raza y clase.");
