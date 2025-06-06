@@ -131,13 +131,29 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>
     `).join("");
 
-    const abilitiesContainer = document.getElementById("character-abilities");
-    abilitiesContainer.innerHTML = `
-      <h5>Hechizos:</h5>
-      <ul>${character.hechizos.map(h => `<li>${h}</li>`).join("") || '<li>Ninguno</li>'}</ul>
-      <h5>Equipamiento:</h5>
-      <ul>${character.equipo.map(e => `<li>${e}</li>`).join("") || '<li>Sin equipo</li>'}</ul>
-    `;
+const abilitiesContainer = document.getElementById("character-abilities");
+abilitiesContainer.innerHTML = `
+  <h5>Hechizos:</h5>
+  <ul>${(character.hechizos || []).map(h => `<li>${h}</li>`).join("") || '<li>Ninguno</li>'}</ul>
+  <h5>Equipamiento:</h5>
+  <ul id="lista-equipo">
+    ${
+      (character.equipo && character.equipo.length > 0)
+        ? character.equipo.map(e =>
+            `<li>
+              ${typeof e === "string" ? e : (e.nombre + (e.tipo ? ` (${e.tipo})` : ""))}
+              ${
+                e.tipo === "OBJETO"
+                  ? `<button class="btn btn-danger btn-sm ms-2 btn-borrar-equipo" data-eqid="${e.id}">Borrar</button>`
+                  : ""
+              }
+            </li>`
+          ).join("")
+        : '<li>Sin equipo</li>'
+    }
+  </ul>
+`;
+
 
     const modal = new bootstrap.Modal(document.getElementById("characterModal"));
     modal.show();
