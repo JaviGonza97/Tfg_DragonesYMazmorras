@@ -72,6 +72,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             <button class="btn btn-primary btn-sm view-character" data-id="${character.id}">
               Ver detalles
             </button>
+            <button class="btn btn-danger btn-sm delete-character ms-2" data-id="${character.id}">
+              <i class="bi bi-trash"></i> Eliminar
+            </button>
           </div>
         </div>
       `;
@@ -85,6 +88,23 @@ document.addEventListener("DOMContentLoaded", async () => {
         showDetails(character);
       });
     });
+
+      document.querySelectorAll('.delete-character').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const charId = parseInt(btn.dataset.id);
+      if (confirm('¿Seguro que deseas eliminar este personaje?')) {
+        try {
+          await apiRequest(`/api/personajes/${charId}`, "DELETE", null, true);
+          // Elimina el personaje del array local
+          allCharacters = allCharacters.filter(c => c.id !== charId);
+          renderCharacters(); // Vuelve a renderizar la galería
+        } catch (error) {
+          alert('Error al eliminar el personaje.');
+        }
+      }
+    });
+  });
   }
 
   function showDetails(character) {
