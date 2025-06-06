@@ -142,6 +142,16 @@
                 </div>
                 <div class="card-body" id="character-abilities"></div>
               </div>
+                          <!-- AQUÍ VA TU DIV de EDICIÓN, justo después del equipamiento -->
+            <div id="edit-equipment-section" class="d-none mt-3">
+              <h5>Editar Equipamiento</h5>
+              <ul id="edit-equipment-list" class="list-group mb-2"></ul>
+              <button type="button" class="btn btn-sm btn-success mb-2" id="add-equipment-btn">
+                <i class="bi bi-plus"></i> Agregar equipo
+              </button>
+              <button type="button" class="btn btn-primary" id="save-equipment-btn">Guardar cambios</button>
+              <button type="button" class="btn btn-secondary" id="cancel-equipment-btn">Cancelar</button>
+            </div>
             </div>
           </div>
         </div>
@@ -149,6 +159,9 @@
         <div class="modal-footer">
           <button id="export-pdf-btn" class="btn btn-primary">
             <i class="bi bi-file-earmark-pdf me-2"></i>Exportar PDF
+          </button>
+          <button id="edit-equipment-btn" class="btn btn-warning">
+            <i class="bi bi-pencil-square me-2"></i>Editar equipo
           </button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         </div>
