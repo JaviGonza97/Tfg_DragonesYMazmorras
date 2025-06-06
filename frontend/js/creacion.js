@@ -109,7 +109,6 @@ function agregarEquipo(tipo) {
   li.classList.add("equipment-item");
   li.dataset.tipo = tipo;
   li.dataset.nombre = nombre;
-  // SOLO nombre, nunca "nombre (TIPO)"
   li.innerHTML = `
     <span class="equipment-nombre">${nombre}</span>
     <span class="badge bg-secondary ms-2">${tipo}</span>
@@ -120,9 +119,9 @@ function agregarEquipo(tipo) {
 }
 
   // Todos los botones de agregar equipo llaman a la nueva función
-  document.getElementById("add-weapon").addEventListener("click", agregarEquipo);
-  document.getElementById("add-armor").addEventListener("click", agregarEquipo);
-  document.getElementById("add-item").addEventListener("click", agregarEquipo);
+  document.getElementById("add-weapon").addEventListener("click", () => agregarEquipo("ARMA"));
+  document.getElementById("add-armor").addEventListener("click", () => agregarEquipo("ARMADURA"));
+  document.getElementById("add-item").addEventListener("click", () => agregarEquipo("OBJETO"));
 
   formBtn.addEventListener("click", async () => {
     const nombre = nameInput.value.trim();
