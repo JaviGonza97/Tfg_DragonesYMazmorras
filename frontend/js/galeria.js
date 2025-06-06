@@ -108,60 +108,77 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function showDetails(character) {
-    document.getElementById("character-name").textContent = character.nombre;
-    document.getElementById("character-race-class").textContent = `${character.raza} - ${character.clase}`;
-    const imgName = `${character.raza.toLowerCase()}_${character.clase.toLowerCase()}.png`;
-    document.getElementById("character-avatar-img").src = `img/${imgName}`;
+  document.getElementById("character-name").textContent = character.nombre;
+  document.getElementById("character-race-class").textContent = `${character.raza} - ${character.clase}`;
+  const imgName = `${character.raza.toLowerCase()}_${character.clase.toLowerCase()}.png`;
+  document.getElementById("character-avatar-img").src = `img/${imgName}`;
 
-    const stats = [
-      { label: "Fuerza", value: character.fuerza },
-      { label: "Destreza", value: character.destreza },
-      { label: "Resistencia", value: character.resistencia },
-      { label: "Magia", value: character.magia }
-    ];
-
-    const statsContainer = document.getElementById("character-stats");
-    statsContainer.innerHTML = stats.map(stat => `
-      <div class="col-6 col-md-3 text-center mb-3">
-        <div class="stat-circle rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2"
-             style="width: 50px; height: 50px; background-color: rgba(219, 148, 41, 0.2);">
-          <span style="color: var(--primary); font-weight: bold;">${stat.value}</span>
-        </div>
-        <small>${stat.label}</small>
+  const stats = [
+    { label: "Fuerza", value: character.fuerza },
+    { label: "Destreza", value: character.destreza },
+    { label: "Resistencia", value: character.resistencia },
+    { label: "Magia", value: character.magia }
+  ];
+  const statsContainer = document.getElementById("character-stats");
+  statsContainer.innerHTML = stats.map(stat => `
+    <div class="col-6 col-md-3 text-center mb-3">
+      <div class="stat-circle rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2"
+           style="width: 50px; height: 50px; background-color: rgba(219, 148, 41, 0.2);">
+        <span style="color: var(--primary); font-weight: bold;">${stat.value}</span>
       </div>
-    `).join("");
+      <small>${stat.label}</small>
+    </div>
+  `).join("");
 
-const abilitiesContainer = document.getElementById("character-abilities");
-abilitiesContainer.innerHTML = `
-  <h5>Hechizos:</h5>
-  <ul>${(character.hechizos || []).map(h => `<li>${h}</li>`).join("") || '<li>Ninguno</li>'}</ul>
-  <h5>Equipamiento:</h5>
-  <ul id="lista-equipo">
-    ${
-      (character.equipo && character.equipo.length > 0)
-        ? character.equipo.map(e =>
-            `<li>
-              ${typeof e === "string" ? e : (e.nombre + (e.tipo ? ` (${e.tipo})` : ""))}
-              ${
-                e.tipo === "OBJETO"
-                  ? `<button class="btn btn-danger btn-sm ms-2 btn-borrar-equipo" data-eqid="${e.id}">Borrar</button>`
-                  : ""
-              }
-            </li>`
-          ).join("")
-        : '<li>Sin equipo</li>'
-    }
-  </ul>
-`;
+  // SOLO permite borrar OBJETO
+  const abilitiesContainer = document.getElementById("character-abilities");
+  abilitiesContainer.innerHTML = `
+    <h5>Hechizos:</h5>
+    <ul>${(character.hechizos || []).map(h => `<li>${h}</li>`).join("") || '<li>Ninguno</li>'}</ul>
+    <h5>Equipamiento:</h5>
+    <ul id="lista-equipo">
+      ${
+        (character.equipo && character.equipo.length > 0)
+          ? character.equipo.map(e =>
+              `<li>
+                ${typeof e === "string" ? e : (e.nombre + (e.tipo ? ` (${e.tipo})` : ""))}
+                ${
+                  e.tipo === "OBJETO"
+                    ? `<button class="btn btn-danger btn-sm ms-2 btn-borrar-equipo" data-eqid="${e.id}">Borrar</button>`
+                    : ""
+                }
+              </li>`
+            ).join("")
+          : '<li>Sin equipo</li>'
+      }
+    </ul>
+  `;
 
-
-    const modal = new bootstrap.Modal(document.getElementById("characterModal"));
-    modal.show();
-
-    document.getElementById("export-pdf-btn").onclick = () => {
-      exportPDF(character);
+  // Borra solo OBJETO
+  document.querySelectorAll('.btn-borrar-equipo').forEach(btn => {
+    btn.onclick = async () => {
+      const eqId = btn.getAttribute('data-eqid');
+      if (!confirm('¿Seguro que deseas borrar este objeto?')) return;
+      try {
+        await apiRequest(`/api/equipos/${eqId}`, "DELETE", null, true);
+        // Recargar detalles después de borrar
+        const updatedChar = await apiRequest(`/api/personajes/${character.id}`, "GET", null, true);
+        showDetails(updatedChar);
+      } catch {
+        alert('Error al borrar el objeto');
+      }
     };
-  }
+  });
+
+  // Modal y PDF
+  const modal = new bootstrap.Modal(document.getElementById("characterModal"));
+  modal.show();
+
+  document.getElementById("export-pdf-btn").onclick = () => {
+    exportPDF(character);
+  };
+}
+
 
   // Exportar a PDF con imagen
   async function exportPDF(character) {
