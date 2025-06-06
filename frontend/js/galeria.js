@@ -210,25 +210,41 @@ document.addEventListener("DOMContentLoaded", async () => {
       abilitiesContainer.classList.remove("d-none");
     };
 
-    // Guardar cambios (¡Aquí está el cambio importante!)
-    document.getElementById("save-equipment-btn").onclick = async function () {
-      const lis = document.querySelectorAll("#edit-equipment-list li");
-      const newEquipment = Array.from(lis)
-        .map(li => {
-          const nombre = li.querySelector('input').value.trim();
-          const tipo = li.querySelector('select').value.toUpperCase();
-          return nombre && tipo ? { nombre, tipo } : null;
-        })
-        .filter(v => v);
+document.getElementById("save-equipment-btn").onclick = async function () {
+  const lis = document.querySelectorAll("#edit-equipment-list li");
+  const newEquipment = Array.from(lis)
+    .map(li => {
+      const nombre = li.querySelector('input').value.trim();
+      const tipo = li.querySelector('select').value.toUpperCase();
+      return nombre && tipo ? { nombre, tipo } : null;
+    })
+    .filter(v => v);
 
-      try {
-        await apiRequest(`/api/personajes/${character.id}/equipo`, "PUT", newEquipment, true);
-        alert("Equipo actualizado correctamente");
-        location.reload();
-      } catch (err) {
-        alert("Error al actualizar el equipo: " + err.message);
-      }
-    };
+  // Validación frontend
+  const tiposValidos = ["ARMA", "ARMADURA", "OBJETO"];
+  const equiposValidados = newEquipment.filter(eq => {
+    if (!eq.nombre || !tiposValidos.includes(eq.tipo)) {
+      alert(`Equipo inválido:\n${JSON.stringify(eq, null, 2)}\n\nDebe tener nombre y tipo válido (ARMA, ARMADURA, OBJETO).`);
+      return false;
+    }
+    return true;
+  });
+  if (equiposValidados.length !== newEquipment.length) {
+    // Hay inválidos, no se envía nada al backend.
+    return;
+  }
+
+  try {
+    // Puedes dejar el log para debug:
+    console.log("Enviando al backend:", equiposValidados);
+    await apiRequest(`/api/personajes/${character.id}/equipo`, "PUT", equiposValidados, true);
+    alert("Equipo actualizado correctamente");
+    location.reload();
+  } catch (err) {
+    alert("Error al actualizar el equipo: " + err.message);
+  }
+};
+
 
     // Exportar PDF
     document.getElementById("export-pdf-btn").onclick = () => {
