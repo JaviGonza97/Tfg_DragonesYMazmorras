@@ -108,113 +108,110 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function showDetails(character) {
-    document.getElementById("character-name").textContent = character.nombre;
-    document.getElementById("character-race-class").textContent = `${character.raza} - ${character.clase}`;
-    const imgName = `${character.raza.toLowerCase()}_${character.clase.toLowerCase()}.png`;
-    document.getElementById("character-avatar-img").src = `img/${imgName}`;
+  document.getElementById("character-name").textContent = character.nombre;
+  document.getElementById("character-race-class").textContent = `${character.raza} - ${character.clase}`;
+  const imgName = `${character.raza.toLowerCase()}_${character.clase.toLowerCase()}.png`;
+  document.getElementById("character-avatar-img").src = `img/${imgName}`;
 
-    const stats = [
-      { label: "Fuerza", value: character.fuerza },
-      { label: "Destreza", value: character.destreza },
-      { label: "Resistencia", value: character.resistencia },
-      { label: "Magia", value: character.magia }
-    ];
-
-    const statsContainer = document.getElementById("character-stats");
-    statsContainer.innerHTML = stats.map(stat => `
-      <div class="col-6 col-md-3 text-center mb-3">
-        <div class="stat-circle rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2"
-             style="width: 50px; height: 50px; background-color: rgba(219, 148, 41, 0.2);">
-          <span style="color: var(--primary); font-weight: bold;">${stat.value}</span>
-        </div>
-        <small>${stat.label}</small>
+  // Estadísticas igual que antes...
+  const stats = [
+    { label: "Fuerza", value: character.fuerza },
+    { label: "Destreza", value: character.destreza },
+    { label: "Resistencia", value: character.resistencia },
+    { label: "Magia", value: character.magia }
+  ];
+  const statsContainer = document.getElementById("character-stats");
+  statsContainer.innerHTML = stats.map(stat => `
+    <div class="col-6 col-md-3 text-center mb-3">
+      <div class="stat-circle rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2"
+           style="width: 50px; height: 50px; background-color: rgba(219, 148, 41, 0.2);">
+        <span style="color: var(--primary); font-weight: bold;">${stat.value}</span>
       </div>
-    `).join("");
+      <small>${stat.label}</small>
+    </div>
+  `).join("");
 
-    const abilitiesContainer = document.getElementById("character-abilities");
-    abilitiesContainer.innerHTML = `
-      <h5>Hechizos:</h5>
-      <ul>${character.hechizos.map(h => `<li>${h}</li>`).join("") || '<li>Ninguno</li>'}</ul>
-      <h5>Equipamiento:</h5>
-      <ul>${character.equipo.map(e => `<li>${e}</li>`).join("") || '<li>Sin equipo</li>'}</ul>
-    `;
+  // Renderiza equipamiento y hechizos editable
+  renderEquipamiento(character);
 
-    const modal = new bootstrap.Modal(document.getElementById("characterModal"));
-    modal.show();
+  // Modal y PDF
+  const modal = new bootstrap.Modal(document.getElementById("characterModal"));
+  modal.show();
 
-    document.getElementById("export-pdf-btn").onclick = () => {
-      exportPDF(character);
-    };
+  document.getElementById("export-pdf-btn").onclick = () => {
+    exportPDF(character);
+  };
+}
+
+async function renderEquipamiento(character) {
+  const abilitiesContainer = document.getElementById("character-abilities");
+
+  // Opcional: recarga el personaje actualizado del backend
+  let equipoData = [];
+  try {
+    const updatedChar = await apiRequest(`/api/personajes/${character.id}`, "GET", null, true);
+    equipoData = updatedChar.equipo || [];
+    character.equipo = equipoData;
+    character.hechizos = updatedChar.hechizos || [];
+  } catch {
+    equipoData = character.equipo || [];
   }
- // --------- NUEVA FUNCIÓN renderEquipamiento -------------
-  async function renderEquipamiento(character) {
-    const abilitiesContainer = document.getElementById("character-abilities");
 
-    // Recarga equipo actualizado del backend
-    let equipoData = [];
-    try {
-      const updatedChar = await apiRequest(`/api/personajes/${character.id}`, "GET", null, true);
-      equipoData = updatedChar.equipo || [];
-      character.equipo = equipoData; // Actualiza el objeto original para PDF/export
-      character.hechizos = updatedChar.hechizos || [];
-    } catch {
-      equipoData = character.equipo || [];
-    }
+  abilitiesContainer.innerHTML = `
+    <h5>Hechizos:</h5>
+    <ul>${(character.hechizos || []).map(h => `<li>${h}</li>`).join("") || '<li>Ninguno</li>'}</ul>
+    <h5>Equipamiento:</h5>
+    <ul id="lista-equipo">
+      ${equipoData.length > 0
+        ? equipoData.map(e => `
+            <li>
+              ${e.nombre} (${e.tipo || ""})
+              <button class="btn btn-danger btn-sm ms-2 btn-borrar-equipo" data-eqid="${e.id}">Borrar</button>
+            </li>
+          `).join("")
+        : '<li>Sin equipo</li>'}
+    </ul>
+    <button id="add-equipment-btn" class="btn btn-success btn-sm mt-2">
+      Añadir equipamiento
+    </button>
+  `;
 
-    // Renderiza el equipamiento con botón borrar y añadir
-    abilitiesContainer.innerHTML = `
-      <h5>Hechizos:</h5>
-      <ul>${(character.hechizos || []).map(h => `<li>${h}</li>`).join("") || '<li>Ninguno</li>'}</ul>
-      <h5>Equipamiento:</h5>
-      <ul id="lista-equipo">
-        ${equipoData.length > 0 
-            ? equipoData.map(e => `
-                <li>
-                  ${e.nombre} (${e.tipo || ""})
-                  <button class="btn btn-danger btn-sm ms-2 btn-borrar-equipo" data-eqid="${e.id}">Borrar</button>
-                </li>
-              `).join("") 
-            : '<li>Sin equipo</li>'}
-      </ul>
-      <button id="add-equipment-btn" class="btn btn-success btn-sm mt-2">
-        Añadir equipamiento
-      </button>
-    `;
-
-    // BORRAR equipo
-    abilitiesContainer.querySelectorAll('.btn-borrar-equipo').forEach(btn => {
-      btn.onclick = async () => {
-        const eqId = btn.getAttribute('data-eqid');
-        if (!confirm('¿Seguro que deseas borrar este equipamiento?')) return;
-        try {
-          await apiRequest(`/api/equipos/${eqId}`, "DELETE", null, true);
-          renderEquipamiento(character); // Refresca la lista solo
-        } catch {
-          alert('Error al borrar equipamiento');
-        }
-      };
-    });
-
-    // AÑADIR equipo
-    document.getElementById("add-equipment-btn").onclick = async () => {
-      const nombre = prompt("Nombre del equipamiento:");
-      if (!nombre) return;
-      let tipo = prompt("Tipo (ARMA/ARMADURA/OBJETO):").toUpperCase();
-      if (!["ARMA","ARMADURA","OBJETO"].includes(tipo)) {
-        alert("Tipo inválido");
-        return;
-      }
+  // BORRAR equipo
+  abilitiesContainer.querySelectorAll('.btn-borrar-equipo').forEach(btn => {
+    btn.onclick = async () => {
+      const eqId = btn.getAttribute('data-eqid');
+      if (!confirm('¿Seguro que deseas borrar este equipamiento?')) return;
       try {
-        // 1. Crear equipamiento
-        const eq = await apiRequest("/api/equipos", "POST", { nombre, tipo }, true);
-        // 2. Asignar al personaje
-        await apiRequest(`/api/equipos/${eq.id}/asignar-personaje/${character.id}`, "PUT", null, true);
+        await apiRequest(`/api/equipos/${eqId}`, "DELETE", null, true);
         renderEquipamiento(character); // Refresca la lista
       } catch {
-        alert("Error al añadir equipamiento");
+        alert('Error al borrar equipamiento');
       }
     };
-  }
+  });
+
+  // AÑADIR equipo
+  document.getElementById("add-equipment-btn").onclick = async () => {
+    const nombre = prompt("Nombre del equipamiento:");
+    if (!nombre) return;
+    let tipo = prompt("Tipo (ARMA/ARMADURA/OBJETO):").toUpperCase();
+    if (!["ARMA","ARMADURA","OBJETO"].includes(tipo)) {
+      alert("Tipo inválido");
+      return;
+    }
+    try {
+      // 1. Crear equipamiento
+      const eq = await apiRequest("/api/equipos", "POST", { nombre, tipo }, true);
+      // 2. Asignar al personaje
+      await apiRequest(`/api/equipos/${eq.id}/asignar-personaje/${character.id}`, "PUT", null, true);
+      renderEquipamiento(character); // Refresca la lista
+    } catch {
+      alert("Error al añadir equipamiento");
+    }
+  };
+}
+
+
   // Exportar a PDF con imagen
   async function exportPDF(character) {
     const { jsPDF } = window.jspdf;
