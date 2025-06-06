@@ -89,22 +89,41 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     });
 
-      document.querySelectorAll('.delete-character').forEach(btn => {
-    btn.addEventListener('click', async (e) => {
-      e.stopPropagation();
-      const charId = parseInt(btn.dataset.id);
-      if (confirm('¿Seguro que deseas eliminar este personaje?')) {
-        try {
-          await apiRequest(`/api/personajes/${charId}`, "DELETE", null, true);
-          // Elimina el personaje del array local
-          allCharacters = allCharacters.filter(c => c.id !== charId);
-          renderCharacters(); // Vuelve a renderizar la galería
-        } catch (error) {
-          alert('Error al eliminar el personaje.');
+    document.querySelectorAll('.delete-character').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const charId = parseInt(btn.dataset.id);
+        if (confirm('¿Seguro que deseas eliminar este personaje?')) {
+          try {
+            await apiRequest(`/api/personajes/${charId}`, "DELETE", null, true);
+            allCharacters = allCharacters.filter(c => c.id !== charId);
+            renderCharacters();
+          } catch (error) {
+            alert('Error al eliminar el personaje.');
+          }
         }
-      }
+      });
     });
-  });
+  }
+
+  // ---- EDICIÓN DE EQUIPO ----
+
+  // Helper para crear fila de equipo (input + select tipo + eliminar)
+  const tipos = ["ARMA", "ARMADURA", "OBJETO"];
+  function crearFilaEquipo(nombre = "", tipo = "ARMA") {
+    const li = document.createElement("li");
+    li.className = "list-group-item d-flex align-items-center gap-2";
+    li.innerHTML = `
+      <input type="text" class="form-control form-control-sm me-2" value="${nombre}" placeholder="Nombre del equipo" required style="font-weight:bold;">
+      <select class="form-select form-select-sm me-2" style="width:auto;">
+        ${tipos.map(t => `<option value="${t}"${t === tipo ? " selected" : ""}>${t}</option>`).join("")}
+      </select>
+      <button class="btn btn-danger btn-sm remove-equipment-btn" type="button"><i class="bi bi-x"></i></button>
+    `;
+    li.querySelector('.remove-equipment-btn').onclick = function () {
+      li.remove();
+    };
+    return li;
   }
 
   function showDetails(character) {
@@ -131,6 +150,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>
     `).join("");
 
+    // Habilidades y equipamiento (vista normal)
     const abilitiesContainer = document.getElementById("character-abilities");
     abilitiesContainer.innerHTML = `
       <h5>Hechizos:</h5>
@@ -139,77 +159,68 @@ document.addEventListener("DOMContentLoaded", async () => {
       <ul>${character.equipo.map(e => `<li>${e}</li>`).join("") || '<li>Sin equipo</li>'}</ul>
     `;
 
-    const modal = new bootstrap.Modal(document.getElementById("characterModal"));
-    modal.show();
+    // -------------------
+    // EDICIÓN DE EQUIPO
+    // -------------------
+    document.getElementById("edit-equipment-btn").onclick = function () {
+      abilitiesContainer.classList.add("d-none");
+      document.getElementById("edit-equipment-section").classList.remove("d-none");
 
+      const list = document.getElementById("edit-equipment-list");
+      list.innerHTML = "";
+      // Parsear los equipos: nombre y tipo
+      character.equipo.forEach(e => {
+        let nombre = e, tipo = "ARMA";
+        const match = e.match(/\((ARMA|ARMADURA|OBJETO)\)$/);
+        if (match) {
+          tipo = match[1];
+          nombre = e.replace(/\s*\((ARMA|ARMADURA|OBJETO)\)$/, "").trim();
+        }
+        list.appendChild(crearFilaEquipo(nombre, tipo));
+      });
+    };
+
+    // Agregar equipo nuevo
+    document.getElementById("add-equipment-btn").onclick = function () {
+      const list = document.getElementById("edit-equipment-list");
+      list.appendChild(crearFilaEquipo());
+    };
+
+    // Cancelar edición
+    document.getElementById("cancel-equipment-btn").onclick = function () {
+      document.getElementById("edit-equipment-section").classList.add("d-none");
+      abilitiesContainer.classList.remove("d-none");
+    };
+
+    // Guardar cambios
+    document.getElementById("save-equipment-btn").onclick = async function () {
+      const lis = document.querySelectorAll("#edit-equipment-list li");
+      const newEquipment = Array.from(lis)
+        .map(li => {
+          const nombre = li.querySelector('input').value.trim();
+          const tipo = li.querySelector('select').value;
+          return nombre && tipo ? `${nombre} (${tipo})` : null;
+        })
+        .filter(v => v);
+
+      try {
+        await apiRequest(`/api/personajes/${character.id}/equipo`, "PUT", newEquipment, true);
+        alert("Equipo actualizado correctamente");
+        location.reload();
+      } catch (err) {
+        alert("Error al actualizar el equipo: " + err.message);
+      }
+    };
+
+    // Exportar PDF
     document.getElementById("export-pdf-btn").onclick = () => {
       exportPDF(character);
     };
 
-    // Mostrar sección de edición al pulsar "Editar equipo"
-document.getElementById("edit-equipment-btn").onclick = function () {
-  // Oculta la vista normal y muestra la edición
-  document.getElementById("character-abilities").classList.add("d-none");
-  document.getElementById("edit-equipment-section").classList.remove("d-none");
-
-  // Llena el ul con los equipos actuales
-  const list = document.getElementById("edit-equipment-list");
-  list.innerHTML = "";
-  character.equipo.forEach((e, idx) => {
-    const li = document.createElement("li");
-    li.className = "list-group-item d-flex align-items-center";
-    li.innerHTML = `
-      <input type="text" class="form-control form-control-sm me-2" value="${e}" data-idx="${idx}" style="color:rgb(0, 0, 0);">
-      <button class="btn btn-danger btn-sm remove-equipment-btn" type="button"><i class="bi bi-x"></i></button>
-    `;
-    list.appendChild(li);
-
-    // Botón de eliminar en cada equipo
-    li.querySelector('.remove-equipment-btn').onclick = function () {
-      li.remove();
-    };
-  });
-};
-    
-  // Botón para agregar nuevo equipo
-  document.getElementById("add-equipment-btn").onclick = function () {
-  const list = document.getElementById("edit-equipment-list");
-  const li = document.createElement("li");
-  li.className = "list-group-item d-flex align-items-center";
-  li.innerHTML = `
-    <input type="text" class="form-control form-control-sm me-2" value="">
-    <button class="btn btn-danger btn-sm remove-equipment-btn" type="button"><i class="bi bi-x"></i></button>
-  `;
-  li.querySelector('.remove-equipment-btn').onclick = function () {
-    li.remove();
-  };
-  list.appendChild(li);
-  };
-  // Botón para cancelar
-  document.getElementById("cancel-equipment-btn").onclick = function () {
-  document.getElementById("edit-equipment-section").classList.add("d-none");
-  document.getElementById("character-abilities").classList.remove("d-none");
-  };
-    // Botón para guardar
-document.getElementById("save-equipment-btn").onclick = async function () {
-  const inputs = document.querySelectorAll("#edit-equipment-list input");
-  const newEquipment = Array.from(inputs)
-    .map(inp => inp.value.trim())
-    .filter(v => v);
-
-  // Aquí deberías llamar a tu API para guardar (de momento, solo alerta para que veas el resultado)
-  try {
-    // Ejemplo de llamada, ajusta según tu backend
-    await apiRequest(`/api/personajes/${character.id}/equipo`, "PUT", { equipo: newEquipment }, true);
-    alert("Equipo actualizado correctamente");
-    location.reload(); // O vuelve a renderizar el personaje si no quieres recargar
-  } catch (err) {
-    alert("Error al actualizar el equipo: " + err.message);
+    // Mostrar modal
+    const modal = new bootstrap.Modal(document.getElementById("characterModal"));
+    modal.show();
   }
-};
-
-
-}
 
   // Exportar a PDF con imagen
   async function exportPDF(character) {
