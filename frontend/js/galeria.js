@@ -131,60 +131,43 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>
     `).join("");
 
-const abilitiesContainer = document.getElementById("character-abilities");
-const equipo = character.equipo || [];
+    const abilitiesContainer = document.getElementById("character-abilities");
+    abilitiesContainer.innerHTML = `
+      <h5>Hechizos:</h5>
+      <ul>${character.hechizos.map(h => `<li>${h}</li>`).join("") || '<li>Ninguno</li>'}</ul>
+      <h5>Equipamiento:</h5>
+      <ul>${character.equipo.map(e => `<li>${e}</li>`).join("") || '<li>Sin equipo</li>'}</ul>
+    `;
+    // Botón para añadir equipamiento
+  const addEquipBtn = document.createElement("button");
+  addEquipBtn.textContent = "Añadir equipamiento";
+  addEquipBtn.className = "btn btn-success btn-sm ms-2";
+  document.getElementById("character-abilities").appendChild(addEquipBtn);
 
-let equipoHtml = `<h5>Equipamiento:</h5>
-<ul id="equipos-editables" style="list-style:none; padding-left:0;">`;
+  addEquipBtn.onclick = async () => {
+    const nombre = prompt("Nombre del nuevo equipamiento:");
+    if (!nombre) return;
+    const tipo = prompt("Tipo (ARMA/ARMADURA/OBJETO):").toUpperCase();
+    if (!["ARMA","ARMADURA","OBJETO"].includes(tipo)) {
+      alert("Tipo inválido");
+      return;
+    }
 
-equipo.forEach((e, i) => {
-  equipoHtml += `
-    <li class="mb-2 d-flex align-items-center">
-      <span class="flex-grow-1">${e.nombre} <span class="badge bg-secondary ms-2">${e.tipo}</span></span>
-      <button class="btn btn-sm btn-danger ms-2 delete-equipo" data-idx="${i}" title="Eliminar">
-        <i class="bi bi-trash"></i>
-      </button>
-    </li>`;
-});
+    try {
+      // 1. Crear el equipo
+      const nuevoEquipo = await apiRequest("/api/equipos", "POST", { nombre, tipo }, true);
+      // 2. Asociar al personaje
+      await apiRequest(`/api/equipos/${nuevoEquipo.id}/asignar-personaje/${character.id}`, "PUT", null, true);
 
-equipoHtml += `
-</ul>
-<div class="d-flex align-items-center gap-2 mt-2">
-  <input type="text" id="nuevo-equipo-nombre" class="form-control" placeholder="Nuevo equipo" style="width: 60%;">
-  <select id="nuevo-equipo-tipo" class="form-select" style="width: 30%;">
-    <option value="ARMA">ARMA</option>
-    <option value="ARMADURA">ARMADURA</option>
-    <option value="OBJETO">OBJETO</option>
-  </select>
-  <button id="add-equipo-btn" class="btn btn-primary" title="Añadir equipo">
-    <i class="bi bi-plus-circle"></i>
-  </button>
-</div>`;
-
-abilitiesContainer.innerHTML = `
-  <h5>Hechizos:</h5>
-  <ul>${character.hechizos.map(h => `<li>${h}</li>`).join("") || '<li>Ninguno</li>'}</ul>
-  ${equipoHtml}
-`;
-
-    // Manejar borrado de equipo
-abilitiesContainer.querySelectorAll(".delete-equipo").forEach(btn => {
-  btn.onclick = () => {
-    const idx = parseInt(btn.dataset.idx);
-    character.equipo.splice(idx, 1);
-    showDetails(character); // Vuelve a renderizar el modal con el cambio
+      alert("¡Equipo añadido!");
+      // Puedes recargar los detalles para mostrar el nuevo equipamiento:
+      // (Idealmente re-fetch el personaje y vuelve a llamar a showDetails)
+      location.reload(); // O mejor, vuelve a pedir el personaje actualizado y refresca solo el modal
+    } catch (e) {
+      alert("Error al añadir equipamiento");
+    }
   };
-});
-
-// Manejar añadido de equipo
-abilitiesContainer.querySelector("#add-equipo-btn").onclick = () => {
-  const nombre = abilitiesContainer.querySelector("#nuevo-equipo-nombre").value.trim();
-  const tipo = abilitiesContainer.querySelector("#nuevo-equipo-tipo").value;
-  if (!nombre) return alert("Pon un nombre de equipo");
-  character.equipo.push({ nombre, tipo });
-  showDetails(character); // Vuelve a renderizar el modal con el nuevo equipo
-};
-
+}
 
     const modal = new bootstrap.Modal(document.getElementById("characterModal"));
     modal.show();
