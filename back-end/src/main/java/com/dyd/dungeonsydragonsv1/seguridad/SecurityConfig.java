@@ -57,6 +57,7 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+<<<<<<< HEAD
         CorsConfiguration config = new CorsConfiguration();
 
         // Dominios explícitos
@@ -76,6 +77,30 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
+=======
+        CorsConfiguration cfg = new CorsConfiguration();
+
+        // Producción (dominio fijo)
+        cfg.addAllowedOrigin("https://tfg-dragones-y-mazmorras.vercel.app");
+
+        // Todos los previews de Vercel para este proyecto
+        // cualquier sub-dominio que empiece por "tfg-dragones-y-mazmor"
+        cfg.addAllowedOriginPattern("https://tfg-dragones-y-mazmor*.vercel.app");
+
+        // Live-server local
+        cfg.addAllowedOrigin("http://localhost:5500");
+
+        /* resto igual */
+        cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
+        cfg.setAllowedHeaders(List.of("Authorization","Content-Type","Accept"));
+        cfg.setExposedHeaders(List.of("Authorization"));
+        cfg.setAllowCredentials(true);
+        cfg.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource src = new UrlBasedCorsConfigurationSource();
+        src.registerCorsConfiguration("/**", cfg);
+        return src;
+>>>>>>> b3763d4ee3575758fe5c99cf34801e725f08db17
     }
 
 
