@@ -9,6 +9,7 @@ import com.dyd.dungeonsydragonsv1.repositorios.UsuarioRepository;
 import com.dyd.dungeonsydragonsv1.servicios.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
+@Profile("!test")
 @RequiredArgsConstructor
 public class InitData {
 
@@ -60,7 +62,7 @@ public class InitData {
                     .roles(Set.of(rolAdmin))
                     .build();
             usuarioRepository.save(admin);
-            System.out.println("🛡 Usuario admin creado: admin / admin123");
+            System.out.println("Usuario admin creado: admin / admin123");
         }
     }
 

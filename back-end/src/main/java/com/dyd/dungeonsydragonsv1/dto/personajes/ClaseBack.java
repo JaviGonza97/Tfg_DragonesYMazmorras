@@ -10,8 +10,6 @@ import lombok.*;
 @Builder
 public class ClaseBack {
 
-    // En principio esto se dejara commo respaldo por si en un futuro se utiliza
-
     private Long id;
 
     @NotNull(message = "El nombre de la clase no puede ser nulo")

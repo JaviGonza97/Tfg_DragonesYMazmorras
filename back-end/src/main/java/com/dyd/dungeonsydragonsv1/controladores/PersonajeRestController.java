@@ -171,6 +171,27 @@ public class PersonajeRestController {
         return ResponseEntity.ok(personajeMapper.toGaleriaList(personajesDelUsuario));
     }
 
+    @PutMapping("/{id}/equipo")
+    public ResponseEntity<?> actualizarEquipo(
+            @PathVariable Long id,
+            @RequestBody List<EquipoBack> equipos,
+            EquipoMapper equipoMapper
+    ) {
+
+        var personajeOpt = personajeService.findById(id);
+        if (personajeOpt.isEmpty()) return ResponseEntity.notFound().build();
+        Personaje personaje = personajeOpt.get();
+
+        List<Equipo> nuevosEquipos = equipos.stream()
+                .map(equipoMapper::toEntity)
+                .toList();
+        personaje.setEquipo(nuevosEquipos);
+        personajeService.savePersonaje(personaje);
+
+        return ResponseEntity.ok().build();
+    }
+
+
 
 
 }
