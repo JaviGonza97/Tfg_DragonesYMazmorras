@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       alert("Error al añadir equipamiento");
     }
   };
-}
+
 
     const modal = new bootstrap.Modal(document.getElementById("characterModal"));
     modal.show();
