@@ -132,12 +132,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     `).join("");
 
     const abilitiesContainer = document.getElementById("character-abilities");
-    abilitiesContainer.innerHTML = `
-      <h5>Hechizos:</h5>
-      <ul>${character.hechizos.map(h => `<li>${h}</li>`).join("") || '<li>Ninguno</li>'}</ul>
-      <h5>Equipamiento:</h5>
-      <ul>${character.equipo.map(e => `<li>${e}</li>`).join("") || '<li>Sin equipo</li>'}</ul>
-    `;
+  abilitiesContainer.innerHTML = `
+    <h5>Hechizos:</h5>
+    <ul>${character.hechizos.map(h => `<li>${h}</li>`).join("") || '<li>Ninguno</li>'}</ul>
+    <h5>Equipamiento:</h5>
+    <ul id="equipos-editables" style="list-style:none; padding-left:0;">
+      ${character.equipo.map((e, i) => `
+        <li class="mb-2">
+          <input type="text" value="${e.nombre}" data-idx="${i}" class="form-control d-inline-block equipo-nombre" style="width:60%; display:inline;">
+          <span class="badge bg-secondary ms-2">${e.tipo}</span>
+          <button class="btn btn-sm btn-success ms-2 save-equipo" data-idx="${i}" title="Guardar cambios"><i class="bi bi-check"></i></button>
+          <button class="btn btn-sm btn-danger ms-1 delete-equipo" data-idx="${i}" title="Eliminar equipo"><i class="bi bi-trash"></i></button>
+        </li>
+      `).join("")}
+    </ul>
+    <hr>
+    <div class="d-flex align-items-center gap-2 mb-2">
+      <input type="text" id="nuevo-equipo-nombre" class="form-control" placeholder="Nuevo equipo" style="width: 60%;">
+      <select id="nuevo-equipo-tipo" class="form-select" style="width: 30%;">
+        <option value="ARMA">ARMA</option>
+        <option value="ARMADURA">ARMADURA</option>
+        <option value="OBJETO">OBJETO</option>
+      </select>
+      <button id="add-equipo-btn" class="btn btn-primary" title="Añadir equipo"><i class="bi bi-plus-circle"></i></button>
+    </div>
+  `;
 
     const modal = new bootstrap.Modal(document.getElementById("characterModal"));
     modal.show();
@@ -145,6 +164,55 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("export-pdf-btn").onclick = () => {
       exportPDF(character);
     };
+    // Guardar cambios en el equipo
+document.querySelectorAll('.save-equipo').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const idx = btn.dataset.idx;
+    const input = document.querySelector(`input[data-idx='${idx}']`);
+    const nuevoNombre = input.value.trim();
+    if (!nuevoNombre) return alert('El nombre no puede estar vacío.');
+    try {
+      await apiRequest(`/api/equipos/${character.equipo[idx].id}`, "PUT", { nombre: nuevoNombre }, true);
+      character.equipo[idx].nombre = nuevoNombre;
+      input.classList.add('border-success');
+      setTimeout(() => input.classList.remove('border-success'), 800);
+    } catch (err) {
+      alert('Error al guardar el equipo');
+    }
+  });
+});
+
+// Eliminar equipo
+document.querySelectorAll('.delete-equipo').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const idx = btn.dataset.idx;
+    if (!confirm('¿Eliminar este equipo?')) return;
+    try {
+      await apiRequest(`/api/equipos/${character.equipo[idx].id}`, "DELETE", null, true);
+      character.equipo.splice(idx, 1);
+      showDetails(character); // Vuelve a mostrar el modal actualizado
+    } catch (err) {
+      alert('Error al eliminar el equipo');
+    }
+  });
+});
+
+// Añadir nuevo equipo
+document.getElementById('add-equipo-btn').addEventListener('click', async () => {
+  const nombre = document.getElementById('nuevo-equipo-nombre').value.trim();
+  const tipo = document.getElementById('nuevo-equipo-tipo').value;
+  if (!nombre) return alert('El nombre del equipo no puede estar vacío.');
+  try {
+    const nuevo = await apiRequest("/api/equipos", "POST", { nombre, tipo }, true);
+    // Asignar a este personaje
+    await apiRequest(`/api/equipos/${nuevo.id}/asignar-personaje/${character.id}`, "PUT", null, true);
+    character.equipo.push(nuevo);
+    showDetails(character); // Recarga la lista
+  } catch (err) {
+    alert('Error al añadir equipo');
+  }
+});
+
   }
 
   // Exportar a PDF con imagen
