@@ -101,32 +101,38 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const equipoList = document.getElementById("equipment-list");
 
+  // NUEVA FUNCIÓN para agregar equipos sin tipo en el nombre
   function agregarEquipo(tipo) {
-    const nombre = prompt(`Nombre del ${tipo.toLowerCase()}`);
-    if (!nombre) return;
-    const li = document.createElement("li");
-    li.classList.add("equipment-item");
-    li.textContent = `${nombre} (${tipo})`;
-    li.dataset.tipo = tipo;
-    const removeBtn = document.createElement("button");
-    removeBtn.textContent = "x";
-    removeBtn.classList.add("btn", "btn-sm", "btn-danger", "ms-2");
-    removeBtn.onclick = () => li.remove();
-    li.appendChild(removeBtn);
-    equipoList.appendChild(li);
-  }
+  const nombre = prompt(`Nombre del ${tipo.toLowerCase()}`);
+  if (!nombre) return;
+  const li = document.createElement("li");
+  li.classList.add("equipment-item");
+  li.dataset.tipo = tipo;
+  li.dataset.nombre = nombre;
+  li.innerHTML = `
+    <span class="equipment-nombre">${nombre}</span>
+    <span class="badge bg-secondary ms-2">${tipo}</span>
+    <button type="button" class="btn btn-sm btn-danger ms-2 remove-equipment-btn">x</button>
+  `;
+  li.querySelector('.remove-equipment-btn').onclick = () => li.remove();
+  equipoList.appendChild(li);
+}
 
-  document.getElementById("add-weapon").addEventListener("click", () => agregarEquipo("ARMA"));
-  document.getElementById("add-armor").addEventListener("click", () => agregarEquipo("ARMADURA"));
-  document.getElementById("add-item").addEventListener("click", () => agregarEquipo("OBJETO"));
+
+  // Todos los botones de agregar equipo llaman a la nueva función
+  document.getElementById("add-weapon").addEventListener("click", agregarEquipo);
+  document.getElementById("add-armor").addEventListener("click", agregarEquipo);
+  document.getElementById("add-item").addEventListener("click", agregarEquipo);
 
   formBtn.addEventListener("click", async () => {
     const nombre = nameInput.value.trim();
     const nivel = parseInt(document.getElementById("character-level").value);
     const hechizoNombre = document.getElementById("spell-name")?.value || null;
     const hechizoDescripcion = document.getElementById("spell-description")?.value || null;
+
+    // Ahora se recolecta nombre y tipo de cada equipo por separado
     const equipos = Array.from(document.querySelectorAll(".equipment-item")).map((el) => ({
-      nombre: el.textContent.replace("x", "").trim(),
+      nombre: el.dataset.nombre,
       tipo: el.dataset.tipo,
     }));
 
