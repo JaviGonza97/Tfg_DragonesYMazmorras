@@ -138,36 +138,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       <h5>Equipamiento:</h5>
       <ul>${character.equipo.map(e => `<li>${e}</li>`).join("") || '<li>Sin equipo</li>'}</ul>
     `;
-    // Botón para añadir equipamiento
-  const addEquipBtn = document.createElement("button");
-  addEquipBtn.textContent = "Añadir equipamiento";
-  addEquipBtn.className = "btn btn-success btn-sm ms-2";
-  document.getElementById("character-abilities").appendChild(addEquipBtn);
-
-  addEquipBtn.onclick = async () => {
-    const nombre = prompt("Nombre del nuevo equipamiento:");
-    if (!nombre) return;
-    const tipo = prompt("Tipo (ARMA/ARMADURA/OBJETO):").toUpperCase();
-    if (!["ARMA","ARMADURA","OBJETO"].includes(tipo)) {
-      alert("Tipo inválido");
-      return;
-    }
-
-    try {
-      // 1. Crear el equipo
-      const nuevoEquipo = await apiRequest("/api/equipos", "POST", { nombre, tipo }, true);
-      // 2. Asociar al personaje
-      await apiRequest(`/api/equipos/${nuevoEquipo.id}/asignar-personaje/${character.id}`, "PUT", null, true);
-
-      alert("¡Equipo añadido!");
-      // Puedes recargar los detalles para mostrar el nuevo equipamiento:
-      // (Idealmente re-fetch el personaje y vuelve a llamar a showDetails)
-      location.reload(); // O mejor, vuelve a pedir el personaje actualizado y refresca solo el modal
-    } catch (e) {
-      alert("Error al añadir equipamiento");
-    }
-  };
-
 
     const modal = new bootstrap.Modal(document.getElementById("characterModal"));
     modal.show();
@@ -176,7 +146,75 @@ document.addEventListener("DOMContentLoaded", async () => {
       exportPDF(character);
     };
   }
+ // --------- NUEVA FUNCIÓN renderEquipamiento -------------
+  async function renderEquipamiento(character) {
+    const abilitiesContainer = document.getElementById("character-abilities");
 
+    // Recarga equipo actualizado del backend
+    let equipoData = [];
+    try {
+      const updatedChar = await apiRequest(`/api/personajes/${character.id}`, "GET", null, true);
+      equipoData = updatedChar.equipo || [];
+      character.equipo = equipoData; // Actualiza el objeto original para PDF/export
+      character.hechizos = updatedChar.hechizos || [];
+    } catch {
+      equipoData = character.equipo || [];
+    }
+
+    // Renderiza el equipamiento con botón borrar y añadir
+    abilitiesContainer.innerHTML = `
+      <h5>Hechizos:</h5>
+      <ul>${(character.hechizos || []).map(h => `<li>${h}</li>`).join("") || '<li>Ninguno</li>'}</ul>
+      <h5>Equipamiento:</h5>
+      <ul id="lista-equipo">
+        ${equipoData.length > 0 
+            ? equipoData.map(e => `
+                <li>
+                  ${e.nombre} (${e.tipo || ""})
+                  <button class="btn btn-danger btn-sm ms-2 btn-borrar-equipo" data-eqid="${e.id}">Borrar</button>
+                </li>
+              `).join("") 
+            : '<li>Sin equipo</li>'}
+      </ul>
+      <button id="add-equipment-btn" class="btn btn-success btn-sm mt-2">
+        Añadir equipamiento
+      </button>
+    `;
+
+    // BORRAR equipo
+    abilitiesContainer.querySelectorAll('.btn-borrar-equipo').forEach(btn => {
+      btn.onclick = async () => {
+        const eqId = btn.getAttribute('data-eqid');
+        if (!confirm('¿Seguro que deseas borrar este equipamiento?')) return;
+        try {
+          await apiRequest(`/api/equipos/${eqId}`, "DELETE", null, true);
+          renderEquipamiento(character); // Refresca la lista solo
+        } catch {
+          alert('Error al borrar equipamiento');
+        }
+      };
+    });
+
+    // AÑADIR equipo
+    document.getElementById("add-equipment-btn").onclick = async () => {
+      const nombre = prompt("Nombre del equipamiento:");
+      if (!nombre) return;
+      let tipo = prompt("Tipo (ARMA/ARMADURA/OBJETO):").toUpperCase();
+      if (!["ARMA","ARMADURA","OBJETO"].includes(tipo)) {
+        alert("Tipo inválido");
+        return;
+      }
+      try {
+        // 1. Crear equipamiento
+        const eq = await apiRequest("/api/equipos", "POST", { nombre, tipo }, true);
+        // 2. Asignar al personaje
+        await apiRequest(`/api/equipos/${eq.id}/asignar-personaje/${character.id}`, "PUT", null, true);
+        renderEquipamiento(character); // Refresca la lista
+      } catch {
+        alert("Error al añadir equipamiento");
+      }
+    };
+  }
   // Exportar a PDF con imagen
   async function exportPDF(character) {
     const { jsPDF } = window.jspdf;
