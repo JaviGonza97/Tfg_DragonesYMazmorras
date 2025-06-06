@@ -28,9 +28,9 @@ public class Personaje {
     @JoinColumn(name = "clase_id")
     private Clase clase;
 
-    @OneToMany(mappedBy = "personaje", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "personaje", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private List<Equipo> equipo = new ArrayList<>();  // ← inicializada
+    private List<Equipo> equipo = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(

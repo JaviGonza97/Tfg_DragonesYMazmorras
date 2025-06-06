@@ -181,18 +181,20 @@ public class PersonajeRestController {
         if (personajeOpt.isEmpty()) return ResponseEntity.notFound().build();
         Personaje personaje = personajeOpt.get();
 
-        List<Equipo> nuevosEquipos = equipos.stream()
-                .map(equipoMapper::toEntity)
-                .toList();
-
+        // Limpia la lista actual para evitar duplicados
         personaje.getEquipo().clear();
-        for (Equipo eq : nuevosEquipos) {
-            eq.setPersonaje(personaje);
+
+        // Crea y asigna los nuevos equipos
+        for (EquipoBack eqBack : equipos) {
+            Equipo eq = equipoMapper.toEntity(eqBack);
+            eq.setPersonaje(personaje); // relación bidireccional
             personaje.getEquipo().add(eq);
         }
-        personajeService.savePersonaje(personaje);
+        // Solo necesitas este save, JPA borra los viejos por orphanRemoval
+        personajeService.savePersonajeSimple(personaje);
 
         return ResponseEntity.ok().build();
     }
+
 
 }

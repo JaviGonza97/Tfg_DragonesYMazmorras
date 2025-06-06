@@ -163,5 +163,10 @@ public class PersonajeService {
         return personajeRepository.findByUsuario(usuario);
     }
 
+    public Personaje savePersonajeSimple(Personaje personaje) {
+        return personajeRepository.save(personaje);
+    }
+
+
 
 }
