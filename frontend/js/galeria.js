@@ -137,14 +137,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     <ul>${character.hechizos.map(h => `<li>${h}</li>`).join("") || '<li>Ninguno</li>'}</ul>
     <h5>Equipamiento:</h5>
     <ul id="equipos-editables" style="list-style:none; padding-left:0;">
-      ${character.equipo.map((e, i) => `
-        <li class="mb-2">
-          <input type="text" value="${e.nombre}" data-idx="${i}" class="form-control d-inline-block equipo-nombre" style="width:60%; display:inline;">
-          <span class="badge bg-secondary ms-2">${e.tipo}</span>
-          <button class="btn btn-sm btn-success ms-2 save-equipo" data-idx="${i}" title="Guardar cambios"><i class="bi bi-check"></i></button>
-          <button class="btn btn-sm btn-danger ms-1 delete-equipo" data-idx="${i}" title="Eliminar equipo"><i class="bi bi-trash"></i></button>
-        </li>
-      `).join("")}
+      ${character.equipo.map((e, i) => {
+        const nombre = (e && e.nombre) ? e.nombre : '';
+        const tipo = (e && e.tipo) ? e.tipo : '';
+        return `
+          <li class="mb-2">
+            <input type="text" value="${nombre}" data-idx="${i}" class="form-control d-inline-block equipo-nombre" style="width:60%; display:inline;">
+            <span class="badge bg-secondary ms-2">${tipo || "?"}</span>
+            <button class="btn btn-sm btn-success ms-2 save-equipo" data-idx="${i}" title="Guardar cambios"><i class="bi bi-check"></i></button>
+            <button class="btn btn-sm btn-danger ms-1 delete-equipo" data-idx="${i}" title="Eliminar equipo"><i class="bi bi-trash"></i></button>
+          </li>
+        `;
+      }).join("")}
     </ul>
     <hr>
     <div class="d-flex align-items-center gap-2 mb-2">
