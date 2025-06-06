@@ -127,115 +127,118 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function showDetails(character) {
-  document.getElementById("character-name").textContent = character.nombre;
-  document.getElementById("character-race-class").textContent = `${character.raza} - ${character.clase}`;
-  const imgName = `${character.raza.toLowerCase()}_${character.clase.toLowerCase()}.png`;
-  document.getElementById("character-avatar-img").src = `img/${imgName}`;
+    document.getElementById("character-name").textContent = character.nombre;
+    document.getElementById("character-race-class").textContent = `${character.raza} - ${character.clase}`;
+    const imgName = `${character.raza.toLowerCase()}_${character.clase.toLowerCase()}.png`;
+    document.getElementById("character-avatar-img").src = `img/${imgName}`;
 
-  const stats = [
-    { label: "Fuerza", value: character.fuerza },
-    { label: "Destreza", value: character.destreza },
-    { label: "Resistencia", value: character.resistencia },
-    { label: "Magia", value: character.magia }
-  ];
+    const stats = [
+      { label: "Fuerza", value: character.fuerza },
+      { label: "Destreza", value: character.destreza },
+      { label: "Resistencia", value: character.resistencia },
+      { label: "Magia", value: character.magia }
+    ];
 
-  const statsContainer = document.getElementById("character-stats");
-  statsContainer.innerHTML = stats.map(stat => `
-    <div class="col-6 col-md-3 text-center mb-3">
-      <div class="stat-circle rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2"
-           style="width: 50px; height: 50px; background-color: rgba(219, 148, 41, 0.2);">
-        <span style="color: var(--primary); font-weight: bold;">${stat.value}</span>
+    const statsContainer = document.getElementById("character-stats");
+    statsContainer.innerHTML = stats.map(stat => `
+      <div class="col-6 col-md-3 text-center mb-3">
+        <div class="stat-circle rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2"
+             style="width: 50px; height: 50px; background-color: rgba(219, 148, 41, 0.2);">
+          <span style="color: var(--primary); font-weight: bold;">${stat.value}</span>
+        </div>
+        <small>${stat.label}</small>
       </div>
-      <small>${stat.label}</small>
-    </div>
-  `).join("");
+    `).join("");
 
-  // ---- VISTA DE EQUIPO (SOLO NOMBRE Y BADGE DE TIPO) ----
-  const abilitiesContainer = document.getElementById("character-abilities");
-  abilitiesContainer.innerHTML = `
-    <h5>Hechizos:</h5>
-    <ul>
-      ${character.hechizos.map(h => `<li>${h}</li>`).join("") || '<li>Ninguno</li>'}
-    </ul>
-    <h5>Equipamiento:</h5>
-    <ul>
-      ${character.equipo.map(e => {
-        let nombre = e, tipo = "";
-        // Si el equipo viene como string "Nombre (TIPO)"
-        const match = e.match?.(/\((ARMA|ARMADURA|OBJETO)\)$/);
-        if (match) {
-          tipo = match[1];
-          nombre = e.replace(/\s*\((ARMA|ARMADURA|OBJETO)\)$/, "").trim();
+    // ---- VISTA DE EQUIPO (SOLO NOMBRE Y BADGE DE TIPO) ----
+    const abilitiesContainer = document.getElementById("character-abilities");
+    abilitiesContainer.innerHTML = `
+      <h5>Hechizos:</h5>
+      <ul>
+        ${character.hechizos.map(h => `<li>${h}</li>`).join("") || '<li>Ninguno</li>'}
+      </ul>
+      <h5>Equipamiento:</h5>
+      <ul>
+        ${character.equipo.map(e => {
+          let nombre = e.nombre ?? e, tipo = e.tipo ?? "";
+          // Soporta tanto array de strings como array de objetos
+          if (typeof e === "string") {
+            const match = e.match?.(/\((ARMA|ARMADURA|OBJETO)\)$/);
+            if (match) {
+              tipo = match[1];
+              nombre = e.replace(/\s*\((ARMA|ARMADURA|OBJETO)\)$/, "").trim();
+            }
+          }
+          return `<li>${nombre}${tipo ? ` <span class="badge bg-secondary ms-2">${tipo}</span>` : ""}</li>`;
+        }).join("") || '<li>Sin equipo</li>'}
+      </ul>
+    `;
+
+    // -------------------
+    // EDICIÓN DE EQUIPO
+    // -------------------
+    document.getElementById("edit-equipment-btn").onclick = function () {
+      abilitiesContainer.classList.add("d-none");
+      document.getElementById("edit-equipment-section").classList.remove("d-none");
+
+      const list = document.getElementById("edit-equipment-list");
+      list.innerHTML = "";
+
+      // Parsear los equipos: nombre y tipo (soporta ambos formatos)
+      character.equipo.forEach(e => {
+        let nombre = e.nombre ?? e, tipo = e.tipo ?? "ARMA";
+        if (typeof e === "string") {
+          const match = e.match?.(/\((ARMA|ARMADURA|OBJETO)\)$/);
+          if (match) {
+            tipo = match[1];
+            nombre = e.replace(/\s*\((ARMA|ARMADURA|OBJETO)\)$/, "").trim();
+          }
         }
-        return `<li>${nombre}${tipo ? ` <span class="badge bg-secondary ms-2">${tipo}</span>` : ""}</li>`;
-      }).join("") || '<li>Sin equipo</li>'}
-    </ul>
-  `;
+        list.appendChild(crearFilaEquipo(nombre, tipo));
+      });
+    };
 
-  // -------------------
-  // EDICIÓN DE EQUIPO
-  // -------------------
-  document.getElementById("edit-equipment-btn").onclick = function () {
-    abilitiesContainer.classList.add("d-none");
-    document.getElementById("edit-equipment-section").classList.remove("d-none");
+    // Agregar equipo nuevo
+    document.getElementById("add-equipment-btn").onclick = function () {
+      const list = document.getElementById("edit-equipment-list");
+      list.appendChild(crearFilaEquipo());
+    };
 
-    const list = document.getElementById("edit-equipment-list");
-    list.innerHTML = "";
+    // Cancelar edición
+    document.getElementById("cancel-equipment-btn").onclick = function () {
+      document.getElementById("edit-equipment-section").classList.add("d-none");
+      abilitiesContainer.classList.remove("d-none");
+    };
 
-    // Parsear los equipos: nombre y tipo
-    character.equipo.forEach(e => {
-      let nombre = e, tipo = "ARMA";
-      const match = e.match?.(/\((ARMA|ARMADURA|OBJETO)\)$/);
-      if (match) {
-        tipo = match[1];
-        nombre = e.replace(/\s*\((ARMA|ARMADURA|OBJETO)\)$/, "").trim();
+    // Guardar cambios (¡Aquí está el cambio importante!)
+    document.getElementById("save-equipment-btn").onclick = async function () {
+      const lis = document.querySelectorAll("#edit-equipment-list li");
+      const newEquipment = Array.from(lis)
+        .map(li => {
+          const nombre = li.querySelector('input').value.trim();
+          const tipo = li.querySelector('select').value.toUpperCase();
+          return nombre && tipo ? { nombre, tipo } : null;
+        })
+        .filter(v => v);
+
+      try {
+        await apiRequest(`/api/personajes/${character.id}/equipo`, "PUT", newEquipment, true);
+        alert("Equipo actualizado correctamente");
+        location.reload();
+      } catch (err) {
+        alert("Error al actualizar el equipo: " + err.message);
       }
-      list.appendChild(crearFilaEquipo(nombre, tipo));
-    });
-  };
+    };
 
-  // Agregar equipo nuevo
-  document.getElementById("add-equipment-btn").onclick = function () {
-    const list = document.getElementById("edit-equipment-list");
-    list.appendChild(crearFilaEquipo());
-  };
+    // Exportar PDF
+    document.getElementById("export-pdf-btn").onclick = () => {
+      exportPDF(character);
+    };
 
-  // Cancelar edición
-  document.getElementById("cancel-equipment-btn").onclick = function () {
-    document.getElementById("edit-equipment-section").classList.add("d-none");
-    abilitiesContainer.classList.remove("d-none");
-  };
-
-  // Guardar cambios
-  document.getElementById("save-equipment-btn").onclick = async function () {
-    const lis = document.querySelectorAll("#edit-equipment-list li");
-    const newEquipment = Array.from(lis)
-      .map(li => {
-        const nombre = li.querySelector('input').value.trim();
-        const tipo = li.querySelector('select').value;
-        return nombre && tipo ? `${nombre} (${tipo})` : null;
-      })
-      .filter(v => v);
-
-    try {
-      await apiRequest(`/api/personajes/${character.id}/equipo`, "PUT", newEquipment, true);
-      alert("Equipo actualizado correctamente");
-      location.reload();
-    } catch (err) {
-      alert("Error al actualizar el equipo: " + err.message);
-    }
-  };
-
-  // Exportar PDF
-  document.getElementById("export-pdf-btn").onclick = () => {
-    exportPDF(character);
-  };
-
-  // Mostrar modal
-  const modal = new bootstrap.Modal(document.getElementById("characterModal"));
-  modal.show();
-}
-
+    // Mostrar modal
+    const modal = new bootstrap.Modal(document.getElementById("characterModal"));
+    modal.show();
+  }
 
   // Exportar a PDF con imagen
   async function exportPDF(character) {
@@ -300,7 +303,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (character.equipo.length) {
       character.equipo.forEach(e => {
-        doc.text(`- ${e}`, marginX + 5, cursorY);
+        let nombre = e.nombre ?? e, tipo = e.tipo ?? "";
+        if (typeof e === "string") {
+          const match = e.match?.(/\((ARMA|ARMADURA|OBJETO)\)$/);
+          if (match) {
+            tipo = match[1];
+            nombre = e.replace(/\s*\((ARMA|ARMADURA|OBJETO)\)$/, "").trim();
+          }
+        }
+        doc.text(`- ${nombre}${tipo ? " (" + tipo + ")" : ""}`, marginX + 5, cursorY);
         cursorY += 7;
       });
     } else {
