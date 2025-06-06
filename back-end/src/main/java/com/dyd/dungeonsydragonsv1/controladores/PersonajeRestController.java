@@ -27,6 +27,7 @@ public class PersonajeRestController {
     private final ClaseService claseService;
     private final RazaService razaService;
     private final HechizoMapper hechizoMapper;
+    private final EquipoMapper equipoMapper;
 
     @GetMapping
     public ResponseEntity<List<PersonajeFront>> obtenerTodos() {
@@ -174,14 +175,13 @@ public class PersonajeRestController {
     @PutMapping("/{id}/equipo")
     public ResponseEntity<?> actualizarEquipo(
             @PathVariable Long id,
-            @RequestBody List<EquipoBack> equipos,
-            EquipoMapper equipoMapper
+            @RequestBody List<EquipoBack> equipos
     ) {
-
         var personajeOpt = personajeService.findById(id);
         if (personajeOpt.isEmpty()) return ResponseEntity.notFound().build();
         Personaje personaje = personajeOpt.get();
 
+        // Usa el mapper inyectado como campo
         List<Equipo> nuevosEquipos = equipos.stream()
                 .map(equipoMapper::toEntity)
                 .toList();
@@ -190,8 +190,5 @@ public class PersonajeRestController {
 
         return ResponseEntity.ok().build();
     }
-
-
-
 
 }
