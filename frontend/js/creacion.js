@@ -102,13 +102,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   const equipoList = document.getElementById("equipment-list");
 
   // NUEVA FUNCIÓN para agregar equipos sin tipo en el nombre
-  function agregarEquipo(tipo) {
+function agregarEquipo(tipo) {
   const nombre = prompt(`Nombre del ${tipo.toLowerCase()}`);
   if (!nombre) return;
   const li = document.createElement("li");
   li.classList.add("equipment-item");
   li.dataset.tipo = tipo;
   li.dataset.nombre = nombre;
+  // SOLO nombre, nunca "nombre (TIPO)"
   li.innerHTML = `
     <span class="equipment-nombre">${nombre}</span>
     <span class="badge bg-secondary ms-2">${tipo}</span>
@@ -117,7 +118,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   li.querySelector('.remove-equipment-btn').onclick = () => li.remove();
   equipoList.appendChild(li);
 }
-
 
   // Todos los botones de agregar equipo llaman a la nueva función
   document.getElementById("add-weapon").addEventListener("click", agregarEquipo);
