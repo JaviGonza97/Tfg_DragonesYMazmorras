@@ -181,11 +181,15 @@ public class PersonajeRestController {
         if (personajeOpt.isEmpty()) return ResponseEntity.notFound().build();
         Personaje personaje = personajeOpt.get();
 
-        // Usa el mapper inyectado como campo
         List<Equipo> nuevosEquipos = equipos.stream()
                 .map(equipoMapper::toEntity)
                 .toList();
-        personaje.setEquipo(nuevosEquipos);
+
+        personaje.getEquipo().clear();
+        for (Equipo eq : nuevosEquipos) {
+            eq.setPersonaje(personaje);
+            personaje.getEquipo().add(eq);
+        }
         personajeService.savePersonaje(personaje);
 
         return ResponseEntity.ok().build();
