@@ -159,7 +159,7 @@ document.getElementById("edit-equipment-btn").onclick = function () {
     const li = document.createElement("li");
     li.className = "list-group-item d-flex align-items-center";
     li.innerHTML = `
-      <input type="text" class="form-control form-control-sm me-2" value="${e}" data-idx="${idx}">
+      <input type="text" class="form-control form-control-sm me-2" value="${e}" data-idx="${idx}" style="color:rgb(0, 0, 0);">
       <button class="btn btn-danger btn-sm remove-equipment-btn" type="button"><i class="bi bi-x"></i></button>
     `;
     list.appendChild(li);

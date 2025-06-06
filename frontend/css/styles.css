@@ -559,6 +559,6 @@ body.dark #character-race-class {
   color: var(--text) !important;
 }
 #edit-equipment-list input {
-  color: #5a2aff; /* Cambia este valor por el color que prefieras */
+  color: #000000; /* Cambia este valor por el color que prefieras */
   font-weight: bold; /* Opcional, para hacerlo más notorio */
 }
