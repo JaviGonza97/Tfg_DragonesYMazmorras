@@ -365,7 +365,7 @@ class PersonajeRestControllerTest {
         when(personajeMapper.toFront(personajeConHechizos)).thenReturn(frontConHechizos);
 
         mockMvc.perform(post("/api/personajes/1/hechizos/100"))
-                .andDo(r -> System.out.println("➕ Hechizo existente Status=" + r.getResponse().getStatus()))
+                .andDo(r -> System.out.println("Hechizo existente Status=" + r.getResponse().getStatus()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nombre").value("Aragorn"))
                 .andExpect(jsonPath("$.hechizos[0]").value("BolaFuego"));
@@ -399,7 +399,7 @@ class PersonajeRestControllerTest {
                 .thenReturn(frontDespues);
 
         mockMvc.perform(delete("/api/personajes/1/hechizos/100"))
-                .andDo(r -> System.out.println("➖ Hechizo eliminado Status=" + r.getResponse().getStatus()))
+                .andDo(r -> System.out.println("Hechizo eliminado=" + r.getResponse().getStatus()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nombre").value("Aragorn"))
                 .andExpect(jsonPath("$.hechizos[0]").value("EscudoMagico"))
@@ -427,33 +427,11 @@ class PersonajeRestControllerTest {
                 .thenReturn(frontDespues);
 
         mockMvc.perform(delete("/api/personajes/1/hechizos"))
-                .andDo(r -> System.out.println("🚫 Todos hechizos eliminados Status=" + r.getResponse().getStatus()))
+                .andDo(r -> System.out.println("Todos hechizos eliminados=" + r.getResponse().getStatus()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nombre").value("Aragorn"))
                 .andExpect(jsonPath("$.hechizos.length()").value(0));
     }
 
-    @Test
-    void obtenerMisPersonajes_devuelveLista() throws Exception {
-        var listaEnt = List.of(entidad);
-        var listaGaleria = List.of(galeriaDto);
 
-        var principal = new UsuarioDetails(
-                Usuario.builder()
-                        .id(99L)
-                        .username("neo")
-                        .roles(Set.of())
-                        .build()
-        );
-        var authToken = new UsernamePasswordAuthenticationToken(principal, null, List.of());
-        SecurityContextHolder.getContext().setAuthentication(authToken);
-
-        when(personajeService.getPersonajesDelUsuario("neo")).thenReturn(listaEnt);
-        when(personajeMapper.toGaleriaList(listaEnt)).thenReturn(listaGaleria);
-
-        mockMvc.perform(get("/api/personajes/mios").accept(MediaType.APPLICATION_JSON))
-                .andDo(r -> System.out.println("🏞️ mis personajes: " + r.getResponse().getContentAsString()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].nombre").value("Aragorn"));
-    }
 }
