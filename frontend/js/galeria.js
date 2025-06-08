@@ -256,7 +256,7 @@ document.getElementById("save-equipment-btn").onclick = async function () {
     modal.show();
   }
 
-// Función mejorada para exportar PDF con diseño auténtico de D&D
+// Función completa para exportar PDF de múltiples páginas con diseño auténtico de D&D
 async function exportPDF(character) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF("p", "mm", "a4");
@@ -272,15 +272,13 @@ async function exportPDF(character) {
   
   // Función para crear fondo de pergamino con patrón sutil
   function createParchmentBackground() {
-    // Fondo base color pergamino claro
     doc.setFillColor(...colors.lightSepia);
     doc.rect(0, 0, 210, 297, 'F');
     
-    // Patrón sutil (simulado con puntos muy claros)
+    // Patrón sutil de textura
     doc.setGState(new doc.GState({opacity: 0.05}));
     doc.setFillColor(...colors.sepia);
     
-    // Crear patrón de puntos para simular textura
     for(let x = 0; x < 210; x += 4) {
       for(let y = 0; y < 297; y += 4) {
         if(Math.random() > 0.7) {
@@ -293,10 +291,10 @@ async function exportPDF(character) {
   }
   
   // Función para dibujar marcos decorativos estilo D&D
-  function drawDecorativeFrame(x, y, width, height, title = null) {
+  function drawDecorativeFrame(x, y, width, height, title = null, titleColor = colors.sepia) {
     // Marco principal
     doc.setDrawColor(...colors.sepia);
-    doc.setLineWidth(1);
+    doc.setLineWidth(1.2);
     doc.roundedRect(x, y, width, height, 3, 3, 'S');
     
     // Marco interior
@@ -306,157 +304,191 @@ async function exportPDF(character) {
     
     // Título si existe
     if (title) {
-      // Fondo del título
-      doc.setFillColor(...colors.lightSepia);
-      const titleWidth = doc.getTextWidth(title) + 10;
-      doc.roundedRect(x + (width - titleWidth) / 2 - 2, y - 5, titleWidth + 4, 10, 3, 3, 'F');
-      
-      // Borde del título
-      doc.setDrawColor(...colors.sepia);
-      doc.roundedRect(x + (width - titleWidth) / 2 - 2, y - 5, titleWidth + 4, 10, 3, 3, 'S');
-      
-      // Texto del título
-      doc.setTextColor(...colors.sepia);
       doc.setFontSize(10);
       doc.setFont("times", "bold");
-      doc.text(title, x + (width - titleWidth) / 2, y);
+      const titleWidth = doc.getTextWidth(title);
+      
+      // Fondo del título
+      doc.setFillColor(...colors.lightSepia);
+      doc.roundedRect(x + (width - titleWidth) / 2 - 5, y - 6, titleWidth + 10, 12, 3, 3, 'F');
+      
+      // Borde del título
+      doc.setDrawColor(...titleColor);
+      doc.setLineWidth(1);
+      doc.roundedRect(x + (width - titleWidth) / 2 - 5, y - 6, titleWidth + 10, 12, 3, 3, 'S');
+      
+      // Texto del título
+      doc.setTextColor(...titleColor);
+      doc.text(title, x + (width - titleWidth) / 2, y + 1);
     }
   }
   
   // Función para dibujar líneas punteadas para rellenar
-  function drawDottedLine(x, y, width, text = null) {
-    // Texto inicial si existe
-    if (text) {
+  function drawDottedLine(x, y, width, label = null, labelWidth = 0) {
+    if (label) {
       doc.setTextColor(...colors.sepia);
       doc.setFontSize(9);
       doc.setFont("times", "bold");
-      doc.text(text, x, y);
-      x += doc.getTextWidth(text) + 3;
-      width -= doc.getTextWidth(text) + 3;
+      doc.text(label, x, y);
+      x += labelWidth || (doc.getTextWidth(label) + 3);
+      width -= labelWidth || (doc.getTextWidth(label) + 3);
     }
     
     // Línea punteada
     doc.setDrawColor(...colors.sepia);
-    doc.setLineWidth(0.3);
+    doc.setLineWidth(0.4);
     
-    const dotSpacing = 1.5;
+    const dotSpacing = 1.2;
     const dotCount = Math.floor(width / dotSpacing);
     
     for (let i = 0; i < dotCount; i++) {
       const dotX = x + (i * dotSpacing);
-      doc.line(dotX, y, dotX + 0.5, y);
+      doc.line(dotX, y, dotX + 0.4, y);
     }
     
     // Puntos decorativos en los extremos
     doc.setFillColor(...colors.gold);
-    doc.circle(x, y, 0.8, 'F');
-    doc.circle(x + width, y, 0.8, 'F');
+    doc.circle(x - 1, y, 0.8, 'F');
+    doc.circle(x + width + 1, y, 0.8, 'F');
   }
   
   // Función para dibujar círculos de estadísticas estilo D&D
-  function drawStatCircle(x, y, statName, statValue) {
+  function drawStatCircle(x, y, statName, statValue, modifier) {
     // Marco exterior decorativo
     doc.setDrawColor(...colors.sepia);
-    doc.setLineWidth(1);
-    doc.circle(x, y, 12, 'S');
+    doc.setLineWidth(1.5);
+    doc.circle(x, y, 15, 'S');
     
     // Círculo interior
+    doc.setFillColor(255, 255, 255);
+    doc.circle(x, y, 12, 'F');
     doc.setDrawColor(...colors.sepia);
-    doc.setLineWidth(0.5);
-    doc.circle(x, y, 10, 'S');
+    doc.setLineWidth(0.8);
+    doc.circle(x, y, 12, 'S');
     
     // Valor de la estadística
     doc.setTextColor(...colors.sepia);
-    doc.setFontSize(14);
+    doc.setFontSize(16);
     doc.setFont("times", "bold");
     const valueWidth = doc.getTextWidth(statValue.toString());
-    doc.text(statValue.toString(), x - valueWidth/2, y + 2);
+    doc.text(statValue.toString(), x - valueWidth/2, y + 3);
+    
+    // Modificador
+    const mod = Math.floor((statValue - 10) / 2);
+    const modText = mod >= 0 ? `+${mod}` : `${mod}`;
+    doc.setFontSize(10);
+    const modWidth = doc.getTextWidth(modText);
+    doc.text(modText, x - modWidth/2, y - 8);
     
     // Nombre de la estadística
     doc.setFontSize(8);
     doc.setFont("times", "bold");
     const nameWidth = doc.getTextWidth(statName);
-    doc.text(statName, x - nameWidth/2, y + 18);
-    
-    // Decoración superior del círculo
-    doc.setDrawColor(...colors.sepia);
-    doc.setLineWidth(0.5);
-    const decorSize = 5;
-    doc.line(x - decorSize, y - 12, x + decorSize, y - 12);
-    doc.line(x, y - 12 - decorSize, x, y - 12);
+    doc.text(statName, x - nameWidth/2, y + 22);
   }
   
-  // Función para dibujar encabezado con banner
-  function drawBannerHeader(text) {
-    // Cargar imagen de banner (simulado con dibujo)
-    const bannerY = 20;
-    const bannerHeight = 30;
-    
-    // Dibujar banner
+  // Función para crear encabezado de página
+  function createPageHeader(pageNum) {
+    // Banner superior
+    doc.setFillColor(...colors.lightSepia);
     doc.setDrawColor(...colors.sepia);
     doc.setLineWidth(1.5);
+    doc.roundedRect(15, 10, 180, 25, 3, 3, 'FD');
     
-    // Parte central del banner
-    doc.setFillColor(...colors.lightSepia);
-    doc.roundedRect(20, bannerY, 170, bannerHeight, 2, 2, 'FD');
-    
-    // Bordes decorativos
-    doc.setDrawColor(...colors.sepia);
-    doc.setLineWidth(0.8);
-    doc.roundedRect(22, bannerY + 2, 166, bannerHeight - 4, 1, 1, 'S');
-    
-    // Texto del banner
+    // Título D&D
     doc.setTextColor(...colors.sepia);
-    doc.setFontSize(24);
+    doc.setFontSize(20);
     doc.setFont("times", "bold");
-    const textWidth = doc.getTextWidth("D&D");
-    doc.text("D&D", (210 - textWidth) / 2, bannerY + 12);
+    doc.text("D&D", 25, 27);
     
-    // Texto del personaje
-    doc.setFontSize(16);
-    doc.setFont("times", "italic");
-    const nameText = "CHARACTER NAME";
-    const nameWidth = doc.getTextWidth(nameText);
-    doc.text(nameText, (210 - nameWidth) / 2, bannerY + 22);
+    // Número de página
+    doc.setFontSize(12);
+    doc.text(`Página ${pageNum}`, 170, 27);
     
-    // Línea para el nombre
-    drawDottedLine(50, bannerY + 28, 110);
+    // Línea decorativa
+    doc.setDrawColor(...colors.gold);
+    doc.setLineWidth(2);
+    doc.line(15, 38, 195, 38);
   }
   
-  // Crear fondo de pergamino
+  // ==================== PÁGINA 1: INFORMACIÓN PRINCIPAL ====================
   createParchmentBackground();
+  createPageHeader(1);
   
-  // Dibujar encabezado con banner
-  drawBannerHeader(character.nombre);
+  let currentY = 50;
   
-  // SECCIÓN DE INFORMACIÓN BÁSICA
-  let currentY = 60;
+  // TÍTULO DEL PERSONAJE
+  doc.setTextColor(...colors.sepia);
+  doc.setFontSize(24);
+  doc.setFont("times", "bold");
+  const nameText = character.nombre.toUpperCase();
+  const nameWidth = doc.getTextWidth(nameText);
+  doc.text(nameText, (210 - nameWidth) / 2, currentY);
   
-  // Marco para información básica
-  drawDecorativeFrame(20, currentY, 170, 30);
+  // Línea decorativa bajo el nombre
+  doc.setDrawColor(...colors.gold);
+  doc.setLineWidth(2);
+  doc.line(50, currentY + 5, 160, currentY + 5);
   
-  // Información básica en líneas
-  drawDottedLine(30, currentY + 10, 50, "CLASS & LEVEL");
-  drawDottedLine(120, currentY + 10, 60, "BACKGROUND");
-  drawDottedLine(30, currentY + 20, 50, "RACE");
-  drawDottedLine(120, currentY + 20, 60, "ALIGNMENT");
+  currentY += 20;
   
-  // Rellenar información del personaje
+  // SECCIÓN DE INFORMACIÓN BÁSICA CON IMAGEN
+  drawDecorativeFrame(20, currentY, 170, 80, "INFORMACIÓN DEL PERSONAJE");
+  
+  // Imagen del personaje
+  const imgName = `${character.raza.toLowerCase()}_${character.clase.toLowerCase()}.png`;
+  const imgURL = `img/${imgName}`;
+  
+  try {
+    const imgData = await getBase64ImageFromUrl(imgURL);
+    
+    // Marco decorativo para la imagen
+    doc.setFillColor(...colors.gold);
+    doc.roundedRect(25, currentY + 10, 50, 50, 3, 3, 'F');
+    doc.setDrawColor(...colors.sepia);
+    doc.setLineWidth(2);
+    doc.roundedRect(25, currentY + 10, 50, 50, 3, 3, 'S');
+    
+    // Imagen del personaje
+    doc.addImage(imgData, "PNG", 27, currentY + 12, 46, 46);
+    
+    // Marco interior de la imagen
+    doc.setDrawColor(...colors.darkSepia);
+    doc.setLineWidth(1);
+    doc.roundedRect(27, currentY + 12, 46, 46, 2, 2, 'S');
+    
+  } catch (error) {
+    // Placeholder si no se puede cargar la imagen
+    doc.setFillColor(240, 240, 240);
+    doc.roundedRect(27, currentY + 12, 46, 46, 2, 2, 'F');
+    doc.setTextColor(...colors.sepia);
+    doc.setFontSize(10);
+    doc.text("RETRATO", 50, currentY + 30);
+    doc.text("PERSONAJE", 50, currentY + 40);
+  }
+  
+  // Información básica del personaje
+  const infoX = 85;
+  
+  // Campos de información básica
+  drawDottedLine(infoX, currentY + 20, 90, "CLASE Y NIVEL:", 35);
   doc.setTextColor(...colors.darkSepia);
   doc.setFontSize(10);
   doc.setFont("times", "normal");
-  doc.text(character.clase, 85, currentY + 10);
-  doc.text(character.raza, 85, currentY + 20);
+  doc.text(character.clase, infoX + 35, currentY + 20);
   
-  currentY += 40;
+  drawDottedLine(infoX, currentY + 30, 90, "RAZA:", 20);
+  doc.text(character.raza, infoX + 20, currentY + 30);
   
-  // SECCIÓN DE ATRIBUTOS PRINCIPALES
-  const statStartY = currentY;
-  const statWidth = 30;
-  const statHeight = 40;
-  const statSpacing = 35;
+  drawDottedLine(infoX, currentY + 40, 90, "TRASFONDO:", 35);
+  drawDottedLine(infoX, currentY + 50, 90, "ALINEAMIENTO:", 40);
+  drawDottedLine(infoX, currentY + 60, 90, "PUNTOS DE EXPERIENCIA:", 60);
   
-  // Estadísticas principales
+  currentY += 90;
+  
+  // ATRIBUTOS PRINCIPALES
+  drawDecorativeFrame(20, currentY, 170, 70, "ATRIBUTOS PRINCIPALES");
+  
   const stats = [
     { name: "FUERZA", value: character.fuerza },
     { name: "DESTREZA", value: character.destreza },
@@ -465,74 +497,99 @@ async function exportPDF(character) {
   ];
   
   // Dibujar círculos de estadísticas
+  const statY = currentY + 40;
   stats.forEach((stat, index) => {
-    const x = 35 + (index * statSpacing);
-    drawStatCircle(x, statStartY + 20, stat.name, stat.value);
+    const x = 50 + (index * 35);
+    drawStatCircle(x, statY, stat.name, stat.value);
   });
   
-  // Línea para modificadores
-  doc.setTextColor(...colors.sepia);
-  doc.setFontSize(8);
-  doc.setFont("times", "italic");
-  doc.text("MOD:", 30, statStartY + 45);
-  doc.text("MOD:", 65, statStartY + 45);
-  doc.text("MOD:", 100, statStartY + 45);
-  doc.text("MOD:", 135, statStartY + 45);
+  currentY += 80;
   
-  drawDottedLine(45, statStartY + 45, 15);
-  drawDottedLine(80, statStartY + 45, 15);
-  drawDottedLine(115, statStartY + 45, 15);
-  drawDottedLine(150, statStartY + 45, 15);
+  // TIRADAS DE SALVACIÓN Y HABILIDADES
+  drawDecorativeFrame(20, currentY, 80, 60, "TIRADAS DE SALVACIÓN");
   
-  currentY += 55;
+  const savingThrows = ["Fuerza", "Destreza", "Constitución", "Inteligencia", "Sabiduría", "Carisma"];
+  savingThrows.forEach((save, index) => {
+    if (index < 4) {
+      const y = currentY + 15 + (index * 10);
+      doc.setFillColor(...colors.sepia);
+      doc.rect(25, y - 2, 4, 4, 'F');
+      drawDottedLine(35, y, 35, save + ":", 25);
+    }
+  });
   
-  // SECCIÓN DE PUNTOS DE VIDA Y COMBATE
-  drawDecorativeFrame(20, currentY, 80, 60, "HIT POINTS");
+  // HABILIDADES
+  drawDecorativeFrame(110, currentY, 80, 60, "HABILIDADES");
+  
+  const skills = ["Acrobacias", "Atletismo", "Engaño", "Historia", "Intimidación", "Investigación"];
+  skills.forEach((skill, index) => {
+    if (index < 4) {
+      const y = currentY + 15 + (index * 10);
+      doc.setFillColor(...colors.sepia);
+      doc.rect(115, y - 2, 4, 4, 'F');
+      drawDottedLine(125, y, 35, skill + ":", 25);
+    }
+  });
+  
+  // ==================== PÁGINA 2: COMBATE Y EQUIPAMIENTO ====================
+  doc.addPage();
+  createParchmentBackground();
+  createPageHeader(2);
+  
+  currentY = 50;
+  
+  // ESTADÍSTICAS DE COMBATE
+  drawDecorativeFrame(20, currentY, 170, 80, "ESTADÍSTICAS DE COMBATE");
   
   // Puntos de vida
-  drawDottedLine(30, currentY + 15, 60, "Maximum");
-  drawDottedLine(30, currentY + 25, 60, "Current");
-  drawDottedLine(30, currentY + 35, 60, "Temporary");
+  drawDecorativeFrame(30, currentY + 15, 70, 50, "PUNTOS DE VIDA");
+  drawDottedLine(35, currentY + 30, 50, "Máximo:", 25);
+  drawDottedLine(35, currentY + 40, 50, "Actual:", 25);
+  drawDottedLine(35, currentY + 50, 50, "Temporal:", 25);
   
-  // Estadísticas de combate
-  drawDecorativeFrame(110, currentY, 80, 60, "COMBAT STATS");
+  // Clase de armadura e iniciativa
+  drawDecorativeFrame(110, currentY + 15, 70, 50, "COMBATE");
+  drawDottedLine(115, currentY + 30, 50, "Clase de Armadura:", 45);
+  drawDottedLine(115, currentY + 40, 50, "Iniciativa:", 25);
+  drawDottedLine(115, currentY + 50, 50, "Velocidad:", 25);
   
-  drawDottedLine(120, currentY + 15, 60, "ARMOR CLASS");
-  drawDottedLine(120, currentY + 25, 60, "INITIATIVE");
-  drawDottedLine(120, currentY + 35, 60, "SPEED");
+  currentY += 90;
   
-  currentY += 70;
+  // ATAQUES Y CONJUROS
+  drawDecorativeFrame(20, currentY, 170, 70, "ATAQUES Y CONJUROS");
   
-  // SECCIÓN DE HECHIZOS Y EQUIPAMIENTO
-  const colWidth = 80;
+  // Encabezados de tabla
+  doc.setTextColor(...colors.sepia);
+  doc.setFontSize(9);
+  doc.setFont("times", "bold");
+  doc.text("NOMBRE", 30, currentY + 15);
+  doc.text("BONIF. ATAQUE", 80, currentY + 15);
+  doc.text("DAÑO/TIPO", 130, currentY + 15);
   
-  // Hechizos
-  drawDecorativeFrame(20, currentY, colWidth, 70, "SPELLS");
-  
-  let spellY = currentY + 15;
-  if (character.hechizos.length > 0) {
-    character.hechizos.forEach((spell, index) => {
-      if (index < 5) {
-        doc.setFillColor(...colors.sepia);
-        doc.circle(25, spellY, 1, 'F');
-        
-        doc.setTextColor(...colors.sepia);
-        doc.setFontSize(9);
-        doc.setFont("times", "normal");
-        doc.text(spell, 30, spellY);
-        
-        spellY += 10;
-      }
-    });
+  // Líneas para ataques
+  for (let i = 0; i < 4; i++) {
+    const y = currentY + 25 + (i * 10);
+    drawDottedLine(30, y, 40);
+    drawDottedLine(80, y, 35);
+    drawDottedLine(130, y, 50);
   }
   
-  // Equipamiento
-  drawDecorativeFrame(110, currentY, colWidth, 70, "EQUIPMENT");
+  currentY += 80;
   
+  // EQUIPAMIENTO
+  drawDecorativeFrame(20, currentY, 170, 80, "EQUIPAMIENTO");
+  
+  // Mostrar equipamiento actual
   let equipY = currentY + 15;
+  doc.setTextColor(...colors.sepia);
+  doc.setFontSize(10);
+  doc.setFont("times", "bold");
+  doc.text("EQUIPAMIENTO ACTUAL:", 30, equipY);
+  
+  equipY += 10;
   if (character.equipo.length > 0) {
     character.equipo.forEach((item, index) => {
-      if (index < 5) {
+      if (index < 6 && equipY < currentY + 70) {
         let nombre = item.nombre ?? item;
         let tipo = item.tipo ?? "";
         
@@ -545,29 +602,80 @@ async function exportPDF(character) {
         }
         
         doc.setFillColor(...colors.sepia);
-        doc.circle(115, equipY, 1, 'F');
+        doc.circle(35, equipY, 1, 'F');
         
         doc.setTextColor(...colors.sepia);
         doc.setFontSize(9);
         doc.setFont("times", "normal");
-        doc.text(nombre, 120, equipY);
+        doc.text(nombre, 40, equipY);
         
         if (tipo) {
-          doc.setFontSize(7);
+          doc.setFontSize(8);
           doc.setFont("times", "italic");
-          doc.text(`(${tipo})`, 120 + doc.getTextWidth(nombre + " "), equipY);
+          doc.text(`(${tipo})`, 40 + doc.getTextWidth(nombre + " "), equipY);
         }
         
-        equipY += 10;
+        equipY += 8;
       }
     });
   }
   
-  currentY += 80;
+  // Líneas adicionales para equipamiento
+  const remainingLines = Math.max(0, 6 - character.equipo.length);
+  for (let i = 0; i < remainingLines; i++) {
+    drawDottedLine(40, equipY + (i * 8), 130);
+  }
   
-  // SECCIÓN DE ALIADOS Y ENEMIGOS
-  drawDecorativeFrame(20, currentY, colWidth, 60, "ALIADOS");
-  drawDecorativeFrame(110, currentY, colWidth, 60, "ENEMIGOS");
+  // ==================== PÁGINA 3: HECHIZOS Y TRASFONDO ====================
+  doc.addPage();
+  createParchmentBackground();
+  createPageHeader(3);
+  
+  currentY = 50;
+  
+  // HECHIZOS
+  drawDecorativeFrame(20, currentY, 170, 100, "GRIMORIO DE HECHIZOS");
+  
+  // Información de conjuros
+  drawDottedLine(30, currentY + 15, 50, "Clase de conjuro:", 40);
+  drawDottedLine(100, currentY + 15, 70, "Habilidad de conjuro:", 45);
+  drawDottedLine(30, currentY + 25, 50, "CD de conjuro:", 35);
+  drawDottedLine(100, currentY + 25, 70, "Bonif. de ataque:", 40);
+  
+  // Hechizos conocidos
+  doc.setTextColor(...colors.sepia);
+  doc.setFontSize(10);
+  doc.setFont("times", "bold");
+  doc.text("HECHIZOS CONOCIDOS:", 30, currentY + 40);
+  
+  let spellY = currentY + 50;
+  if (character.hechizos.length > 0) {
+    character.hechizos.forEach((spell, index) => {
+      if (spellY < currentY + 90) {
+        doc.setFillColor(...colors.sepia);
+        doc.circle(35, spellY, 1, 'F');
+        
+        doc.setTextColor(...colors.sepia);
+        doc.setFontSize(9);
+        doc.setFont("times", "normal");
+        doc.text(spell, 40, spellY);
+        
+        spellY += 8;
+      }
+    });
+  }
+  
+  // Líneas adicionales para hechizos
+  const remainingSpellLines = Math.floor((currentY + 90 - spellY) / 8);
+  for (let i = 0; i < remainingSpellLines; i++) {
+    drawDottedLine(40, spellY + (i * 8), 130);
+  }
+  
+  currentY += 110;
+  
+  // ALIADOS Y ENEMIGOS
+  drawDecorativeFrame(20, currentY, 80, 60, "ALIADOS");
+  drawDecorativeFrame(110, currentY, 80, 60, "ENEMIGOS");
   
   // Líneas para aliados
   for (let i = 0; i < 5; i++) {
@@ -581,8 +689,8 @@ async function exportPDF(character) {
   
   currentY += 70;
   
-  // SECCIÓN DE TESOROS
-  drawDecorativeFrame(20, currentY, 170, 50, "TESOROS Y RIQUEZAS");
+  // TESOROS Y RIQUEZAS
+  drawDecorativeFrame(20, currentY, 170, 60, "TESOROS Y RIQUEZAS");
   
   // Monedas
   doc.setTextColor(...colors.sepia);
@@ -592,13 +700,13 @@ async function exportPDF(character) {
   doc.text("MONEDAS DE PLATA:", 80, currentY + 20);
   doc.text("MONEDAS DE COBRE:", 130, currentY + 20);
   
-  drawDottedLine(30, currentY + 30, 40);
-  drawDottedLine(80, currentY + 30, 40);
-  drawDottedLine(130, currentY + 30, 40);
+  drawDottedLine(30, currentY + 30, 35);
+  drawDottedLine(80, currentY + 30, 35);
+  drawDottedLine(130, currentY + 30, 35);
   
   // Objetos valiosos
-  doc.text("OBJETOS VALIOSOS:", 30, currentY + 40);
-  drawDottedLine(30, currentY + 45, 150);
+  doc.text("OBJETOS VALIOSOS:", 30, currentY + 45);
+  drawDottedLine(30, currentY + 55, 150);
   
   // Pie de página
   doc.setTextColor(...colors.sepia);
@@ -609,7 +717,7 @@ async function exportPDF(character) {
   doc.text(footer, (210 - footerWidth) / 2, 280);
   
   // Guardar el PDF
-  doc.save(`${character.nombre}_HojaPersonaje_DnD.pdf`);
+  doc.save(`${character.nombre}_HojaCompleta_DnD.pdf`);
 }
 
   async function getBase64ImageFromUrl(imageUrl) {
