@@ -453,14 +453,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       try {
         const imgData = await getBase64ImageFromUrl(imgURL)
 
-        // Crear una imagen temporal para obtener dimensiones originales
-        const tempImg = new Image()
-        await new Promise((resolve, reject) => {
-          tempImg.onload = resolve
-          tempImg.onerror = reject
-          tempImg.src = imgData
-        })
-
         // Marco decorativo para la imagen (cuadrado perfecto)
         doc.setFillColor(...colors.gold)
         doc.roundedRect(x, y, size, size, 3, 3, "F")
@@ -468,46 +460,62 @@ document.addEventListener("DOMContentLoaded", async () => {
         doc.setLineWidth(2)
         doc.roundedRect(x, y, size, size, 3, 3, "S")
 
-        // Imagen del personaje (cuadrada y recortada desde arriba para mostrar la cara)
-        const imgInnerSize = size - 4
-        const innerX = x + 2
-        const innerY = y + 2
+        // Crear un canvas temporal para procesar la imagen
+        const canvas = document.createElement("canvas")
+        const ctx = canvas.getContext("2d")
+        const img = new Image()
 
-        // Calcular dimensiones para recortar un cuadrado perfecto centrado horizontalmente
-        // y alineado con la parte superior para mostrar las caras
-        const originalWidth = tempImg.width
-        const originalHeight = tempImg.height
+        await new Promise((resolve, reject) => {
+          img.onload = resolve
+          img.onerror = reject
+          img.src = imgData
+        })
+
+        // Calcular dimensiones para un cuadrado centrado en la parte superior
+        const originalWidth = img.width
+        const originalHeight = img.height
 
         let cropSize, cropX, cropY
 
         if (originalWidth > originalHeight) {
-          // Si la imagen es más ancha que alta, tomamos un cuadrado del tamaño de la altura
+          // Si es más ancha que alta, tomar un cuadrado del alto completo
           cropSize = originalHeight
-          cropX = Math.floor((originalWidth - cropSize) / 2) // Centrado horizontal
-          cropY = 0 // Desde arriba para mostrar las caras
+          cropX = (originalWidth - cropSize) / 2 // Centrar horizontalmente
+          cropY = 0 // Desde arriba
         } else {
-          // Si la imagen es más alta que ancha o cuadrada, tomamos un cuadrado del tamaño del ancho
+          // Si es más alta que ancha, tomar un cuadrado del ancho completo
           cropSize = originalWidth
-          cropX = 0 // No necesita desplazamiento horizontal
-          cropY = 0 // Desde arriba para mostrar las caras
+          cropX = 0 // No desplazar horizontalmente
+          cropY = 0 // Desde arriba
         }
 
-        // Parámetros para recortar la imagen como un cuadrado perfecto centrado horizontalmente
-        doc.addImage(
-          imgData, // Datos de la imagen
-          "PNG", // Formato
-          innerX, // Posición X en el PDF
-          innerY, // Posición Y en el PDF
-          imgInnerSize, // Ancho en el PDF
-          imgInnerSize, // Alto en el PDF
-          undefined, // Alias
-          "FAST", // Compresión
-          0, // Rotación
-          cropX, // Recorte X (para centrar horizontalmente)
-          cropY, // Recorte Y (desde arriba para mostrar las caras)
-          cropSize, // Ancho del recorte (cuadrado)
-          cropSize, // Alto del recorte (cuadrado)
+        // Configurar el canvas como cuadrado
+        canvas.width = cropSize
+        canvas.height = cropSize
+
+        // Dibujar la porción recortada en el canvas
+        ctx.drawImage(
+          img,
+          cropX,
+          cropY,
+          cropSize,
+          cropSize, // Área de origen (cuadrado)
+          0,
+          0,
+          cropSize,
+          cropSize, // Área de destino (todo el canvas)
         )
+
+        // Convertir el canvas a data URL
+        const croppedImageData = canvas.toDataURL("image/png")
+
+        // Imagen del personaje (cuadrada y sin distorsión)
+        const imgInnerSize = size - 4
+        const innerX = x + 2
+        const innerY = y + 2
+
+        // Agregar la imagen recortada al PDF
+        doc.addImage(croppedImageData, "PNG", innerX, innerY, imgInnerSize, imgInnerSize)
 
         // Marco interior de la imagen
         doc.setDrawColor(...colors.darkSepia)
