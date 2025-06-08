@@ -256,7 +256,7 @@ document.getElementById("save-equipment-btn").onclick = async function () {
     modal.show();
   }
 
-// Función completa para exportar PDF de múltiples páginas con diseño auténtico de D&D
+  // Función completa para exportar PDF de múltiples páginas con diseño auténtico de D&D
 async function exportPDF(character) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF("p", "mm", "a4");
@@ -433,8 +433,62 @@ async function exportPDF(character) {
   currentY += 20;
   
   // SECCIÓN DE INFORMACIÓN BÁSICA CON IMAGEN (reducida)
-  drawDecorativeFrame(20, currentY, 170, 70, "INFORMACIÓN DEL PERSONAJE");
+// Función para mostrar la imagen del personaje correctamente centrada
+async function addCharacterImage(doc, x, y, size, character) {
+  const imgName = `${character.raza.toLowerCase()}_${character.clase.toLowerCase()}.png`;
+  const imgURL = `img/${imgName}`;
   
+  try {
+    const imgData = await getBase64ImageFromUrl(imgURL);
+    
+    // Marco decorativo para la imagen (cuadrado perfecto)
+    doc.setFillColor(...colors.gold);
+    doc.roundedRect(x, y, size, size, 3, 3, 'F');
+    doc.setDrawColor(...colors.sepia);
+    doc.setLineWidth(2);
+    doc.roundedRect(x, y, size, size, 3, 3, 'S');
+    
+    // Imagen del personaje (cuadrada, recortada desde arriba para mostrar la cara)
+    const imgInnerSize = size - 4;
+    const innerX = x + 2;
+    const innerY = y + 2;
+    
+    // Parámetros para recortar la imagen desde arriba (para mostrar la cara centrada)
+    // El último parámetro es 0 para recortar desde arriba
+    doc.addImage(
+      imgData,           // Datos de la imagen
+      "PNG",             // Formato
+      innerX,            // Posición X
+      innerY,            // Posición Y
+      imgInnerSize,      // Ancho
+      imgInnerSize,      // Alto
+      undefined,         // Alias
+      'FAST',            // Compresión
+      0,                 // Rotación
+      0,                 // Recorte X (desde la izquierda)
+      0,                 // Recorte Y (desde arriba - 0 para mostrar la parte superior)
+      undefined,         // Ancho original
+      undefined          // Alto original
+    );
+    
+    // Marco interior de la imagen
+    doc.setDrawColor(...colors.darkSepia);
+    doc.setLineWidth(1);
+    doc.roundedRect(innerX, innerY, imgInnerSize, imgInnerSize, 2, 2, 'S');
+    
+    return true;
+  } catch (error) {
+    // Placeholder si no se puede cargar la imagen
+    doc.setFillColor(240, 240, 240);
+    doc.roundedRect(x + 2, y + 2, size - 4, size - 4, 2, 2, 'F');
+    doc.setTextColor(...colors.sepia);
+    doc.setFontSize(9);
+    doc.text("RETRATO", x + size/2 - 10, y + size/2 - 5);
+    doc.text("PERSONAJE", x + size/2 - 15, y + size/2 + 5);
+    
+    return false;
+  }
+}  
   // Imagen del personaje (cuadrada y recortada desde arriba)
   const imgName = `${character.raza.toLowerCase()}_${character.clase.toLowerCase()}.png`;
   const imgURL = `img/${imgName}`;
