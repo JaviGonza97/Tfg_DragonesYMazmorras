@@ -545,7 +545,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const infoX = 80
 
     // Campos de información básica
-    drawDottedLine(infoX, currentY + 18, 90, "CLASE Y NIVEL:", 35)
+    drawDottedLine(infoX, currentY + 18, 90, "CLASE:", 35)
     doc.setTextColor(...colors.darkSepia)
     doc.setFontSize(10)
     doc.setFont("times", "normal")
