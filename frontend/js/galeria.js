@@ -256,241 +256,211 @@ document.getElementById("save-equipment-btn").onclick = async function () {
     modal.show();
   }
 
-// Función mejorada para exportar PDF con diseño temático de D&D
+// Función mejorada para exportar PDF de múltiples páginas con diseño D&D
 async function exportPDF(character) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF("p", "mm", "a4");
   
-  // Colores temáticos D&D
+  // Paleta de colores más bonita y vibrante
   const colors = {
-    gold: [218, 165, 32],
-    darkBrown: [101, 67, 33],
-    parchment: [245, 235, 220],
-    darkParchment: [235, 220, 195],
-    redAccent: [139, 69, 19],
-    deepGold: [184, 134, 11],
-    shadow: [80, 50, 20],
-    lightGold: [255, 215, 0]
+    deepPurple: [75, 0, 130],        // Púrpura profundo
+    royalGold: [255, 215, 0],        // Oro real
+    crimsonRed: [220, 20, 60],       // Rojo carmesí
+    forestGreen: [34, 139, 34],      // Verde bosque
+    parchment: [255, 248, 220],      // Pergamino claro
+    darkParchment: [245, 222, 179],  // Pergamino oscuro
+    silverBlue: [176, 196, 222],     // Azul plateado
+    burnishedGold: [184, 134, 11],   // Oro bruñido
+    shadow: [47, 79, 79],            // Sombra oscura
+    ivory: [255, 255, 240],          // Marfil
+    emerald: [80, 200, 120],         // Esmeralda
+    sapphire: [65, 105, 225]         // Zafiro
   };
   
-  // Función para crear fondo de pergamino elaborado
-  function createParchmentBackground() {
+  let currentPage = 1;
+  
+  // Función para crear encabezado de página
+  function createPageHeader(pageTitle, pageNumber) {
+    // Fondo degradado del encabezado
+    doc.setFillColor(...colors.deepPurple);
+    doc.rect(0, 0, 210, 25, 'F');
+    
+    // Línea dorada decorativa
+    doc.setDrawColor(...colors.royalGold);
+    doc.setLineWidth(2);
+    doc.line(0, 25, 210, 25);
+    
+    // Título de la página
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(16);
+    doc.setFont("helvetica", "bold");
+    doc.text(pageTitle, 20, 17);
+    
+    // Número de página
+    doc.setFontSize(12);
+    doc.text(`Página ${pageNumber}`, 170, 17);
+    
+    // Decoración lateral
+    doc.setFillColor(...colors.royalGold);
+    doc.circle(15, 12.5, 3, 'F');
+    doc.circle(195, 12.5, 3, 'F');
+  }
+  
+  // Función para crear fondo de pergamino mejorado
+  function createEnhancedParchmentBackground() {
     // Fondo base
     doc.setFillColor(...colors.parchment);
-    doc.rect(0, 0, 210, 297, 'F');
+    doc.rect(0, 25, 210, 272, 'F');
     
-    // Efectos de envejecimiento con gradientes
-    doc.setGState(new doc.GState({opacity: 0.15}));
+    // Efectos de textura
+    doc.setGState(new doc.GState({opacity: 0.1}));
     doc.setFillColor(...colors.darkParchment);
     
-    // Manchas de envejecimiento más realistas
-    const spots = [
-      {x: 30, y: 40, size: 25}, {x: 160, y: 80, size: 20},
-      {x: 50, y: 150, size: 30}, {x: 170, y: 200, size: 18},
-      {x: 25, y: 250, size: 22}, {x: 180, y: 50, size: 15}
-    ];
-    
-    spots.forEach(spot => {
-      doc.ellipse(spot.x, spot.y, spot.size, spot.size * 0.7, 'F');
-    });
-    
-    doc.setGState(new doc.GState({opacity: 1}));
-  }
-  
-  // Función para dibujar bordes ornamentales elaborados
-  function drawOrnamentalBorders() {
-    // Borde exterior principal
-    doc.setDrawColor(...colors.darkBrown);
-    doc.setLineWidth(3);
-    doc.rect(8, 8, 194, 281);
-    
-    // Borde interior decorativo
-    doc.setLineWidth(1.5);
-    doc.setDrawColor(...colors.gold);
-    doc.rect(12, 12, 186, 273);
-    
-    // Borde más interno
-    doc.setLineWidth(0.8);
-    doc.setDrawColor(...colors.darkBrown);
-    doc.rect(15, 15, 180, 267);
-    
-    // Esquinas ornamentales elaboradas
-    const cornerSize = 20;
-    
-    // Esquinas doradas con sombra
-    doc.setFillColor(...colors.shadow);
-    // Sombras de esquinas
-    doc.triangle(16, 16, 31, 16, 16, 31, 'F');
-    doc.triangle(194, 16, 179, 16, 194, 31, 'F');
-    doc.triangle(16, 281, 31, 281, 16, 266, 'F');
-    doc.triangle(194, 281, 179, 281, 194, 266, 'F');
-    
-    // Esquinas principales doradas
-    doc.setFillColor(...colors.gold);
-    doc.triangle(15, 15, 30, 15, 15, 30, 'F');
-    doc.triangle(195, 15, 180, 15, 195, 30, 'F');
-    doc.triangle(15, 282, 30, 282, 15, 267, 'F');
-    doc.triangle(195, 282, 180, 282, 195, 267, 'F');
-    
-    // Detalles ornamentales en esquinas
-    doc.setDrawColor(...colors.deepGold);
-    doc.setLineWidth(0.5);
-    // Líneas decorativas en esquinas
-    doc.line(15, 25, 25, 15);
-    doc.line(185, 15, 195, 25);
-    doc.line(15, 272, 25, 282);
-    doc.line(185, 282, 195, 272);
-  }
-  
-  // Función para crear cajas decorativas elaboradas
-  function drawElaborateBox(x, y, width, height, title, style = 'normal') {
-    // Sombra de la caja
-    doc.setFillColor(...colors.shadow);
-    doc.setGState(new doc.GState({opacity: 0.3}));
-    doc.roundedRect(x + 1, y + 1, width, height, 4, 4, 'F');
-    doc.setGState(new doc.GState({opacity: 1}));
-    
-    // Fondo de la caja con gradiente simulado
-    if (style === 'highlight') {
-      doc.setFillColor(...colors.lightGold);
-    } else {
-      doc.setFillColor(250, 245, 235);
+    // Patrones de textura más sofisticados
+    for(let i = 0; i < 20; i++) {
+      const x = Math.random() * 200 + 5;
+      const y = Math.random() * 250 + 30;
+      const size = Math.random() * 15 + 5;
+      doc.ellipse(x, y, size, size * 0.6, 'F');
     }
-    doc.roundedRect(x, y, width, height, 4, 4, 'F');
     
-    // Borde dorado de la caja
-    doc.setDrawColor(...colors.gold);
-    doc.setLineWidth(1.5);
-    doc.roundedRect(x, y, width, height, 4, 4, 'S');
+    doc.setGState(new doc.GState({opacity: 1}));
+    
+    // Bordes laterales decorativos
+    doc.setDrawColor(...colors.burnishedGold);
+    doc.setLineWidth(1);
+    doc.line(10, 30, 10, 290);
+    doc.line(200, 30, 200, 290);
+  }
+  
+  // Función para cajas más elegantes
+  function createElegantBox(x, y, width, height, title, color = colors.sapphire) {
+    // Sombra suave
+    doc.setFillColor(...colors.shadow);
+    doc.setGState(new doc.GState({opacity: 0.2}));
+    doc.roundedRect(x + 2, y + 2, width, height, 5, 5, 'F');
+    doc.setGState(new doc.GState({opacity: 1}));
+    
+    // Fondo principal
+    doc.setFillColor(...colors.ivory);
+    doc.roundedRect(x, y, width, height, 5, 5, 'F');
+    
+    // Borde colorido
+    doc.setDrawColor(...color);
+    doc.setLineWidth(2);
+    doc.roundedRect(x, y, width, height, 5, 5, 'S');
     
     // Borde interior sutil
-    doc.setDrawColor(...colors.deepGold);
+    doc.setDrawColor(...colors.silverBlue);
     doc.setLineWidth(0.5);
-    doc.roundedRect(x + 2, y + 2, width - 4, height - 4, 2, 2, 'S');
+    doc.roundedRect(x + 3, y + 3, width - 6, height - 6, 3, 3, 'S');
     
-    // Título elaborado
+    // Título elegante
     if (title) {
-      const titleWidth = doc.getTextWidth(title) + 12;
-      
-      // Fondo del título con sombra
-      doc.setFillColor(...colors.shadow);
-      doc.setGState(new doc.GState({opacity: 0.4}));
-      doc.roundedRect(x + 8, y - 6, titleWidth, 12, 3, 3, 'F');
-      doc.setGState(new doc.GState({opacity: 1}));
+      const titleWidth = doc.getTextWidth(title) + 16;
       
       // Fondo del título
-      doc.setFillColor(...colors.gold);
-      doc.roundedRect(x + 7, y - 7, titleWidth, 12, 3, 3, 'F');
+      doc.setFillColor(...color);
+      doc.roundedRect(x + 10, y - 8, titleWidth, 16, 4, 4, 'F');
       
       // Borde del título
-      doc.setDrawColor(...colors.darkBrown);
+      doc.setDrawColor(...colors.shadow);
       doc.setLineWidth(1);
-      doc.roundedRect(x + 7, y - 7, titleWidth, 12, 3, 3, 'S');
+      doc.roundedRect(x + 10, y - 8, titleWidth, 16, 4, 4, 'S');
       
       // Texto del título
       doc.setTextColor(255, 255, 255);
-      doc.setFontSize(11);
+      doc.setFontSize(12);
       doc.setFont("helvetica", "bold");
-      doc.text(title, x + 13, y - 1);
+      doc.text(title, x + 18, y + 2);
     }
   }
   
-  // Función para líneas rellenables estilizadas
-  function drawStyledFillableLines(x, y, width, spacing = 7, count = 1, style = 'normal') {
-    doc.setDrawColor(120, 120, 120);
-    doc.setLineWidth(style === 'bold' ? 0.8 : 0.5);
+  // Función para líneas elegantes
+  function createElegantLines(x, y, width, count = 1, spacing = 8, color = colors.silverBlue) {
+    doc.setDrawColor(...color);
+    doc.setLineWidth(0.8);
     
     for(let i = 0; i < count; i++) {
       const lineY = y + (i * spacing);
       doc.line(x, lineY, x + width, lineY);
       
-      // Pequeños puntos decorativos al final de cada línea
-      if (style === 'decorative') {
-        doc.setFillColor(...colors.gold);
-        doc.circle(x + width + 2, lineY, 0.8, 'F');
-      }
+      // Puntos decorativos
+      doc.setFillColor(...colors.royalGold);
+      doc.circle(x - 2, lineY, 1, 'F');
+      doc.circle(x + width + 2, lineY, 1, 'F');
     }
   }
   
-  // Función para círculos de estadísticas ornamentales
-  function drawOrnamentalStatCircle(x, y, value, label) {
+  // Función para círculos de estadísticas mejorados
+  function createBeautifulStatCircle(x, y, value, label, color = colors.emerald) {
     // Sombra del círculo
     doc.setFillColor(...colors.shadow);
-    doc.setGState(new doc.GState({opacity: 0.4}));
-    doc.circle(x + 1, y + 1, 12, 'F');
+    doc.setGState(new doc.GState({opacity: 0.3}));
+    doc.circle(x + 2, y + 2, 15, 'F');
     doc.setGState(new doc.GState({opacity: 1}));
     
-    // Círculo exterior dorado
-    doc.setFillColor(...colors.gold);
+    // Círculo exterior
+    doc.setFillColor(...color);
+    doc.circle(x, y, 15, 'F');
+    
+    // Círculo medio
+    doc.setFillColor(...colors.ivory);
     doc.circle(x, y, 12, 'F');
     
     // Círculo interior
-    doc.setFillColor(255, 255, 255);
+    doc.setFillColor(...color);
     doc.circle(x, y, 9, 'F');
     
-    // Borde decorativo
-    doc.setDrawColor(...colors.darkBrown);
+    // Bordes decorativos
+    doc.setDrawColor(...colors.shadow);
     doc.setLineWidth(2);
-    doc.circle(x, y, 12, 'S');
+    doc.circle(x, y, 15, 'S');
     doc.setLineWidth(1);
-    doc.circle(x, y, 9, 'S');
+    doc.circle(x, y, 12, 'S');
     
-    // Valor de la estadística
-    doc.setTextColor(...colors.darkBrown);
-    doc.setFontSize(14);
+    // Valor
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(16);
     doc.setFont("helvetica", "bold");
     const valueStr = value.toString();
     const textWidth = doc.getTextWidth(valueStr);
-    doc.text(valueStr, x - textWidth/2, y + 2);
+    doc.text(valueStr, x - textWidth/2, y + 3);
     
-    // Etiqueta de la estadística
-    doc.setFontSize(9);
+    // Etiqueta
+    doc.setFontSize(10);
     doc.setFont("helvetica", "bold");
-    doc.setTextColor(...colors.darkBrown);
+    doc.setTextColor(...colors.shadow);
     const labelWidth = doc.getTextWidth(label);
-    doc.text(label, x - labelWidth/2, y + 18);
+    doc.text(label, x - labelWidth/2, y + 25);
   }
   
-  // Crear el fondo elaborado
-  createParchmentBackground();
-  drawOrnamentalBorders();
+  // ==================== PÁGINA 1: INFORMACIÓN PRINCIPAL ====================
+  createPageHeader("HOJA DE PERSONAJE - INFORMACIÓN PRINCIPAL", 1);
+  createEnhancedParchmentBackground();
   
-  // TÍTULO PRINCIPAL ORNAMENTAL
-  const titleY = 32;
+  let currentY = 40;
   
-  // Sombra del título
-  doc.setTextColor(...colors.shadow);
-  doc.setFontSize(26);
+  // TÍTULO PRINCIPAL ESPECTACULAR
+  doc.setTextColor(...colors.deepPurple);
+  doc.setFontSize(28);
   doc.setFont("helvetica", "bold");
-  const mainTitle = "HOJA DE PERSONAJE";
+  const mainTitle = character.nombre.toUpperCase();
   const titleWidth = doc.getTextWidth(mainTitle);
-  doc.text(mainTitle, (210 - titleWidth) / 2 + 1, titleY + 1);
-  
-  // Título principal
-  doc.setTextColor(...colors.darkBrown);
-  doc.text(mainTitle, (210 - titleWidth) / 2, titleY);
+  doc.text(mainTitle, (210 - titleWidth) / 2, currentY);
   
   // Líneas decorativas del título
-  doc.setDrawColor(...colors.gold);
-  doc.setLineWidth(2);
-  const titleStart = (210 - titleWidth) / 2 - 10;
-  const titleEnd = (210 + titleWidth) / 2 + 10;
-  doc.line(titleStart, titleY + 5, titleEnd, titleY + 5);
-  doc.line(titleStart, titleY - 8, titleEnd, titleY - 8);
+  doc.setDrawColor(...colors.royalGold);
+  doc.setLineWidth(3);
+  doc.line(30, currentY + 5, 180, currentY + 5);
+  doc.line(50, currentY - 10, 160, currentY - 10);
   
-  // Subtítulo ornamental
-  doc.setFontSize(12);
-  doc.setFont("helvetica", "italic");
-  doc.setTextColor(...colors.gold);
-  const subtitle = "~ Dragones y Mazmorras ~";
-  const subtitleWidth = doc.getTextWidth(subtitle);
-  doc.text(subtitle, (210 - subtitleWidth) / 2, titleY + 12);
+  currentY += 25;
   
-  // SECCIÓN DE INFORMACIÓN BÁSICA CON IMAGEN
-  let currentY = 50;
-  drawElaborateBox(20, currentY, 170, 55, "INFORMACIÓN DEL PERSONAJE", 'highlight');
+  // INFORMACIÓN BÁSICA CON IMAGEN (más espaciosa)
+  createElegantBox(20, currentY, 170, 80, "INFORMACIÓN DEL AVENTURERO", colors.crimsonRed);
   
-  // IMAGEN DEL PERSONAJE (lado izquierdo)
+  // Imagen del personaje (más grande)
   const imgName = `${character.raza.toLowerCase()}_${character.clase.toLowerCase()}.png`;
   const imgURL = `img/${imgName}`;
   
@@ -498,214 +468,311 @@ async function exportPDF(character) {
     const imgData = await getBase64ImageFromUrl(imgURL);
     
     // Marco decorativo para la imagen
-    doc.setFillColor(...colors.gold);
-    doc.roundedRect(25, currentY + 8, 42, 42, 3, 3, 'F');
-    doc.setDrawColor(...colors.darkBrown);
-    doc.setLineWidth(2);
-    doc.roundedRect(25, currentY + 8, 42, 42, 3, 3, 'S');
+    doc.setFillColor(...colors.royalGold);
+    doc.roundedRect(30, currentY + 15, 60, 60, 5, 5, 'F');
+    doc.setDrawColor(...colors.deepPurple);
+    doc.setLineWidth(3);
+    doc.roundedRect(30, currentY + 15, 60, 60, 5, 5, 'S');
     
-    // Imagen del personaje
-    doc.addImage(imgData, "PNG", 27, currentY + 10, 38, 38);
-    
-    // Borde interior de la imagen
-    doc.setDrawColor(...colors.deepGold);
-    doc.setLineWidth(1);
-    doc.roundedRect(27, currentY + 10, 38, 38, 2, 2, 'S');
+    // Imagen
+    doc.addImage(imgData, "PNG", 33, currentY + 18, 54, 54);
     
   } catch (error) {
-    // Si no se puede cargar la imagen, mostrar placeholder decorativo
-    doc.setFillColor(240, 240, 240);
-    doc.roundedRect(27, currentY + 10, 38, 38, 2, 2, 'F');
-    doc.setTextColor(150, 150, 150);
-    doc.setFontSize(8);
-    doc.text("RETRATO", 46, currentY + 25);
-    doc.text("PERSONAJE", 46, currentY + 33);
+    // Placeholder elegante
+    doc.setFillColor(...colors.silverBlue);
+    doc.roundedRect(33, currentY + 18, 54, 54, 3, 3, 'F');
+    doc.setTextColor(...colors.shadow);
+    doc.setFontSize(12);
+    doc.text("RETRATO", 60, currentY + 40);
+    doc.text("PERSONAJE", 60, currentY + 50);
   }
   
-  // INFORMACIÓN BÁSICA (lado derecho)
-  const infoStartX = 75;
+  // Información básica (lado derecho, más espaciosa)
+  const infoX = 100;
   
-  // Nombre del personaje
-  doc.setTextColor(...colors.darkBrown);
-  doc.setFontSize(16);
-  doc.setFont("helvetica", "bold");
-  doc.text("NOMBRE:", infoStartX, currentY + 18);
-  
+  doc.setTextColor(...colors.deepPurple);
   doc.setFontSize(14);
-  doc.setTextColor(...colors.redAccent);
-  doc.text(character.nombre, infoStartX, currentY + 28);
-  drawStyledFillableLines(infoStartX, currentY + 30, 100, 7, 1, 'decorative');
+  doc.setFont("helvetica", "bold");
+  doc.text("RAZA:", infoX, currentY + 25);
+  doc.setTextColor(...colors.crimsonRed);
+  doc.setFontSize(16);
+  doc.text(character.raza, infoX + 30, currentY + 25);
   
-  // Raza y Clase en la misma línea
+  doc.setTextColor(...colors.deepPurple);
+  doc.setFontSize(14);
+  doc.text("CLASE:", infoX, currentY + 40);
+  doc.setTextColor(...colors.crimsonRed);
+  doc.setFontSize(16);
+  doc.text(character.clase, infoX + 30, currentY + 40);
+  
+  // Campos adicionales con líneas elegantes
+  doc.setTextColor(...colors.deepPurple);
   doc.setFontSize(12);
-  doc.setFont("helvetica", "bold");
-  doc.setTextColor(...colors.darkBrown);
-  doc.text("RAZA:", infoStartX, currentY + 42);
-  doc.setFont("helvetica", "normal");
-  doc.setTextColor(...colors.redAccent);
-  doc.text(character.raza, infoStartX + 25, currentY + 42);
+  doc.text("NIVEL:", infoX, currentY + 55);
+  createElegantLines(infoX + 30, currentY + 57, 50, 1);
   
-  doc.setFont("helvetica", "bold");
-  doc.setTextColor(...colors.darkBrown);
-  doc.text("CLASE:", infoStartX + 70, currentY + 42);
-  doc.setFont("helvetica", "normal");
-  doc.setTextColor(...colors.redAccent);
-  doc.text(character.clase, infoStartX + 95, currentY + 42);
+  doc.text("TRASFONDO:", infoX, currentY + 70);
+  createElegantLines(infoX + 45, currentY + 72, 35, 1);
   
-  // Líneas rellenables para raza y clase
-  drawStyledFillableLines(infoStartX + 25, currentY + 44, 40);
-  drawStyledFillableLines(infoStartX + 95, currentY + 44, 40);
+  currentY += 90;
   
-  currentY += 65;
-  
-  // ESTADÍSTICAS PRINCIPALES CON CÍRCULOS ORNAMENTALES
-  drawElaborateBox(20, currentY, 170, 45, "⚔ ATRIBUTOS PRINCIPALES ⚔");
+  // ATRIBUTOS PRINCIPALES (más espaciosos y coloridos)
+  createElegantBox(20, currentY, 170, 80, "⚔ ATRIBUTOS PRINCIPALES ⚔", colors.forestGreen);
   
   const stats = [
-    { name: "FUERZA", value: character.fuerza },
-    { name: "DESTREZA", value: character.destreza },
-    { name: "RESISTENCIA", value: character.resistencia },
-    { name: "MAGIA", value: character.magia }
+    { name: "FUERZA", value: character.fuerza, color: colors.crimsonRed },
+    { name: "DESTREZA", value: character.destreza, color: colors.emerald },
+    { name: "RESISTENCIA", value: character.resistencia, color: colors.sapphire },
+    { name: "MAGIA", value: character.magia, color: colors.deepPurple }
   ];
   
-  const statStartX = 45;
-  const statSpacing = 35;
-  
+  const statY = currentY + 45;
   stats.forEach((stat, index) => {
-    const x = statStartX + (index * statSpacing);
-    drawOrnamentalStatCircle(x, currentY + 25, stat.value, stat.name);
+    const x = 50 + (index * 40);
+    createBeautifulStatCircle(x, statY, stat.value, stat.name, stat.color);
+    
+    // Modificador
+    doc.setTextColor(...colors.shadow);
+    doc.setFontSize(10);
+    doc.text("MOD:", x - 10, statY + 35);
+    createElegantLines(x + 5, statY + 37, 15, 1);
   });
   
-  currentY += 55;
+  currentY += 90;
   
-  // HECHIZOS Y EQUIPAMIENTO (dos columnas)
-  const columnWidth = 82;
+  // ESTADÍSTICAS SECUNDARIAS (más organizadas)
+  createElegantBox(20, currentY, 170, 60, "📊 ESTADÍSTICAS DE COMBATE", colors.sapphire);
   
-  // COLUMNA IZQUIERDA - HECHIZOS
-  drawElaborateBox(20, currentY, columnWidth, 70, "✨ HECHIZOS CONOCIDOS");
+  const combatStats = [
+    { label: "PUNTOS DE VIDA MÁXIMOS", x: 30, y: currentY + 20 },
+    { label: "PUNTOS DE VIDA ACTUALES", x: 30, y: currentY + 35 },
+    { label: "PUNTOS DE VIDA TEMPORALES", x: 30, y: currentY + 50 },
+    { label: "CLASE DE ARMADURA", x: 120, y: currentY + 20 },
+    { label: "INICIATIVA", x: 120, y: currentY + 35 },
+    { label: "VELOCIDAD", x: 120, y: currentY + 50 }
+  ];
   
-  let spellY = currentY + 15;
   doc.setFontSize(10);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(...colors.deepPurple);
+  
+  combatStats.forEach(stat => {
+    doc.text(stat.label + ":", stat.x, stat.y);
+    createElegantLines(stat.x + 60, stat.y + 2, 25, 1);
+  });
+  
+  // ==================== PÁGINA 2: HABILIDADES Y EQUIPAMIENTO ====================
+  doc.addPage();
+  currentPage = 2;
+  createPageHeader("HABILIDADES, HECHIZOS Y EQUIPAMIENTO", 2);
+  createEnhancedParchmentBackground();
+  
+  currentY = 40;
+  
+  // HECHIZOS (sección completa más espaciosa)
+  createElegantBox(20, currentY, 170, 100, "✨ GRIMORIO DE HECHIZOS ✨", colors.deepPurple);
+  
+  doc.setTextColor(...colors.deepPurple);
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "bold");
+  doc.text("HECHIZOS CONOCIDOS:", 30, currentY + 20);
+  
+  let spellY = currentY + 35;
+  doc.setFontSize(11);
   doc.setFont("helvetica", "normal");
-  doc.setTextColor(...colors.darkBrown);
   
   if (character.hechizos.length > 0) {
     character.hechizos.forEach((spell, index) => {
-      if (index < 4 && spellY < currentY + 60) {
-        doc.text(`• ${spell}`, 25, spellY);
-        spellY += 8;
+      if (spellY < currentY + 85) {
+        // Viñeta decorativa
+        doc.setFillColor(...colors.royalGold);
+        doc.circle(35, spellY - 2, 2, 'F');
+        
+        doc.setTextColor(...colors.shadow);
+        doc.text(spell, 45, spellY);
+        spellY += 12;
       }
     });
   } else {
     doc.setFont("helvetica", "italic");
-    doc.text("Ningún hechizo conocido", 25, spellY);
-    spellY += 8;
+    doc.setTextColor(...colors.silverBlue);
+    doc.text("Este aventurero aún no ha aprendido ningún hechizo", 45, spellY);
   }
   
-  // Líneas adicionales para hechizos
-  const remainingSpellLines = Math.max(0, 4 - character.hechizos.length);
-  drawStyledFillableLines(25, spellY, 70, 8, remainingSpellLines);
+  // Espacios adicionales para hechizos
+  const remainingSpellSpace = Math.floor((currentY + 85 - spellY) / 12);
+  if (remainingSpellSpace > 0) {
+    createElegantLines(45, spellY + 5, 130, remainingSpellSpace, 12);
+  }
   
-  // COLUMNA DERECHA - EQUIPAMIENTO
-  drawElaborateBox(108, currentY, columnWidth, 70, "⚔ EQUIPAMIENTO");
+  currentY += 110;
   
-  let equipY = currentY + 15;
-  doc.setFontSize(10);
-  doc.setFont("helvetica", "normal");
-  doc.setTextColor(...colors.darkBrown);
+  // EQUIPAMIENTO (sección expandida)
+  createElegantBox(20, currentY, 170, 120, "⚔ ARSENAL Y EQUIPAMIENTO ⚔", colors.crimsonRed);
   
-  if (character.equipo.length > 0) {
-    character.equipo.forEach((item, index) => {
-      if (index < 4 && equipY < currentY + 60) {
-        let nombre = item.nombre ?? item;
-        let tipo = item.tipo ?? "";
-        
-        if (typeof item === "string") {
-          const match = item.match?.(/$$(ARMA|ARMADURA|OBJETO)$$$/);
-          if (match) {
-            tipo = match[1];
-            nombre = item.replace(/\s*$$(ARMA|ARMADURA|OBJETO)$$$/, "").trim();
-          }
-        }
-        
-        doc.text(`• ${nombre}`, 113, equipY);
-        if (tipo) {
-          doc.setFontSize(8);
-          doc.setTextColor(...colors.gold);
-          doc.text(`(${tipo})`, 113 + doc.getTextWidth(`• ${nombre} `), equipY);
-          doc.setFontSize(10);
-          doc.setTextColor(...colors.darkBrown);
-        }
-        equipY += 8;
+  // Categorías de equipamiento
+  const equipCategories = {
+    ARMA: { title: "ARMAS", x: 30, items: [] },
+    ARMADURA: { title: "ARMADURAS", x: 110, items: [] },
+    OBJETO: { title: "OBJETOS", x: 30, items: [] }
+  };
+  
+  // Clasificar equipamiento
+  character.equipo.forEach(item => {
+    let nombre = item.nombre ?? item;
+    let tipo = item.tipo ?? "OBJETO";
+    
+    if (typeof item === "string") {
+      const match = item.match?.(/$$(ARMA|ARMADURA|OBJETO)$$$/);
+      if (match) {
+        tipo = match[1];
+        nombre = item.replace(/\s*$$(ARMA|ARMADURA|OBJETO)$$$/, "").trim();
       }
-    });
-  } else {
-    doc.setFont("helvetica", "italic");
-    doc.text("Sin equipamiento", 113, equipY);
-    equipY += 8;
-  }
+    }
+    
+    if (equipCategories[tipo]) {
+      equipCategories[tipo].items.push(nombre);
+    }
+  });
   
-  // Líneas adicionales para equipamiento
-  const remainingEquipLines = Math.max(0, 4 - character.equipo.length);
-  drawStyledFillableLines(113, equipY, 70, 8, remainingEquipLines);
+  // Mostrar armas
+  doc.setTextColor(...colors.crimsonRed);
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "bold");
+  doc.text("ARMAS:", 30, currentY + 20);
+  
+  let weaponY = currentY + 35;
+  equipCategories.ARMA.items.forEach(weapon => {
+    if (weaponY < currentY + 70) {
+      doc.setFillColor(...colors.crimsonRed);
+      doc.circle(35, weaponY - 2, 2, 'F');
+      doc.setTextColor(...colors.shadow);
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.text(weapon, 45, weaponY);
+      weaponY += 10;
+    }
+  });
+  
+  // Líneas para armas adicionales
+  createElegantLines(45, weaponY + 5, 60, 3, 10);
+  
+  // Mostrar armaduras
+  doc.setTextColor(...colors.sapphire);
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "bold");
+  doc.text("ARMADURAS:", 110, currentY + 20);
+  
+  let armorY = currentY + 35;
+  equipCategories.ARMADURA.items.forEach(armor => {
+    if (armorY < currentY + 70) {
+      doc.setFillColor(...colors.sapphire);
+      doc.circle(115, armorY - 2, 2, 'F');
+      doc.setTextColor(...colors.shadow);
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.text(armor, 125, armorY);
+      armorY += 10;
+    }
+  });
+  
+  // Líneas para armaduras adicionales
+  createElegantLines(125, armorY + 5, 60, 3, 10);
+  
+  // Mostrar objetos
+  doc.setTextColor(...colors.forestGreen);
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "bold");
+  doc.text("OBJETOS Y TESOROS:", 30, currentY + 80);
+  
+  let objectY = currentY + 95;
+  equipCategories.OBJETO.items.forEach(object => {
+    if (objectY < currentY + 115) {
+      doc.setFillColor(...colors.forestGreen);
+      doc.circle(35, objectY - 2, 2, 'F');
+      doc.setTextColor(...colors.shadow);
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.text(object, 45, objectY);
+      objectY += 10;
+    }
+  });
+  
+  // Líneas para objetos adicionales
+  createElegantLines(45, objectY + 5, 130, 2, 10);
+  
+  // ==================== PÁGINA 3: TRASFONDO Y NOTAS ====================
+  doc.addPage();
+  currentPage = 3;
+  createPageHeader("TRASFONDO Y AVENTURAS", 3);
+  createEnhancedParchmentBackground();
+  
+  currentY = 40;
+  
+  // TRASFONDO DEL PERSONAJE
+  createElegantBox(20, currentY, 170, 80, "📜 HISTORIA DEL PERSONAJE", colors.forestGreen);
+  
+  doc.setTextColor(...colors.forestGreen);
+  doc.setFontSize(11);
+  doc.setFont("helvetica", "italic");
+  doc.text("Escribe aquí la historia, personalidad y motivaciones de tu personaje:", 30, currentY + 20);
+  
+  createElegantLines(30, currentY + 35, 150, 6, 8);
+  
+  currentY += 90;
+  
+  // ALIADOS Y ENEMIGOS
+  createElegantBox(20, currentY, 82, 70, "👥 ALIADOS", colors.emerald);
+  createElegantBox(108, currentY, 82, 70, "⚔ ENEMIGOS", colors.crimsonRed);
+  
+  createElegantLines(30, currentY + 25, 65, 5, 8);
+  createElegantLines(118, currentY + 25, 65, 5, 8);
   
   currentY += 80;
   
-  // ESTADÍSTICAS SECUNDARIAS
-  drawElaborateBox(20, currentY, 170, 50, "📊 ESTADÍSTICAS DE COMBATE");
+  // TESOROS Y RIQUEZAS
+  createElegantBox(20, currentY, 170, 60, "💰 TESOROS Y RIQUEZAS", colors.royalGold);
   
-  const combatStats = [
-    { label: "PUNTOS DE VIDA MÁXIMOS:", x: 25, y: currentY + 15 },
-    { label: "PUNTOS DE VIDA ACTUALES:", x: 25, y: currentY + 25 },
-    { label: "CLASE DE ARMADURA:", x: 25, y: currentY + 35 },
-    { label: "VELOCIDAD:", x: 25, y: currentY + 45 },
-    { label: "INICIATIVA:", x: 120, y: currentY + 15 },
-    { label: "COMPETENCIA:", x: 120, y: currentY + 25 },
-    { label: "NIVEL:", x: 120, y: currentY + 35 },
-    { label: "EXPERIENCIA:", x: 120, y: currentY + 45 }
+  const currencies = [
+    { name: "MONEDAS DE ORO", x: 30 },
+    { name: "MONEDAS DE PLATA", x: 80 },
+    { name: "MONEDAS DE COBRE", x: 130 }
   ];
   
-  doc.setFontSize(9);
-  doc.setFont("helvetica", "bold");
-  doc.setTextColor(...colors.darkBrown);
-  
-  combatStats.forEach(stat => {
-    doc.text(stat.label, stat.x, stat.y);
-    const lineStart = stat.x + doc.getTextWidth(stat.label) + 3;
-    const lineEnd = stat.x < 100 ? 110 : 185;
-    drawStyledFillableLines(lineStart, stat.y + 1, lineEnd - lineStart);
+  currencies.forEach(currency => {
+    doc.setTextColor(...colors.burnishedGold);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    doc.text(currency.name + ":", currency.x, currentY + 25);
+    createElegantLines(currency.x, currentY + 35, 40, 1);
   });
   
-  currentY += 60;
+  doc.setTextColor(...colors.burnishedGold);
+  doc.text("OBJETOS VALIOSOS:", 30, currentY + 50);
+  createElegantLines(30, currentY + 60, 150, 1);
   
-  // NOTAS Y TRASFONDO
-  if (currentY < 240) {
-    drawElaborateBox(20, currentY, 170, 45, "📜 TRASFONDO Y NOTAS DEL PERSONAJE");
-    
-    doc.setFontSize(9);
-    doc.setFont("helvetica", "italic");
-    doc.setTextColor(...colors.darkBrown);
-    doc.text("Escribe aquí la historia y personalidad de tu personaje:", 25, currentY + 15);
-    
-    // Líneas decorativas para escribir
-    drawStyledFillableLines(25, currentY + 22, 160, 8, 3, 'decorative');
+  currentY += 70;
+  
+  // NOTAS ADICIONALES
+  if (currentY < 220) {
+    createElegantBox(20, currentY, 170, 50, "📝 NOTAS DE AVENTURA", colors.sapphire);
+    createElegantLines(30, currentY + 20, 150, 4, 8);
   }
   
-  // PIE DE PÁGINA ORNAMENTAL
-  const footerY = 275;
-  doc.setDrawColor(...colors.gold);
-  doc.setLineWidth(1);
-  doc.line(30, footerY, 180, footerY);
+  // PIE DE PÁGINA FINAL
+  doc.setDrawColor(...colors.royalGold);
+  doc.setLineWidth(2);
+  doc.line(20, 270, 190, 270);
   
-  doc.setFontSize(8);
+  doc.setTextColor(...colors.deepPurple);
+  doc.setFontSize(10);
   doc.setFont("helvetica", "italic");
-  doc.setTextColor(...colors.gold);
-  const footer = "~ Creado con Dragons & Dungeons Character Creator ~";
-  const footerWidth = doc.getTextWidth(footer);
-  doc.text(footer, (210 - footerWidth) / 2, footerY + 8);
+  const finalFooter = "¡Que tus aventuras sean épicas y tus dados siempre favorables!";
+  const finalFooterWidth = doc.getTextWidth(finalFooter);
+  doc.text(finalFooter, (210 - finalFooterWidth) / 2, 280);
   
-  // Guardar el PDF con nombre descriptivo
-  doc.save(`${character.nombre}_HojaPersonaje_DnD.pdf`);
+  // Guardar el PDF
+  doc.save(`${character.nombre}_HojaCompleta_DnD.pdf`);
 }
 
   async function getBase64ImageFromUrl(imageUrl) {

@@ -562,3 +562,94 @@ body.dark #character-race-class {
   color: #000000; /* Cambia este valor por el color que prefieras */
   font-weight: bold; /* Opcional, para hacerlo más notorio */
 }
+/* Estilos mejorados para la vista previa del PDF */
+.pdf-preview-container {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+.character-card-enhanced {
+  background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+  border: 3px solid #6f42c1;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(111, 66, 193, 0.3);
+  transition: all 0.3s ease;
+}
+
+.character-card-enhanced:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(111, 66, 193, 0.4);
+}
+
+.stat-circle-enhanced {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #ff6b6b, #ee5a24);
+  border: 4px solid #ffffff;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin: 0 auto 1rem;
+}
+
+.stat-circle-enhanced.strength { background: linear-gradient(145deg, #ff6b6b, #ee5a24); }
+.stat-circle-enhanced.dexterity { background: linear-gradient(145deg, #51cf66, #40c057); }
+.stat-circle-enhanced.constitution { background: linear-gradient(145deg, #339af0, #228be6); }
+.stat-circle-enhanced.magic { background: linear-gradient(145deg, #9775fa, #845ef7); }
+
+.section-header {
+  background: linear-gradient(90deg, #6f42c1, #9775fa);
+  color: white;
+  padding: 1rem;
+  border-radius: 10px 10px 0 0;
+  font-weight: bold;
+  text-align: center;
+}
+
+.equipment-badge {
+  background: linear-gradient(45deg, #ffd700, #ffed4e);
+  color: #333;
+  border: none;
+  font-weight: bold;
+}
+
+.spell-item {
+  background: linear-gradient(90deg, #e3f2fd, #f3e5f5);
+  border-left: 4px solid #9c27b0;
+  padding: 0.5rem;
+  margin: 0.25rem 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.pdf-export-btn {
+  background: linear-gradient(145deg, #ff6b6b, #ee5a24);
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  color: white;
+  font-weight: bold;
+  font-size: 1.1rem;
+  box-shadow: 0 8px 16px rgba(238, 90, 36, 0.3);
+  transition: all 0.3s ease;
+}
+
+.pdf-export-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 20px rgba(238, 90, 36, 0.4);
+  background: linear-gradient(145deg, #ee5a24, #ff6b6b);
+}
+
+.page-indicator {
+  background: linear-gradient(90deg, #6f42c1, #9775fa);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  margin: 0.25rem;
+}
