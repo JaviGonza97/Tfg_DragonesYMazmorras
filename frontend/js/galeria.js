@@ -383,12 +383,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       const valueWidth = doc.getTextWidth(statValue.toString())
       doc.text(statValue.toString(), x - valueWidth / 2, y + 3)
 
-      // Modificador
-      const mod = Math.floor((statValue - 10) / 2)
-      const modText = mod >= 0 ? `+${mod}` : `${mod}`
-      doc.setFontSize(10)
-      const modWidth = doc.getTextWidth(modText)
-      doc.text(modText, x - modWidth / 2, y - 8)
+      // ELIMINAR ESTAS LÍNEAS PARA QUITAR EL MODIFICADOR:
+      // const mod = Math.floor((statValue - 10) / 2)
+      // const modText = mod >= 0 ? `+${mod}` : `${mod}`
+      // doc.setFontSize(10)
+      // const modWidth = doc.getTextWidth(modText)
+      // doc.text(modText, x - modWidth / 2, y - 8)
 
       // Nombre de la estadística
       doc.setFontSize(8)
@@ -545,7 +545,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const infoX = 80
 
     // Campos de información básica
-    drawDottedLine(infoX, currentY + 18, 90, "CLASE:", 35)
+    drawDottedLine(infoX, currentY + 18, 90, "CLASE Y NIVEL:", 35)
     doc.setTextColor(...colors.darkSepia)
     doc.setFontSize(10)
     doc.setFont("times", "normal")
