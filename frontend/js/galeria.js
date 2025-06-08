@@ -453,6 +453,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       try {
         const imgData = await getBase64ImageFromUrl(imgURL)
 
+        // Crear una imagen temporal para obtener dimensiones originales
+        const tempImg = new Image()
+        await new Promise((resolve, reject) => {
+          tempImg.onload = resolve
+          tempImg.onerror = reject
+          tempImg.src = imgData
+        })
+
         // Marco decorativo para la imagen (cuadrado perfecto)
         doc.setFillColor(...colors.gold)
         doc.roundedRect(x, y, size, size, 3, 3, "F")
@@ -465,19 +473,40 @@ document.addEventListener("DOMContentLoaded", async () => {
         const innerX = x + 2
         const innerY = y + 2
 
-        // Parámetros para recortar la imagen desde arriba para mostrar la cara)
+        // Calcular dimensiones para recortar un cuadrado perfecto centrado horizontalmente
+        // y alineado con la parte superior para mostrar las caras
+        const originalWidth = tempImg.width
+        const originalHeight = tempImg.height
+
+        let cropSize, cropX, cropY
+
+        if (originalWidth > originalHeight) {
+          // Si la imagen es más ancha que alta, tomamos un cuadrado del tamaño de la altura
+          cropSize = originalHeight
+          cropX = Math.floor((originalWidth - cropSize) / 2) // Centrado horizontal
+          cropY = 0 // Desde arriba para mostrar las caras
+        } else {
+          // Si la imagen es más alta que ancha o cuadrada, tomamos un cuadrado del tamaño del ancho
+          cropSize = originalWidth
+          cropX = 0 // No necesita desplazamiento horizontal
+          cropY = 0 // Desde arriba para mostrar las caras
+        }
+
+        // Parámetros para recortar la imagen como un cuadrado perfecto centrado horizontalmente
         doc.addImage(
           imgData, // Datos de la imagen
           "PNG", // Formato
-          innerX, // Posición X
-          innerY, // Posición Y
-          imgInnerSize, // Ancho
-          imgInnerSize, // Alto
+          innerX, // Posición X en el PDF
+          innerY, // Posición Y en el PDF
+          imgInnerSize, // Ancho en el PDF
+          imgInnerSize, // Alto en el PDF
           undefined, // Alias
           "FAST", // Compresión
           0, // Rotación
-          0, // Recorte X (desde la izquierda)
-          0, // Recorte Y (desde arriba - 0 para mostrar la parte superior)
+          cropX, // Recorte X (para centrar horizontalmente)
+          cropY, // Recorte Y (desde arriba para mostrar las caras)
+          cropSize, // Ancho del recorte (cuadrado)
+          cropSize, // Alto del recorte (cuadrado)
         )
 
         // Marco interior de la imagen
@@ -487,6 +516,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         return true
       } catch (error) {
+        console.error("Error al cargar la imagen:", error)
         // Placeholder si no se puede cargar la imagen
         doc.setFillColor(240, 240, 240)
         doc.roundedRect(x + 2, y + 2, size - 4, size - 4, 2, 2, "F")
