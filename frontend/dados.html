@@ -196,7 +196,7 @@
   <select id="personaje-select" class="form-select w-50 mx-auto"></select>
 
   <div id="personaje-info" class="d-flex justify-content-center align-items-center gap-3 mt-3">
-    <img id="personaje-avatar" src="" alt="Avatar" style="width: 120px; height: 120px; border-radius: 10px; border: 2px solid var(--primary); object-fit: cover;">
+    <img id="personaje-avatar" src="/placeholder.svg" alt="Avatar" style="width: 120px; height: 120px; border-radius: 10px; border: 2px solid var(--primary); object-fit: cover;">
     <div>
       <h4 id="personaje-nombre" class="mb-1"></h4>
       <p id="personaje-raza-clase" class="mb-2 "></p>
@@ -245,6 +245,11 @@
                             <button id="lanzar-btn" class="btn btn-lg btn-primary">
                                 <i class="bi bi-dice-3 me-2"></i>Lanzar dados
                             </button>
+                        </div>
+
+                        <!-- Contenedor de animación de dados -->
+                        <div id="dice-animation-container" class="dice-animation-container" style="display: none;">
+                            <div id="rolling-text" class="rolling-text">🎲 Lanzando dados... 🎲</div>
                         </div>
 
                         <div class="result-highlight mt-4">
