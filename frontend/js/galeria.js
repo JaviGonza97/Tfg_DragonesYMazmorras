@@ -383,13 +383,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       const valueWidth = doc.getTextWidth(statValue.toString())
       doc.text(statValue.toString(), x - valueWidth / 2, y + 3)
 
-      // ELIMINAR ESTAS LÍNEAS PARA QUITAR EL MODIFICADOR:
-      // const mod = Math.floor((statValue - 10) / 2)
-      // const modText = mod >= 0 ? `+${mod}` : `${mod}`
-      // doc.setFontSize(10)
-      // const modWidth = doc.getTextWidth(modText)
-      // doc.text(modText, x - modWidth / 2, y - 8)
-
       // Nombre de la estadística
       doc.setFontSize(8)
       doc.setFont("times", "bold")
