@@ -1,6 +1,6 @@
 # Tfg_Dragones-Mazmorras
 Trabajo de fin de curso de Javier González y Daniel González !!
-https://tfg-dragones-y-mazmorras.vercel.appgit
+tfg-dragones-y-mazmorras.vercel.app
 
 # Despliegue del Backend de la aplicacion Tfg_DragonesYMazmorras
 
@@ -163,7 +163,7 @@ El frontend está desplegado como proyecto estático en Vercel.
    - Selecciona framework `Other` o `Static`.
    - Vercel detecta el `index.html` y lo publica como estático.
 3. **La web se sirve en:**  
-   [https://tfg-dragones-y-mazmorras.vercel.app](https://tfg-dragones-y-mazmorras.vercel.app)
+tfg-dragones-y-mazmorras.vercel.app
 4. **No se requieren variables de entorno**, la URL del backend se gestiona en el JS.
 
 ---
@@ -205,4 +205,4 @@ Si despliegas cambios, Vercel actualiza automáticamente tu web.
 
 Prueba online
 Accede directamente aquí:
-https://tfg-dragones-y-mazmorras.vercel.appgit
+tfg-dragones-y-mazmorras.vercel.app
